@@ -5,13 +5,12 @@ import 'dart:convert';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class CPMController {
-  CPMController({
-    required this.connectedDevice,
-    required this.btInstance,
-    required this.btService,
-    required this.serialRX,
-    required this.serialTX
-  });
+  CPMController(
+      {required this.connectedDevice,
+      required this.btInstance,
+      required this.btService,
+      required this.serialRX,
+      required this.serialTX});
 
   final BluetoothDevice connectedDevice;
   final FlutterBluePlus btInstance;
