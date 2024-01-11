@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Splashscreen.dart';
+import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
 
 import 'dart:async';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:convert';
 
-import 'package:flutter_application_1/ConnectedDevicePage.dart';
+import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class MyDeviceControlPage extends StatefulWidget {
@@ -33,59 +33,44 @@ class _MyDeviceControlPageState extends State<MyDeviceControlPage> {
   String _text = '';
   bool _isListening = false;
   int _countdown = 2;
-  int speed_setting = 80;
-  double flexionCounter = 0.0;
-  double extensionCounter = 0.0;
-  double curFlexAngle = 0.0;
-  double flexLimit = 120.0;
-  double extLimit = 0.0;
 
   String speedSetting = "";
-
-  bool isROMLimitEnabled = false;
-  bool isAngleControlEnabled = false;
-
-  late StreamSubscription _receiverSubscription;
-
-  TextEditingController _speedTextController = TextEditingController();
-
-  late Timer _timer;
 
   @override
   void initState() {
     super.initState();
-    // _speech = stt.SpeechToText();
-    _receiverSubscription = widget.serialRX.onValueReceived.listen((value) {
-      String rx_str = ascii.decode(value);
-      List<String> commands = rx_str.split(" ");
-      if (commands[0] == "A") {
-        setState(() {
-          curFlexAngle = double.parse(commands[1]);
-        });
-      } else if (commands[0] == "P0") {
-        setState(() {
-          isAngleControlEnabled = int.parse(commands[1]) == 1 ? true : false;
-        });
-      } else if (commands[0] == "P1") {
-        setState(() {
-          isROMLimitEnabled = int.parse(commands[1]) == 1 ? true : false;
-        });
-      } else if (commands[0] == "P2") {
-        setState(() {
-          flexLimit = double.parse(commands[1]);
-        });
-      } else if (commands[0] == "P3") {
-        setState(() {
-          extLimit = double.parse(commands[1]);
-        });
-      }
-    });
-    widget.connectedDevice.cancelWhenDisconnected(_receiverSubscription);
-    widget.serialRX.setNotifyValue(true);
+
+    // exoDeviceFunctions()
+    //     .startreceiverSubscription(widget.serialRX, widget.connectedDevice);
   }
 
   @override
   Widget build(BuildContext context) {
+    int speed_setting = Provider.of<exoDeviceFunctions>(context)
+        .speed_setting; // int speed_setting = 80;
+    double flexionCounter = Provider.of<exoDeviceFunctions>(context)
+        .flexionCounter; // double flexionCounter = 0.0;
+    double extensionCounter = Provider.of<exoDeviceFunctions>(context)
+        .extensionCounter; // double extensionCounter = 0.0;
+    double curFlexAngle = Provider.of<exoDeviceFunctions>(context)
+        .curFlexAngle; // double curFlexAngle = 0.0;
+    double flexLimit = Provider.of<exoDeviceFunctions>(context)
+        .flexLimit; // double flexLimit = 120.0;
+    double extLimit = Provider.of<exoDeviceFunctions>(context)
+        .extLimit; // double extLimit = 0.0;
+    bool isROMLimitEnabled = Provider.of<exoDeviceFunctions>(context)
+        .isROMLimitEnabled; // bool isROMLimitEnabled = false;
+    bool isAngleControlEnabled = Provider.of<exoDeviceFunctions>(context)
+        .isAngleControlEnabled; // bool isAngleControlEnabled = false;
+
+    // int speed_setting = 80;
+    // double flexionCounter = 0.0;
+    // double extensionCounter = 0.0;
+    // double curFlexAngle = 0.0;
+    // double flexLimit = 120.0;
+    // double extLimit = 0.0;
+    // bool isROMLimitEnabled = false;
+    // bool isAngleControlEnabled = false;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -148,11 +133,11 @@ class _MyDeviceControlPageState extends State<MyDeviceControlPage> {
                   Switch(
                     value: isROMLimitEnabled,
                     onChanged: (value) {
-                      if (value == true) {
-                        widget.serialTX.write(ascii.encode('G 1'));
-                      } else {
-                        widget.serialTX.write(ascii.encode('G 0'));
-                      }
+                      exoControlFunctions().setROMLimitEnabled(
+                          value,
+                          widget
+                              .serialTX); // exoControlFunctions().setROMLimitEnabled(
+
                       setState(() {
                         isROMLimitEnabled = value;
                       });
@@ -164,11 +149,10 @@ class _MyDeviceControlPageState extends State<MyDeviceControlPage> {
                   Switch(
                     value: isAngleControlEnabled,
                     onChanged: (value) {
-                      if (value == true) {
-                        widget.serialTX.write(ascii.encode('G 3'));
-                      } else {
-                        widget.serialTX.write(ascii.encode('G 2'));
-                      }
+                      exoControlFunctions().setAngleControlEnabled(
+                          value,
+                          widget
+                              .serialTX); // exoControlFunctions().setAngleControlEnabled(
                       setState(() {
                         isAngleControlEnabled = value;
                       });
@@ -201,12 +185,14 @@ class _MyDeviceControlPageState extends State<MyDeviceControlPage> {
                       children: [
                         ElevatedButton(
                             onPressed: () {
-                              widget.serialTX.write(ascii.encode('G 5'));
+                              exoControlFunctions().resetSetPoint(widget
+                                  .serialTX); // exoControlFunctions().resetSetPoint(widget.serialTX);
                             },
                             child: Text('Reset Setpoint')),
                         ElevatedButton(
                             onPressed: () {
-                              widget.serialTX.write(ascii.encode('G 4'));
+                              exoControlFunctions().unwindIntergral(widget
+                                  .serialTX); // exoControlFunctions().unwindIntergral(widget.serialTX
                             },
                             child: Text('Unwind Integral')),
                       ],
@@ -261,11 +247,9 @@ class _MyDeviceControlPageState extends State<MyDeviceControlPage> {
                 ],
               ),
               const SizedBox(height: 15.0),
-              buildFlexionExtensionButtons(),
+              buildFlexionExtensionButtons(extensionCounter, flexionCounter),
               const SizedBox(height: 15.0),
-              buildTable(),
-              const SizedBox(height: 15.0),
-              buildSpeechButton(),
+              buildTable(curFlexAngle, flexLimit, extLimit),
               ElevatedButton(
                 onPressed: () {
                   widget.serialTX
@@ -292,7 +276,8 @@ class _MyDeviceControlPageState extends State<MyDeviceControlPage> {
     );
   }
 
-  Widget buildFlexionExtensionButtons() {
+  Widget buildFlexionExtensionButtons(
+      double extensionCounter, double flexionCounter) {
     return Column(
       children: [
         Text(
@@ -307,10 +292,10 @@ class _MyDeviceControlPageState extends State<MyDeviceControlPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            buildNumberButton('1°', () => setFlexion(1)),
-            buildNumberButton('2°', () => setFlexion(2)),
-            buildNumberButton('5°', () => setFlexion(5)),
-            buildNumberButton('10°', () => setFlexion(10)),
+            buildNumberButton('1°', () => setFlexion(1, flexionCounter)),
+            buildNumberButton('2°', () => setFlexion(2, flexionCounter)),
+            buildNumberButton('5°', () => setFlexion(5, flexionCounter)),
+            buildNumberButton('10°', () => setFlexion(10, flexionCounter)),
           ],
         ),
         const SizedBox(height: 8.0),
@@ -346,10 +331,10 @@ class _MyDeviceControlPageState extends State<MyDeviceControlPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            buildNumberButton('1°', () => setExtension(1)),
-            buildNumberButton('2°', () => setExtension(2)),
-            buildNumberButton('5°', () => setExtension(5)),
-            buildNumberButton('10°', () => setExtension(10)),
+            buildNumberButton('1°', () => setExtension(1, flexionCounter)),
+            buildNumberButton('2°', () => setExtension(2, flexionCounter)),
+            buildNumberButton('5°', () => setExtension(5, flexionCounter)),
+            buildNumberButton('10°', () => setExtension(10, flexionCounter)),
           ],
         ),
         const SizedBox(height: 8.0),
@@ -376,7 +361,7 @@ class _MyDeviceControlPageState extends State<MyDeviceControlPage> {
     );
   }
 
-  Widget buildTable() {
+  Widget buildTable(double curFlexAngle, double flexLimit, double extLimit) {
     return Table(
       border: null,
       children: [
@@ -434,82 +419,15 @@ class _MyDeviceControlPageState extends State<MyDeviceControlPage> {
     );
   }
 
-  Widget buildSpeechButton() {
-    return ElevatedButton(
-      onPressed: _listen,
-      style: ElevatedButton.styleFrom(
-        primary: _isListening ? Colors.red : Colors.green,
-        onPrimary: Colors.white,
-        padding: const EdgeInsets.all(8.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ),
-      child: Icon(_isListening ? Icons.stop : Icons.mic),
-    );
-  }
-
-  void _listen() async {
-    if (_isListening) {
-      _speech.stop();
-      setState(() {
-        _isListening = false;
-        _countdown = 1;
-      });
-    } else {
-      bool available = await _speech.initialize(
-        onStatus: (val) => print('onStatus: $val'),
-        onError: (val) => print('onError: $val'),
-      );
-      if (available) {
-        _speech.listen(
-          onResult: (val) {
-            setState(() {
-              _text = val.recognizedWords;
-            });
-
-            if (_text.contains("stop") || _text.contains("Stop")) {
-              print("Stop");
-              widget.serialTX.write(MyDeviceControlPage.ascii.encode('S 0'));
-            }
-
-            if (_text.contains("flex") || _text.contains("Flex")) {
-              print("Flex");
-              widget.serialTX.write(
-                  MyDeviceControlPage.ascii.encode('F ${speed_setting}'));
-            }
-            if (_text.contains("extend") || _text.contains("Extend")) {
-              print("Extend");
-              widget.serialTX
-                  .write(MyDeviceControlPage.ascii.encode('E $speed_setting'));
-            }
-
-            // Add more conditions for other words
-
-            // Restart listening immediately
-            _listen();
-          },
-        );
-
-        setState(() {
-          _isListening = true;
-        });
-      }
-    }
-  }
-
-  void setFlexion(double value) {
+  void setFlexion(double value, double flexionCounter) {
     widget.serialTX.write(MyDeviceControlPage.ascii.encode('I $value'));
-    setState(() {
-      flexionCounter += value;
-    });
+    exoDeviceFunctions().setFlexionCounter(flexionCounter + value);
   }
 
-  void setExtension(double value) {
+  void setExtension(double value, double extensionCounter) {
     widget.serialTX.write(MyDeviceControlPage.ascii.encode('J $value'));
-    setState(() {
-      extensionCounter += value;
-    });
+
+    exoDeviceFunctions().setExtensionCounter(extensionCounter + value);
   }
 
   Widget buildNumberButton(String text, VoidCallback onPressed) {
@@ -534,7 +452,7 @@ class _MyDeviceControlPageState extends State<MyDeviceControlPage> {
   Widget buildSpeedButton(int speed, String text) {
     return ElevatedButton(
       onPressed: () {
-        speed_setting = speed;
+        exoDeviceFunctions().setSpeed(speed);
       },
       style: ButtonStyle(
         minimumSize: MaterialStateProperty.all<Size>(Size(40, 40)),

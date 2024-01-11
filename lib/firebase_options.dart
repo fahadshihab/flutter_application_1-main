@@ -63,6 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '864806106632',
     projectId: 'creair-exo',
     storageBucket: 'creair-exo.appspot.com',
+    androidClientId: '864806106632-4lolaa1eg3bqkspo42o0ld4qbsd87vob.apps.googleusercontent.com',
+    iosClientId: '864806106632-ijlskfo93d7puto1jk0c3m5g7giin6vo.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterApplication1',
   );
 }

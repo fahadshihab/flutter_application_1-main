@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/sahil/Backend/deviceFunctions.dart';
+import 'package:flutter_application_1/Backend/IGNORE_deviceFunctions.dart';
+
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -17,9 +18,9 @@ class _ConnectDevicePageState extends State<ConnectDevicePage> {
   BluetoothDevice? _connectedDevice;
   bool _isScanning = false;
   late StreamSubscription subscription;
-  late BluetoothService _btSerialService;
-  late BluetoothCharacteristic _serialRXCharacteristic;
-  late BluetoothCharacteristic _serialTXCharacteristic;
+  late BluetoothService? _btSerialService;
+  late BluetoothCharacteristic? _serialRXCharacteristic;
+  late BluetoothCharacteristic? _serialTXCharacteristic;
   static const String SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
   static const String TX_UUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
   static const String RX_UUID = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
@@ -74,14 +75,17 @@ class _ConnectDevicePageState extends State<ConnectDevicePage> {
 
       List<BluetoothService> services = await device.discoverServices();
       services.forEach((service) {
+        print(service.uuid.toString());
+        print(service.characteristics.length);
         // if (service.uuid.toString() == SERVICE_UUID) {
-        _btSerialService = service;
+        _btSerialService =
+            service; ///////////////////////////// potential probles  here witht he if statments
         service.characteristics.forEach((characteristic) {
           // if (characteristic.uuid.toString() == RX_UUID) {
           _serialRXCharacteristic = characteristic;
-          //   } else if (characteristic.uuid.toString() == TX_UUID) {
-          //     _serialTXCharacteristic = characteristic;
-          //   }
+          // } else if (characteristic.uuid.toString() == TX_UUID) {
+          _serialTXCharacteristic = characteristic;
+          // }
         });
         // }
       });
@@ -98,9 +102,9 @@ class _ConnectDevicePageState extends State<ConnectDevicePage> {
             MaterialPageRoute(
               builder: (context) => MyDeviceControlPage(
                 connectedDevice: device,
-                btService: _btSerialService,
-                serialRX: _serialRXCharacteristic,
-                serialTX: _serialTXCharacteristic,
+                btService: _btSerialService as BluetoothService,
+                serialRX: _serialRXCharacteristic as BluetoothCharacteristic,
+                serialTX: _serialTXCharacteristic as BluetoothCharacteristic,
               ),
             ),
           );
@@ -143,8 +147,8 @@ class _ConnectDevicePageState extends State<ConnectDevicePage> {
                 return ListTile(
                   title: Text(device.name.isNotEmpty
                       ? device.name
-                      : device.remoteId.id),
-                  subtitle: Text(device.id.toString()),
+                      : device.platformName),
+                  subtitle: Text(device.remoteId.toString()),
                   onTap: () {
                     _connectToDevice(device);
                   },
