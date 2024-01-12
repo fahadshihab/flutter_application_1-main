@@ -26,13 +26,17 @@ class exoDeviceFunctions extends ChangeNotifier {
   bool get isAngleControlEnabled => _isAngleControlEnabled;
 
   void test_flex() {
-    _curFlexAngle -= _speed_setting;
-    notifyListeners();
+    if (curFlexAngle > 0) {
+      _curFlexAngle -= _speed_setting;
+      notifyListeners();
+    }
   }
 
   void test_extend() {
-    _curFlexAngle += _speed_setting;
-    notifyListeners();
+    if (curFlexAngle < 180) {
+      _curFlexAngle += _speed_setting;
+      notifyListeners();
+    }
   }
 
   void setSpeed(int speed) {
@@ -98,7 +102,7 @@ class exoDeviceFunctions extends ChangeNotifier {
   }
 }
 
-class exoControlFunctions {
+class exoBluetoothControlFunctions {
   void setSpeed(int speed, BluetoothCharacteristic serialTX) {
     String tx_str = "S" + speed.toString();
     serialTX.write(utf8.encode(tx_str));

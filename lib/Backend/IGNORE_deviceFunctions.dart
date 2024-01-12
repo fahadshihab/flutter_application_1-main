@@ -133,7 +133,7 @@ class _MyDeviceControlPageState extends State<MyDeviceControlPage> {
                   Switch(
                     value: isROMLimitEnabled,
                     onChanged: (value) {
-                      exoControlFunctions().setROMLimitEnabled(
+                      exoBluetoothControlFunctions().setROMLimitEnabled(
                           value,
                           widget
                               .serialTX); // exoControlFunctions().setROMLimitEnabled(
@@ -149,7 +149,7 @@ class _MyDeviceControlPageState extends State<MyDeviceControlPage> {
                   Switch(
                     value: isAngleControlEnabled,
                     onChanged: (value) {
-                      exoControlFunctions().setAngleControlEnabled(
+                      exoBluetoothControlFunctions().setAngleControlEnabled(
                           value,
                           widget
                               .serialTX); // exoControlFunctions().setAngleControlEnabled(
@@ -185,13 +185,13 @@ class _MyDeviceControlPageState extends State<MyDeviceControlPage> {
                       children: [
                         ElevatedButton(
                             onPressed: () {
-                              exoControlFunctions().resetSetPoint(widget
+                              exoBluetoothControlFunctions().resetSetPoint(widget
                                   .serialTX); // exoControlFunctions().resetSetPoint(widget.serialTX);
                             },
                             child: Text('Reset Setpoint')),
                         ElevatedButton(
                             onPressed: () {
-                              exoControlFunctions().unwindIntergral(widget
+                              exoBluetoothControlFunctions().unwindIntergral(widget
                                   .serialTX); // exoControlFunctions().unwindIntergral(widget.serialTX
                             },
                             child: Text('Unwind Integral')),
