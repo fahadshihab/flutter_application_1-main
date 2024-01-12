@@ -53,7 +53,7 @@ class DeviceControl extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Device Control App',
-        home: calibrationPage(),
+        home: deviceSetup(),
       ),
     );
   }

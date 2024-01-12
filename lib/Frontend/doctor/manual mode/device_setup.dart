@@ -119,6 +119,38 @@ class _deviceSetupState extends State<deviceSetup> {
                   setState(() {
                     extlimit = curFlexAngle;
                   });
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                          title: Text('Max Extension Set',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xff004788))),
+                          content: Text(
+                              'Flexion Limit: $flexlimit\n'
+                              'Extension Limit: $extlimit',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 0, 0, 0))),
+                          actions: [
+                            ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 128, 102, 255),
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('Ok',
+                                    style: TextStyle(
+                                        color: Color.fromARGB(
+                                            255, 255, 255, 255)))),
+                          ],
+                        );
+                      });
                 } else {
                   setState(() {
                     flexlimit = curFlexAngle;

@@ -29,6 +29,8 @@ class _calibrationPageState extends State<calibrationPage> {
         .extLimit; // double extLimit = 0.0;
     int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
     return Scaffold(
+      extendBody: true,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
         // leading: Image.network(
@@ -46,61 +48,63 @@ class _calibrationPageState extends State<calibrationPage> {
       ),
       backgroundColor: Color.fromARGB(255, 228, 229, 229),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 70),
-        child: Column(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: ListView(
+          padding: EdgeInsets.zero,
           children: [
+            _ROM_display(
+              startLimit: startLimit,
+              endLimit: endLimit,
+            ),
+            SizedBox(
+                height: 230,
+                child: _ArmRangeGauge(
+                  currentAngle: currentAngle,
+                  minRange: 80,
+                  maxRange: 180,
+                )),
+            SizedBox(
+              height: 20,
+            ),
+            _speed_Control(speed: speed),
+            SizedBox(
+              height: 20,
+            ),
             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                    height: 230,
-                    child: _ArmRangeGauge(
-                      currentAngle: currentAngle,
-                      minRange: 80,
-                      maxRange: 180,
-                    )),
+                GestureDetector(
+                    onTapDown: (details) {
+                      startFlexing();
+                    },
+                    onTapUp: (details) {
+                      stopFlexing();
+                    },
+                    onTapCancel: () {
+                      stopFlexing();
+                    },
+                    child: _Flex_BUTTON()),
                 SizedBox(
                   height: 20,
                 ),
-                _SpeedWidget(),
-                SizedBox(
-                  height: 20,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                        onTapDown: (details) {
-                          startFlexing();
-                        },
-                        onTapUp: (details) {
-                          stopFlexing();
-                        },
-                        onTapCancel: () {
-                          stopFlexing();
-                        },
-                        child: _Flex_BUTTON()),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    GestureDetector(
-                        onTapDown: (details) {
-                          startextending();
-                        },
-                        onTapUp: (details) {
-                          stopextending();
-                        },
-                        onTapCancel: () {
-                          stopextending();
-                        },
-                        child: _Extend_BUTTON()),
-                  ],
-                ),
+                GestureDetector(
+                    onTapDown: (details) {
+                      startextending();
+                    },
+                    onTapUp: (details) {
+                      stopextending();
+                    },
+                    onTapCancel: () {
+                      stopextending();
+                    },
+                    child: _Extend_BUTTON()),
               ],
             ),
             SizedBox(
               height: 20,
             ),
             Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               height: 70,
               width: 300,
               decoration: BoxDecoration(
@@ -364,35 +368,192 @@ class _Flex_BUTTON extends StatelessWidget {
   }
 }
 
-class _SpeedWidget extends StatelessWidget {
+class _ROM_display extends StatelessWidget {
+  const _ROM_display({
+    super.key,
+    required this.startLimit,
+    required this.endLimit,
+  });
+
+  final double startLimit;
+  final double endLimit;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
-      width: 300,
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        color: Colors.deepPurple[300], // Replace with your desired pastel color
+          color: Color.fromARGB(93, 0, 0, 0),
+          borderRadius: BorderRadius.circular(20)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Movement Limits',
+                style: GoogleFonts.abel(
+                    textStyle: TextStyle(
+                        color: Colors.white,
+                        letterSpacing: 1,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold)),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  'RECALIBRATE',
+                  style: GoogleFonts.abel(
+                      textStyle: TextStyle(
+                          color: Colors.white,
+                          letterSpacing: 1,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold)),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                    color: Color.fromARGB(93, 151, 151, 151),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  'Flexion  :  $startLimit',
+                  style: GoogleFonts.abel(
+                      textStyle: TextStyle(
+                          color: Colors.white,
+                          letterSpacing: 1,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold)),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                    color: Color.fromARGB(93, 151, 151, 151),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  'Extention  :  $endLimit',
+                  style: GoogleFonts.abel(
+                      textStyle: TextStyle(
+                          color: Colors.white,
+                          letterSpacing: 1,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold)),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
-      padding: EdgeInsets.all(16.0),
+    );
+  }
+}
+
+class _speed_Control extends StatelessWidget {
+  const _speed_Control({
+    super.key,
+    required this.speed,
+  });
+
+  final int speed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      decoration: BoxDecoration(
+          color: Color.fromARGB(93, 0, 0, 0),
+          borderRadius: BorderRadius.circular(20)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              // Add your logic for the plus button here
-            },
-          ),
           Text(
             'Speed',
-            style: TextStyle(fontSize: 20.0),
+            style: GoogleFonts.abel(
+                textStyle: TextStyle(
+                    color: Colors.white,
+                    letterSpacing: 1,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold)),
           ),
-          IconButton(
-            icon: Icon(Icons.remove),
-            onPressed: () {
-              // Add your logic for the minus button here
-            },
+          SizedBox(
+            height: 15,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                    color: Color.fromARGB(93, 151, 151, 151),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  'Speed  :  $speed',
+                  style: GoogleFonts.abel(
+                      textStyle: TextStyle(
+                          color: Colors.white,
+                          letterSpacing: 1,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold)),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              GestureDetector(
+                onTap: () {
+                  if (speed <= 4) {
+                    Provider.of<exoDeviceFunctions>(context, listen: false)
+                        .setSpeed(speed + 1);
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  decoration: BoxDecoration(
+                      color: Color.fromARGB(235, 255, 255, 255),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Icon(
+                    Icons.add,
+                    color: Color.fromARGB(255, 42, 42, 42),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              GestureDetector(
+                onTap: () {
+                  if (speed >= 2) {
+                    Provider.of<exoDeviceFunctions>(context, listen: false)
+                        .setSpeed(speed - 1);
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  decoration: BoxDecoration(
+                      color: Color.fromARGB(235, 255, 255, 255),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Icon(
+                    Icons.remove,
+                    color: Color.fromARGB(255, 42, 42, 42),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
