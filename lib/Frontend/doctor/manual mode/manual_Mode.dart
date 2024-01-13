@@ -29,118 +29,36 @@ class _calibrationPageState extends State<calibrationPage> {
         .extLimit; // double extLimit = 0.0;
     int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
     return Scaffold(
-      extendBody: true,
-      resizeToAvoidBottomInset: false,
+      backgroundColor: Color(0xffF0F0F2),
       appBar: AppBar(
-        centerTitle: true,
-        // leading: Image.network(
-        //   'https://firebasestorage.googleapis.com/v0/b/creair-exo.appspot.com/o/creaid%20logo%20png%203.png?alt=media&token=d1b95c2f-2535-4576-a8d1-78bea5b90e5d',
-        //   height: 20,
-        //   fit: BoxFit.fitHeight,
-        // ),
-        title: Text('Manual Mode',
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 128, 102, 255),
-                fontSize: 25)),
+        centerTitle: false,
+        title: Text(
+          'Device Setup',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Color.fromARGB(255, 90, 90, 90),
+          ),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              'assets/images/main_logo.png',
+              height: 50,
+              width: 50,
+            ),
+          )
+        ],
       ),
-      backgroundColor: Color.fromARGB(255, 228, 229, 229),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            _ROM_display(
-              startLimit: startLimit,
-              endLimit: endLimit,
-            ),
-            SizedBox(
-                height: 230,
-                child: _ArmRangeGauge(
-                  currentAngle: currentAngle,
-                  minRange: 80,
-                  maxRange: 180,
-                )),
-            SizedBox(
-              height: 20,
-            ),
-            _speed_Control(speed: speed),
-            SizedBox(
-              height: 20,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                    onTapDown: (details) {
-                      startFlexing();
-                    },
-                    onTapUp: (details) {
-                      stopFlexing();
-                    },
-                    onTapCancel: () {
-                      stopFlexing();
-                    },
-                    child: _Flex_BUTTON()),
-                SizedBox(
-                  height: 20,
-                ),
-                GestureDetector(
-                    onTapDown: (details) {
-                      startextending();
-                    },
-                    onTapUp: (details) {
-                      stopextending();
-                    },
-                    onTapCancel: () {
-                      stopextending();
-                    },
-                    child: _Extend_BUTTON()),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              height: 70,
-              width: 300,
-              decoration: BoxDecoration(
-                color: Colors.red[400],
-                borderRadius: BorderRadius.circular(10),
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: Colors.grey.withOpacity(0.2),
-                //     spreadRadius: 0,
-                //     blurRadius: 20,
-                //   ),
-                // ],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'EMERGENCY STOP',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Color.fromARGB(255, 255, 255, 255),
-                    ),
-                  ),
-                  Text(
-                    'Cuts off power to the device',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Color.fromARGB(255, 255, 255, 255),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      body: Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height / 2,
+          )
+        ],
       ),
     );
   }

@@ -24,9 +24,241 @@ class _deviceSetupState extends State<deviceSetup> {
   double? extlimit;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<exoDeviceFunctions>(context, listen: false).setSpeed(1);
+  }
+
+  void dispose() {
+    flextimer?.cancel();
+    super.dispose();
+    setState(() {
+      isFlexing = false;
+      isExtending = false;
+      flexlimit = null;
+      extlimit = null;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     double curFlexAngle = Provider.of<exoDeviceFunctions>(context).curFlexAngle;
-    return Scaffold();
+    int currentSpeed = Provider.of<exoDeviceFunctions>(context).speed_setting;
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        title: Text(
+          'Device Setup',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Color.fromARGB(255, 90, 90, 90),
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              'assets/images/main_logo.png',
+              height: 50,
+              width: 50,
+            ),
+          )
+        ],
+      ),
+      backgroundColor: Color(0xFFF0F0F2),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              extlimit == null ? 'FIX Extention Limit' : 'FIX Flexion Limit',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+                color: Color(0xFF004788),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
+              child: Text(
+                textAlign: TextAlign.center,
+                'Please set the flex and extend limits of the device \n\n Current Angle : $curFlexAngle',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color.fromARGB(255, 90, 90, 90),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                    onTapDown: (details) {
+                      startFlexing();
+                    },
+                    onTapUp: (details) {
+                      stopFlexing();
+                    },
+                    onTapCancel: () => stopFlexing(),
+                    child: _Flex_BUTTON()),
+                SizedBox(
+                  width: 20,
+                ),
+                _Stop_BUTTON(),
+                SizedBox(
+                  width: 20,
+                ),
+                GestureDetector(
+                    onTapDown: (details) {
+                      startextending();
+                    },
+                    onTapUp: (details) {
+                      stopextending();
+                    },
+                    onTapCancel: () => stopextending(),
+                    child: _Extend_BUTTON()),
+              ],
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            Text(
+              'Speed',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Color(0xFF004788),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _Speed_BUTTON(speed: 1, currentSpeed: currentSpeed),
+                SizedBox(
+                  width: 10,
+                ),
+                _Speed_BUTTON(speed: 2, currentSpeed: currentSpeed),
+                SizedBox(
+                  width: 10,
+                ),
+                _Speed_BUTTON(speed: 3, currentSpeed: currentSpeed),
+                SizedBox(
+                  width: 10,
+                ),
+                _Speed_BUTTON(speed: 4, currentSpeed: currentSpeed),
+                SizedBox(
+                  width: 10,
+                ),
+                _Speed_BUTTON(speed: 5, currentSpeed: currentSpeed),
+              ],
+            ),
+            SizedBox(
+              height: 80,
+            ),
+            GestureDetector(
+                onTap: () {
+                  if (extlimit == null) {
+                    setState(() {
+                      extlimit = curFlexAngle;
+                    });
+                    Provider.of<exoDeviceFunctions>(context, listen: false)
+                        .setExtLimit(curFlexAngle);
+                    SnackBar snackBar = SnackBar(
+                      content: Center(
+                        child: Text('Extention Limit set to $curFlexAngle',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Color.fromARGB(255, 255, 255, 255),
+                            )),
+                      ),
+                      duration: Duration(milliseconds: 500),
+                      backgroundColor: Color(0xFF004788),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else {
+                    setState(() {
+                      flexlimit = curFlexAngle;
+                    });
+                    Provider.of<exoDeviceFunctions>(context, listen: false)
+                        .setFlexLimit(curFlexAngle);
+                    showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                              title: Center(
+                                child: Text('Calibration Complete',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                      color: Color(0xFF004788),
+                                    )),
+                              ),
+                              content: Text(
+                                'Flexion Limit set to $flexlimit \nExtention Limit set to $extlimit',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Color.fromARGB(255, 90, 90, 90),
+                                ),
+                              ),
+                              actions: [
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Color(0xFF004788),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                calibrationPage()),
+                                      );
+                                    },
+                                    child: Text('OK',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                        ))),
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Color(0xFF004788),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        extlimit = null;
+                                        flexlimit = null;
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('re-calibrate',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                        ))),
+                              ],
+                            ));
+                  }
+                },
+                child: _setLimit_BUTTON(
+                  extention: extlimit == null ? true : false,
+                ))
+          ],
+        ),
+      ),
+    );
   }
 
   startFlexing() {
@@ -70,6 +302,68 @@ class _deviceSetupState extends State<deviceSetup> {
   }
 }
 
+class _Speed_BUTTON extends StatelessWidget {
+  int speed;
+  int currentSpeed;
+  _Speed_BUTTON({
+    super.key,
+    required this.speed,
+    required this.currentSpeed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Provider.of<exoDeviceFunctions>(context, listen: false).setSpeed(speed);
+        SnackBar snackBar = SnackBar(
+          content: Center(
+            child: Text('Speed set to $speed',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Color.fromARGB(255, 255, 255, 255),
+                )),
+          ),
+          duration: Duration(milliseconds: 500),
+          backgroundColor: Color(0xFF004788),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      },
+      child: Container(
+        height: 60,
+        width: 60,
+        decoration: BoxDecoration(
+          color: speed == currentSpeed ? Color(0xFF004788) : Color(0xFFA8BED2),
+          border: Border.all(
+            color: Color.fromARGB(32, 0, 70, 136),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              spreadRadius: 0,
+              blurRadius: 2,
+            ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            speed.toString(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: speed == currentSpeed
+                  ? Color.fromARGB(255, 255, 255, 255)
+                  : Color(0xFF004788),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _Extend_BUTTON extends StatelessWidget {
   const _Extend_BUTTON({
     super.key,
@@ -78,18 +372,21 @@ class _Extend_BUTTON extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
-      width: 120,
+      height: 100,
+      width: 100,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 131, 119, 247),
-        borderRadius: BorderRadius.circular(10),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.grey.withOpacity(0.2),
-        //     spreadRadius: 0,
-        //     blurRadius: 20,
-        //   ),
-        // ],
+        color: Color(0xFFA8BED2),
+        border: Border.all(
+          color: Color.fromARGB(32, 0, 70, 136),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            spreadRadius: 0,
+            blurRadius: 2,
+          ),
+        ],
       ),
       child: Center(
         child: Text(
@@ -97,7 +394,45 @@ class _Extend_BUTTON extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
-            color: const Color.fromARGB(255, 255, 255, 255),
+            color: const Color(0xFF004788),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Stop_BUTTON extends StatelessWidget {
+  const _Stop_BUTTON({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      width: 100,
+      decoration: BoxDecoration(
+        color: Color(0xFFD2A8A8),
+        border: Border.all(
+          color: Color.fromARGB(38, 136, 0, 0),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            spreadRadius: 0,
+            blurRadius: 2,
+          ),
+        ],
+      ),
+      child: Center(
+        child: Text(
+          'Stop',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: const Color(0xFF880000),
           ),
         ),
       ),
@@ -113,18 +448,21 @@ class _Flex_BUTTON extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
-      width: 120,
+      height: 100,
+      width: 100,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 131, 119, 247),
-        borderRadius: BorderRadius.circular(10),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.grey.withOpacity(0.2),
-        //     spreadRadius: 0,
-        //     blurRadius: 20,
-        //   ),
-        // ],
+        color: Color(0xFFA8BED2),
+        border: Border.all(
+          color: Color.fromARGB(32, 0, 70, 136),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            spreadRadius: 0,
+            blurRadius: 2,
+          ),
+        ],
       ),
       child: Center(
         child: Text(
@@ -132,7 +470,7 @@ class _Flex_BUTTON extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
-            color: const Color.fromARGB(255, 255, 255, 255),
+            color: const Color(0xFF004788),
           ),
         ),
       ),
@@ -140,94 +478,44 @@ class _Flex_BUTTON extends StatelessWidget {
   }
 }
 
-class _ArmRangeGauge extends StatelessWidget {
-  final double currentAngle; // Pass the current arm angle dynamically
-  final double? minRange; // Minimum range of motion
-  final double? maxRange; // Maximum range of motion
+class _setLimit_BUTTON extends StatelessWidget {
+  bool extention;
 
-  _ArmRangeGauge({
-    required this.currentAngle,
-    required this.minRange,
-    required this.maxRange,
+  _setLimit_BUTTON({
+    super.key,
+    required this.extention,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SfRadialGauge(
-      axes: <RadialAxis>[
-        RadialAxis(
-          minimum: 0,
-          maximum: 180,
-          showLabels: false,
-          showTicks: false,
-          startAngle: -90,
-          endAngle: 90,
-          radiusFactor: 0.8,
-          axisLineStyle: AxisLineStyle(
-            thickness: 0.0,
-            cornerStyle: CornerStyle.bothCurve,
-            color: Color.fromARGB(255, 131, 119, 247),
-            thicknessUnit: GaugeSizeUnit.factor,
-          ),
-          pointers: <GaugePointer>[
-            MarkerPointer(
-              value: maxRange != null ? maxRange! : currentAngle,
-              markerType: MarkerType.circle,
-              color: Color.fromARGB(255, 131, 119, 247),
-              markerHeight: 15,
-              markerWidth: 15,
-              markerOffset: 0,
-            ),
-            MarkerPointer(
-              value: minRange != null ? minRange! : currentAngle,
-              markerType: MarkerType.circle,
-              color: Color.fromARGB(255, 131, 119, 247),
-              markerHeight: 15,
-              markerWidth: 15,
-              markerOffset: 0,
-            ),
-            // NeedlePointer(
-            //   value: maxRange != null ? maxRange! : currentAngle,
-            //   needleLength: 1,
-            //   needleColor: Color.fromARGB(255, 131, 119, 247),
-            //   needleStartWidth: 1,
-            //   needleEndWidth: 5,
-            //   knobStyle: KnobStyle(
-            //     knobRadius: 0.04,
-            //     sizeUnit: GaugeSizeUnit.factor,
-            //     color: Color.fromARGB(255, 131, 119, 247),
-            //   ),
-            // ),
-            // NeedlePointer(
-            //   value: minRange != null ? minRange! : currentAngle,
-            //   needleLength: 1,
-            //   needleColor: Color.fromARGB(255, 131, 119, 247),
-            //   needleStartWidth: 1,
-            //   needleEndWidth: 5,
-            //   knobStyle: KnobStyle(
-            //     knobRadius: 0.04,
-            //     sizeUnit: GaugeSizeUnit.factor,
-            //     color: Color.fromARGB(255, 131, 119, 247),
-            //   ),
-            // ),
-          ],
-          annotations: <GaugeAnnotation>[
-            GaugeAnnotation(
-              widget: Container(
-                child: Text(
-                  '$currentAngle',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              angle: 0,
-              positionFactor: 0,
-            )
-          ],
+    return Container(
+      height: 60,
+      width: 350,
+      decoration: BoxDecoration(
+        color: const Color(0xFF004788),
+        borderRadius: BorderRadius.circular(50),
+        border: Border.all(
+          color: Color.fromARGB(32, 0, 70, 136),
+          width: 1,
         ),
-      ],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            spreadRadius: 0,
+            blurRadius: 2,
+          ),
+        ],
+      ),
+      child: Center(
+        child: Text(
+          extention == true ? 'Set Extition Limit' : 'Set Flexion Limit',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Color.fromARGB(255, 255, 255, 255),
+          ),
+        ),
+      ),
     );
   }
 }
