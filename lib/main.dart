@@ -51,6 +51,13 @@ class DeviceControl extends StatelessWidget {
     return MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => exoDeviceFunctions())],
       child: MaterialApp(
+        routes: {
+          // '/home': (context) => HomeScreen(),
+          // '/manual': (context) => ManualScreen(),
+          // '/info': (context) => InfoScreen(),
+          // '/settings': (context) => SettingsScreen(),
+          // // Add other routes as needed
+        },
         debugShowCheckedModeBanner: false,
         title: 'Device Control App',
         home: deviceSetup(),

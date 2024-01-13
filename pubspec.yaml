@@ -45,6 +45,7 @@ dependencies:
   provider: ^6.1.1
   syncfusion_flutter_gauges: ^24.1.45
   google_fonts: ^6.1.0
+  flutter_inset_box_shadow: ^1.0.8
 
 
   #speech_to_text: ^6.5.1
@@ -72,7 +73,13 @@ flutter:
   assets:
     - assets/images/main logo.png
     - assets/images/main_logo.png
-    #- assets/hey_bob.ppn
+    - assets/images/person_nohand.png
+    - assets/images/hand.png
+    - assets/icons/colors/calibration icon (1).png
+    - assets/icons/colors/info icon B.png
+    - assets/icons/colors/Manual icon B.png
+    - assets/icons/colors/therapy icon B.png
+   
   
 
   # The following line ensures that the Material Icons font is
