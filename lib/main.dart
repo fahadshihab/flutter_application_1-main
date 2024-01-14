@@ -53,10 +53,12 @@ class DeviceControl extends StatelessWidget {
       child: MaterialApp(
         routes: {
           // '/home': (context) => HomeScreen(),
-          // '/manual': (context) => ManualScreen(),
+          '/manual': (context) => calibrationPage(),
           // '/info': (context) => InfoScreen(),
-          // '/settings': (context) => SettingsScreen(),
-          // // Add other routes as needed
+          '/calibration': (context) => deviceSetup(),
+          '/therapy': (context) => deviceSetup(),
+          '/info': (context) => deviceSetup(),
+          // Add other routes as needed
         },
         debugShowCheckedModeBanner: false,
         title: 'Device Control App',

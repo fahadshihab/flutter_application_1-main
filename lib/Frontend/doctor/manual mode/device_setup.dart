@@ -27,18 +27,22 @@ class _deviceSetupState extends State<deviceSetup> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    setSpeedOnStartUp();
+  }
+
+  setSpeedOnStartUp() async {
+    await Future.delayed(Duration(milliseconds: 100));
     Provider.of<exoDeviceFunctions>(context, listen: false).setSpeed(1);
   }
 
   void dispose() {
     flextimer?.cancel();
     super.dispose();
-    setState(() {
-      isFlexing = false;
-      isExtending = false;
-      flexlimit = null;
-      extlimit = null;
-    });
+
+    isFlexing = false;
+    isExtending = false;
+    flexlimit = null;
+    extlimit = null;
   }
 
   @override
@@ -218,12 +222,12 @@ class _deviceSetupState extends State<deviceSetup> {
                                       primary: Color(0xFF004788),
                                     ),
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                calibrationPage()),
-                                      );
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  calibrationPage()),
+                                          (route) => false);
                                     },
                                     child: Text('OK',
                                         style: TextStyle(

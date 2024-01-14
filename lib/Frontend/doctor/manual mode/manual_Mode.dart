@@ -29,11 +29,63 @@ class _calibrationPageState extends State<calibrationPage> {
         .extLimit; // double extLimit = 0.0;
     int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          selectedFontSize: 15,
+          unselectedFontSize: 15,
+          selectedItemColor: Color.fromARGB(255, 0, 70, 136),
+          unselectedItemColor: Color.fromARGB(255, 0, 70, 136),
+          onTap: (value) {
+            if (value == 0) {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/manual', (route) => false);
+            } else if (value == 1) {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/calibration', (route) => false);
+            } else if (value == 2) {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/therapy', (route) => false);
+            } else if (value == 3) {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/info', (route) => false);
+            }
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/icons/colors/calibration icon (1).png',
+                height: 30,
+              ),
+              label: 'Calibration',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/icons/colors/Manual icon B.png',
+                height: 30,
+              ),
+              label: 'Manual',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/icons/colors/therapy icon B.png',
+                height: 30,
+              ),
+              label: 'Therapy',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/icons/colors/info icon B.png',
+                height: 30,
+              ),
+              label: 'Info',
+            ),
+          ]),
+      extendBodyBehindAppBar: true,
       backgroundColor: Color(0xffF0F0F2),
       appBar: AppBar(
         centerTitle: false,
         title: Text(
-          'Device Setup',
+          'Manual Mode',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -56,7 +108,140 @@ class _calibrationPageState extends State<calibrationPage> {
       body: Column(
         children: [
           Container(
-            height: MediaQuery.of(context).size.height / 2,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 225, 229, 232),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  spreadRadius: 0,
+                  blurRadius: 8,
+                ),
+              ],
+            ),
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 30),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                        onTapDown: (details) {
+                          startFlexing();
+                        },
+                        onTapUp: (details) {
+                          stopFlexing();
+                        },
+                        onTapCancel: () => stopFlexing(),
+                        child: _Flex_BUTTON()),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    _Stop_BUTTON(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                        onTapDown: (details) {
+                          startextending();
+                        },
+                        onTapUp: (details) {
+                          stopextending();
+                        },
+                        onTapCancel: () => stopextending(),
+                        child: _Extend_BUTTON()),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Color.fromARGB(255, 241, 243, 246),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    spreadRadius: 0,
+                    blurRadius: 10,
+                  ),
+                ],
+              ),
+              width: MediaQuery.of(context).size.width,
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: FloatingActionButton.large(
+                        onPressed: () {},
+                        child: Text(
+                          'Stop',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Color.fromARGB(255, 255, 252, 252),
+                          ),
+                        ),
+                        backgroundColor: Color.fromARGB(255, 231, 10, 10),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color.fromARGB(255, 245, 245, 245),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              spreadRadius: 0,
+                              blurRadius: 10,
+                            ),
+                          ],
+                        ),
+                        margin: EdgeInsets.only(top: 20),
+                        child: Text(
+                          '$currentAngle°',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Color.fromARGB(255, 27, 27, 27),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Image.asset(
+                        'assets/images/Group 56 (1).png',
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 114,
+                    left: 97,
+                    child: Transform.rotate(
+                      angle: ((currentAngle - 15) * pi) / 180 - 40,
+                      origin: Offset(-20, -12),
+                      child: Image.asset(
+                        'assets/images/hand.png',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           )
         ],
       ),
@@ -104,98 +289,6 @@ class _calibrationPageState extends State<calibrationPage> {
   }
 }
 
-class _ArmRangeGauge extends StatelessWidget {
-  final double currentAngle; // Pass the current arm angle dynamically
-  final double? minRange; // Minimum range of motion
-  final double? maxRange; // Maximum range of motion
-
-  _ArmRangeGauge({
-    required this.currentAngle,
-    required this.minRange,
-    required this.maxRange,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SfRadialGauge(
-      axes: <RadialAxis>[
-        RadialAxis(
-          minimum: 0,
-          maximum: 180,
-          showLabels: false,
-          showTicks: false,
-          startAngle: -90,
-          endAngle: 90,
-          radiusFactor: 0.8,
-          axisLineStyle: AxisLineStyle(
-            thickness: 0.0,
-            cornerStyle: CornerStyle.bothCurve,
-            color: Color.fromARGB(255, 131, 119, 247),
-            thicknessUnit: GaugeSizeUnit.factor,
-          ),
-          pointers: <GaugePointer>[
-            MarkerPointer(
-              value: maxRange != null ? maxRange! : currentAngle,
-              markerType: MarkerType.circle,
-              color: Color.fromARGB(255, 131, 119, 247),
-              markerHeight: 15,
-              markerWidth: 15,
-              markerOffset: 0,
-            ),
-            MarkerPointer(
-              value: minRange != null ? minRange! : currentAngle,
-              markerType: MarkerType.circle,
-              color: Color.fromARGB(255, 131, 119, 247),
-              markerHeight: 15,
-              markerWidth: 15,
-              markerOffset: 0,
-            ),
-            // NeedlePointer(
-            //   value: maxRange != null ? maxRange! : currentAngle,
-            //   needleLength: 1,
-            //   needleColor: Color.fromARGB(255, 131, 119, 247),
-            //   needleStartWidth: 1,
-            //   needleEndWidth: 5,
-            //   knobStyle: KnobStyle(
-            //     knobRadius: 0.04,
-            //     sizeUnit: GaugeSizeUnit.factor,
-            //     color: Color.fromARGB(255, 131, 119, 247),
-            //   ),
-            // ),
-            // NeedlePointer(
-            //   value: minRange != null ? minRange! : currentAngle,
-            //   needleLength: 1,
-            //   needleColor: Color.fromARGB(255, 131, 119, 247),
-            //   needleStartWidth: 1,
-            //   needleEndWidth: 5,
-            //   knobStyle: KnobStyle(
-            //     knobRadius: 0.04,
-            //     sizeUnit: GaugeSizeUnit.factor,
-            //     color: Color.fromARGB(255, 131, 119, 247),
-            //   ),
-            // ),
-          ],
-          annotations: <GaugeAnnotation>[
-            GaugeAnnotation(
-              widget: Container(
-                child: Text(
-                  '$currentAngle',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              angle: 0,
-              positionFactor: 0,
-            )
-          ],
-        ),
-      ],
-    );
-  }
-}
-
 class _Extend_BUTTON extends StatelessWidget {
   const _Extend_BUTTON({
     super.key,
@@ -204,38 +297,73 @@ class _Extend_BUTTON extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
-      width: 300,
+      margin: EdgeInsets.only(left: 20, right: 20),
+      height: 80,
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 131, 119, 247),
         borderRadius: BorderRadius.circular(10),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.grey.withOpacity(0.2),
-        //     spreadRadius: 0,
-        //     blurRadius: 20,
-        //   ),
-        // ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Extend',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color: const Color.fromARGB(255, 255, 255, 255),
-            ),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Icon(
-            Icons.arrow_downward,
-            color: Colors.white,
+        color: Color.fromARGB(255, 241, 243, 246),
+        border: Border.all(
+          color: Color.fromARGB(169, 0, 70, 136),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            spreadRadius: 0,
+            blurRadius: 10,
           ),
         ],
+      ),
+      child: Center(
+        child: Text(
+          'Extend',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: const Color(0xFF004788),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Stop_BUTTON extends StatelessWidget {
+  const _Stop_BUTTON({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 80,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.only(left: 20, right: 20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Color(0xffFBE9E9),
+        border: Border.all(
+          color: Color.fromARGB(223, 136, 0, 0),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            spreadRadius: 0,
+            blurRadius: 10,
+          ),
+        ],
+      ),
+      child: Center(
+        child: Text(
+          'Stop',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Color.fromARGB(255, 221, 10, 10),
+          ),
+        ),
       ),
     );
   }
@@ -249,231 +377,33 @@ class _Flex_BUTTON extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
-      width: 300,
+      height: 80,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.only(left: 20, right: 20),
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 131, 119, 247),
+        color: Color.fromARGB(255, 243, 244, 246),
         borderRadius: BorderRadius.circular(10),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.grey.withOpacity(0.2),
-        //     spreadRadius: 0,
-        //     blurRadius: 20,
-        //   ),
-        // ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.arrow_upward,
-            color: Colors.white,
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Text(
-            'Flex',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color: const Color.fromARGB(255, 255, 255, 255),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class _ROM_display extends StatelessWidget {
-  const _ROM_display({
-    super.key,
-    required this.startLimit,
-    required this.endLimit,
-  });
-
-  final double startLimit;
-  final double endLimit;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      decoration: BoxDecoration(
-          color: Color.fromARGB(93, 0, 0, 0),
-          borderRadius: BorderRadius.circular(20)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Movement Limits',
-                style: GoogleFonts.abel(
-                    textStyle: TextStyle(
-                        color: Colors.white,
-                        letterSpacing: 1,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold)),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  'RECALIBRATE',
-                  style: GoogleFonts.abel(
-                      textStyle: TextStyle(
-                          color: Colors.white,
-                          letterSpacing: 1,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold)),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                decoration: BoxDecoration(
-                    color: Color.fromARGB(93, 151, 151, 151),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  'Flexion  :  $startLimit',
-                  style: GoogleFonts.abel(
-                      textStyle: TextStyle(
-                          color: Colors.white,
-                          letterSpacing: 1,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold)),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                decoration: BoxDecoration(
-                    color: Color.fromARGB(93, 151, 151, 151),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  'Extention  :  $endLimit',
-                  style: GoogleFonts.abel(
-                      textStyle: TextStyle(
-                          color: Colors.white,
-                          letterSpacing: 1,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold)),
-                ),
-              ),
-            ],
+        border: Border.all(
+          color: Color.fromARGB(224, 0, 70, 136),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            spreadRadius: 0,
+            blurRadius: 10,
           ),
         ],
       ),
-    );
-  }
-}
-
-class _speed_Control extends StatelessWidget {
-  const _speed_Control({
-    super.key,
-    required this.speed,
-  });
-
-  final int speed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      decoration: BoxDecoration(
-          color: Color.fromARGB(93, 0, 0, 0),
-          borderRadius: BorderRadius.circular(20)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Speed',
-            style: GoogleFonts.abel(
-                textStyle: TextStyle(
-                    color: Colors.white,
-                    letterSpacing: 1,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold)),
+      child: Center(
+        child: Text(
+          'Flex',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: const Color(0xFF004788),
           ),
-          SizedBox(
-            height: 15,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                decoration: BoxDecoration(
-                    color: Color.fromARGB(93, 151, 151, 151),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  'Speed  :  $speed',
-                  style: GoogleFonts.abel(
-                      textStyle: TextStyle(
-                          color: Colors.white,
-                          letterSpacing: 1,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold)),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              GestureDetector(
-                onTap: () {
-                  if (speed <= 4) {
-                    Provider.of<exoDeviceFunctions>(context, listen: false)
-                        .setSpeed(speed + 1);
-                  }
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  decoration: BoxDecoration(
-                      color: Color.fromARGB(235, 255, 255, 255),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Icon(
-                    Icons.add,
-                    color: Color.fromARGB(255, 42, 42, 42),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              GestureDetector(
-                onTap: () {
-                  if (speed >= 2) {
-                    Provider.of<exoDeviceFunctions>(context, listen: false)
-                        .setSpeed(speed - 1);
-                  }
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  decoration: BoxDecoration(
-                      color: Color.fromARGB(235, 255, 255, 255),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Icon(
-                    Icons.remove,
-                    color: Color.fromARGB(255, 42, 42, 42),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }
