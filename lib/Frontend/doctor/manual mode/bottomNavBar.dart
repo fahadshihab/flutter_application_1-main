@@ -6,6 +6,8 @@ class bottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+        elevation: 5,
+        backgroundColor: Color(0xffEAEBF1),
         type: BottomNavigationBarType.fixed,
         selectedFontSize: 15,
         unselectedFontSize: 15,
