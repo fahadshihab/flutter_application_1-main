@@ -46,6 +46,7 @@ dependencies:
   syncfusion_flutter_gauges: ^24.1.45
   google_fonts: ^6.1.0
   flutter_inset_box_shadow: ^1.0.8
+  flutter_time_picker_spinner: ^2.0.0
 
 
   #speech_to_text: ^6.5.1

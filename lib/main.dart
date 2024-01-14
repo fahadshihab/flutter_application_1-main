@@ -5,6 +5,7 @@ import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
 import 'package:flutter_application_1/Backend/findDevice.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/calibration_Page.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/manual_Mode.dart';
+import 'package:flutter_application_1/Frontend/doctor/manual%20mode/therapymode.dart';
 
 import 'package:flutter_application_1/auth/signinUI.dart';
 
@@ -54,16 +55,17 @@ class DeviceControl extends StatelessWidget {
       child: MaterialApp(
           routes: {
             // '/home': (context) => HomeScreen(),
+            '/deviceSetup': (context) => deviceSetup(),
             '/manual': (context) => manualMode(),
             // '/info': (context) => InfoScreen(),
             '/calibration': (context) => calibration_page(),
-            '/therapy': (context) => deviceSetup(),
+            '/therapy': (context) => therapyMode(),
             '/info': (context) => deviceSetup(),
             // Add other routes as needed
           },
           debugShowCheckedModeBanner: false,
           title: 'Device Control App',
-          home: manualMode()),
+          home: therapyMode()),
     );
   }
 }

@@ -194,38 +194,8 @@ class _calibration_pageState extends State<calibration_page> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             _movementCircle(
-                              anglePlus: 10,
-                              intString: '+10',
-                              currentangle: currentAngle,
-                              extLimit: extLimit,
-                              flexLimit: flexLimit,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            _movementCircle(
-                              anglePlus: 5,
-                              intString: '+5',
-                              currentangle: currentAngle,
-                              extLimit: extLimit,
-                              flexLimit: flexLimit,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            _movementCircle(
-                              anglePlus: 1,
-                              intString: '+1',
-                              currentangle: currentAngle,
-                              extLimit: extLimit,
-                              flexLimit: flexLimit,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            _movementCircle(
-                              anglePlus: -1,
-                              intString: '-1',
+                              anglePlus: -10,
+                              intString: '-10',
                               currentangle: currentAngle,
                               extLimit: extLimit,
                               flexLimit: flexLimit,
@@ -244,8 +214,38 @@ class _calibration_pageState extends State<calibration_page> {
                               width: 10,
                             ),
                             _movementCircle(
-                              anglePlus: -10,
-                              intString: '-10',
+                              anglePlus: -1,
+                              intString: '-1',
+                              currentangle: currentAngle,
+                              extLimit: extLimit,
+                              flexLimit: flexLimit,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            _movementCircle(
+                              anglePlus: 1,
+                              intString: '+1',
+                              currentangle: currentAngle,
+                              extLimit: extLimit,
+                              flexLimit: flexLimit,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            _movementCircle(
+                              anglePlus: 5,
+                              intString: '+5',
+                              currentangle: currentAngle,
+                              extLimit: extLimit,
+                              flexLimit: flexLimit,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            _movementCircle(
+                              anglePlus: 10,
+                              intString: '+10',
                               currentangle: currentAngle,
                               extLimit: extLimit,
                               flexLimit: flexLimit,
