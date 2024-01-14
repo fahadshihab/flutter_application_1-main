@@ -25,18 +25,26 @@ class exoDeviceFunctions extends ChangeNotifier {
   bool get isROMLimitEnabled => _isROMLimitEnabled;
   bool get isAngleControlEnabled => _isAngleControlEnabled;
 
-  void test_flex() {
-    if (curFlexAngle > 0 && curFlexAngle >= flexLimit) {
+  Future<void>? test_flex(bool testing) {
+    if (testing == true) {
+      _curFlexAngle -= _speed_setting;
+      notifyListeners();
+    } else if (curFlexAngle > 0 && curFlexAngle >= flexLimit) {
       _curFlexAngle -= _speed_setting;
       notifyListeners();
     }
+    return null;
   }
 
-  void test_extend() {
-    if (curFlexAngle < 180 && curFlexAngle <= extLimit) {
+  Future<void>? test_extend(bool testing) {
+    if (testing == true) {
+      _curFlexAngle += _speed_setting;
+      notifyListeners();
+    } else if (curFlexAngle < 180 && curFlexAngle <= extLimit) {
       _curFlexAngle += _speed_setting;
       notifyListeners();
     }
+    return null;
   }
 
   void setSpeed(int speed) {

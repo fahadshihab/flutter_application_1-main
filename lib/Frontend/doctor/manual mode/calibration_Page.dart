@@ -259,12 +259,29 @@ class _calibration_pageState extends State<calibration_page> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 18),
                         child: Text(
-                          'Calibrate the flexion angle to your free range of motion. Maximum degree of flexion is +120o. ',
+                          flexionMode
+                              ? 'Calibrate the flexion angle to your free range of motion'
+                              : 'Calibrate the extension angle to your range of motion',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 14,
                             color: Color(0xFF8E8E8E),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 18, vertical: 5),
+                        child: Text(
+                          flexionMode
+                              ? 'Current Flexion Limit: $flexLimit'
+                              : 'Current Extension Limit: $extLimit',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Color.fromARGB(255, 142, 142, 142),
                           ),
                         ),
                       ),
@@ -277,10 +294,30 @@ class _calibration_pageState extends State<calibration_page> {
                                 Provider.of<exoDeviceFunctions>(context,
                                         listen: false)
                                     .setFlexLimit(currentAngle);
+                                SnackBar snackBar = SnackBar(
+                                  backgroundColor: Color(0xFF004788),
+                                  content: Text(
+                                    'Flexion limit set to $currentAngle',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  duration: Duration(seconds: 1),
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
                               } else {
                                 Provider.of<exoDeviceFunctions>(context,
                                         listen: false)
                                     .setExtLimit(currentAngle);
+                                SnackBar snackBar = SnackBar(
+                                  backgroundColor: Color(0xFF004788),
+                                  content: Text(
+                                    'Extension limit set to $currentAngle',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  duration: Duration(seconds: 1),
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
                               }
                             },
                             child: Container(
@@ -433,8 +470,7 @@ class _movementCircle extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (currentangle + anglePlus < extLimit &&
-            currentangle + anglePlus > flexLimit) {
+        if (currentangle + anglePlus > 5 && currentangle + anglePlus < 180) {
           Provider.of<exoDeviceFunctions>(context, listen: false)
               .setCurFlexAngle(currentangle + anglePlus);
         }
@@ -537,7 +573,7 @@ class _person_BOX extends StatelessWidget {
           top: 20, // Adjust these values as needed (e.g., 9% from the top)
           left: 11, // 8% from the left
           child: Transform.rotate(
-            angle: ((currentAngle - 15) * pi) / 180 - 40,
+            angle: ((currentAngle - 5) * pi) / 180 - 40,
             origin: const Offset(-20, -12),
             child: SizedBox(
               height: 200,

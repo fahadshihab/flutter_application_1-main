@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
+import 'package:flutter_application_1/Frontend/doctor/therapyStart.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 
@@ -323,29 +324,44 @@ class _therapyModeState extends State<therapyMode> {
             SizedBox(
               height: 80,
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.16),
-                      offset: Offset(0, 3),
-                      blurRadius: 6,
-                      spreadRadius: 0)
-                ],
-                borderRadius: BorderRadius.circular(30),
-                color: Color(0xFF004788),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => therapyStart(
+                              reps: reps,
+                              holdTime: datetimeToSeconds(holdTime),
+                            )));
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                        color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.16),
+                        offset: Offset(0, 3),
+                        blurRadius: 6,
+                        spreadRadius: 0)
+                  ],
+                  borderRadius: BorderRadius.circular(30),
+                  color: Color(0xFF004788),
+                ),
+                child: Text('Start',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 17,
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    )),
               ),
-              child: Text('Start',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 17,
-                    color: Color.fromARGB(255, 255, 255, 255),
-                  )),
             ),
           ],
         ),
       ),
     );
   }
+}
+
+datetimeToSeconds(DateTime time) {
+  return time.hour * 60 + time.minute;
 }

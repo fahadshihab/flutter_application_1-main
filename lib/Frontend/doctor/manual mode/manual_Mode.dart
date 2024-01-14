@@ -131,7 +131,8 @@ class _manualModeState extends State<manualMode> {
   startFlexing() {
     if (isFlexing == false) {
       flextimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-        Provider.of<exoDeviceFunctions>(context, listen: false).test_flex();
+        Provider.of<exoDeviceFunctions>(context, listen: false)
+            .test_flex(false);
       });
       setState(() {
         isFlexing = true;
@@ -151,7 +152,8 @@ class _manualModeState extends State<manualMode> {
   startextending() {
     if (isExtending == false) {
       flextimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-        Provider.of<exoDeviceFunctions>(context, listen: false).test_extend();
+        Provider.of<exoDeviceFunctions>(context, listen: false)
+            .test_extend(false);
       });
       setState(() {
         isExtending = true;

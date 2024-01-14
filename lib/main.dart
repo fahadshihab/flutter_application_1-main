@@ -61,15 +61,13 @@ class DeviceControl extends StatelessWidget {
             // '/info': (context) => InfoScreen(),
             '/calibration': (context) => calibration_page(),
             '/therapy': (context) => therapyMode(),
+
             '/info': (context) => deviceSetup(),
             // Add other routes as needed
           },
           debugShowCheckedModeBanner: false,
           title: 'Device Control App',
-          home: therapyStart(
-            reps: 3,
-            holdTime: 50,
-          )),
+          home: deviceSetup()),
     );
   }
 }
