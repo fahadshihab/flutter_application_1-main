@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Frontend/doctor/Doctor_home.dart';
+import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/manual_Mode.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -33,6 +34,8 @@ class _deviceSetupState extends State<deviceSetup> {
   setSpeedOnStartUp() async {
     await Future.delayed(Duration(milliseconds: 100));
     Provider.of<exoDeviceFunctions>(context, listen: false).setSpeed(1);
+    Provider.of<exoDeviceFunctions>(context, listen: false).setExtLimit(180);
+    Provider.of<exoDeviceFunctions>(context, listen: false).setFlexLimit(15);
   }
 
   void dispose() {
@@ -226,7 +229,7 @@ class _deviceSetupState extends State<deviceSetup> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  calibrationPage()),
+                                                  manualMode()),
                                           (route) => false);
                                     },
                                     child: Text('OK',

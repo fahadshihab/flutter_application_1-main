@@ -26,14 +26,14 @@ class exoDeviceFunctions extends ChangeNotifier {
   bool get isAngleControlEnabled => _isAngleControlEnabled;
 
   void test_flex() {
-    if (curFlexAngle > 0) {
+    if (curFlexAngle > 0 && curFlexAngle >= flexLimit) {
       _curFlexAngle -= _speed_setting;
       notifyListeners();
     }
   }
 
   void test_extend() {
-    if (curFlexAngle < 180) {
+    if (curFlexAngle < 180 && curFlexAngle <= extLimit) {
       _curFlexAngle += _speed_setting;
       notifyListeners();
     }

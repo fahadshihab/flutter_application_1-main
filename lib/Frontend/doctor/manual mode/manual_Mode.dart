@@ -4,18 +4,19 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
+import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class calibrationPage extends StatefulWidget {
-  const calibrationPage({super.key});
+class manualMode extends StatefulWidget {
+  const manualMode({super.key});
 
   @override
-  State<calibrationPage> createState() => _calibrationPageState();
+  State<manualMode> createState() => _manualModeState();
 }
 
-class _calibrationPageState extends State<calibrationPage> {
+class _manualModeState extends State<manualMode> {
   bool isFlexing = false;
   bool isExtending = false;
   Timer? flextimer;
@@ -29,57 +30,7 @@ class _calibrationPageState extends State<calibrationPage> {
         .extLimit; // double extLimit = 0.0;
     int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          selectedFontSize: 15,
-          unselectedFontSize: 15,
-          selectedItemColor: Color.fromARGB(255, 0, 70, 136),
-          unselectedItemColor: Color.fromARGB(255, 0, 70, 136),
-          onTap: (value) {
-            if (value == 0) {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/manual', (route) => false);
-            } else if (value == 1) {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/calibration', (route) => false);
-            } else if (value == 2) {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/therapy', (route) => false);
-            } else if (value == 3) {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/info', (route) => false);
-            }
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'assets/icons/colors/calibration icon (1).png',
-                height: 30,
-              ),
-              label: 'Calibration',
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'assets/icons/colors/Manual icon B.png',
-                height: 30,
-              ),
-              label: 'Manual',
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'assets/icons/colors/therapy icon B.png',
-                height: 30,
-              ),
-              label: 'Therapy',
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'assets/icons/colors/info icon B.png',
-                height: 30,
-              ),
-              label: 'Info',
-            ),
-          ]),
+      bottomNavigationBar: bottomNavBar(),
       extendBodyBehindAppBar: true,
       backgroundColor: Color(0xffF0F0F2),
       appBar: AppBar(
@@ -169,78 +120,7 @@ class _calibrationPageState extends State<calibrationPage> {
                 ],
               ),
               width: MediaQuery.of(context).size.width,
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: FloatingActionButton.large(
-                        onPressed: () {},
-                        child: Text(
-                          'Stop',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Color.fromARGB(255, 255, 252, 252),
-                          ),
-                        ),
-                        backgroundColor: Color.fromARGB(255, 231, 10, 10),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color.fromARGB(255, 245, 245, 245),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              spreadRadius: 0,
-                              blurRadius: 10,
-                            ),
-                          ],
-                        ),
-                        margin: EdgeInsets.only(top: 20),
-                        child: Text(
-                          '$currentAngle°',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Color.fromARGB(255, 27, 27, 27),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Image.asset(
-                        'assets/images/Group 56 (1).png',
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 114,
-                    left: 97,
-                    child: Transform.rotate(
-                      angle: ((currentAngle - 15) * pi) / 180 - 40,
-                      origin: Offset(-20, -12),
-                      child: Image.asset(
-                        'assets/images/hand.png',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              child: _person_BOX(currentAngle: currentAngle),
             ),
           )
         ],
@@ -286,6 +166,91 @@ class _calibrationPageState extends State<calibrationPage> {
         isExtending = false;
       });
     }
+  }
+}
+
+class _person_BOX extends StatelessWidget {
+  const _person_BOX({
+    super.key,
+    required this.currentAngle,
+  });
+
+  final double currentAngle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: FloatingActionButton.large(
+              elevation: 0,
+              onPressed: () {},
+              child: Text(
+                'Stop',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Color.fromARGB(255, 255, 252, 252),
+                ),
+              ),
+              backgroundColor: Color.fromARGB(255, 231, 10, 10),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Color.fromARGB(255, 245, 245, 245),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    spreadRadius: 0,
+                    blurRadius: 3,
+                  ),
+                ],
+              ),
+              margin: EdgeInsets.only(top: 20),
+              child: Text(
+                '$currentAngle°',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Color.fromARGB(255, 27, 27, 27),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Image.asset(
+              'assets/images/Group 56 (1).png',
+            ),
+          ),
+        ),
+        Positioned(
+          top: 114,
+          left: 97,
+          child: Transform.rotate(
+            angle: ((currentAngle - 15) * pi) / 180 - 40,
+            origin: Offset(-20, -12),
+            child: Image.asset(
+              'assets/images/hand.png',
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
