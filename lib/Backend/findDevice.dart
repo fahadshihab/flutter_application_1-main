@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Backend/IGNORE_deviceFunctions.dart';
+
+import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
+import 'package:flutter_application_1/Frontend/doctor/manual%20mode/device_setup.dart';
 
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_application_1/main.dart';
+import 'package:provider/provider.dart';
 
 class ConnectDevicePage extends StatefulWidget {
   const ConnectDevicePage({super.key});
@@ -81,11 +84,13 @@ class _ConnectDevicePageState extends State<ConnectDevicePage> {
         _btSerialService =
             service; ///////////////////////////// potential probles  here witht he if statments
         service.characteristics.forEach((characteristic) {
-          // if (characteristic.uuid.toString() == RX_UUID) {
-          _serialRXCharacteristic = characteristic;
-          // } else if (characteristic.uuid.toString() == TX_UUID) {
-          _serialTXCharacteristic = characteristic;
-          // }
+          setState(() {
+            if (characteristic.uuid.toString() == RX_UUID) {
+              _serialRXCharacteristic = characteristic;
+            } else if (characteristic.uuid.toString() == TX_UUID) {
+              _serialTXCharacteristic = characteristic;
+            }
+          });
         });
         // }
       });
@@ -97,16 +102,21 @@ class _ConnectDevicePageState extends State<ConnectDevicePage> {
             "Required services and characteristics found. Starting MyDeviceControlPage.");
         setState(() {
           _connectedDevice = device;
+
+          Provider.of<exoDeviceFunctions>(context, listen: false)
+              .setSerialRX(_serialRXCharacteristic!);
+          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+              .setSerialTX(_serialTXCharacteristic!);
+          Provider.of<exoDeviceFunctions>(context, listen: false)
+              .setConnectedDevice(device);
+
+          exoDeviceFunctions().startreceiverSubscription(
+              _connectedDevice!, _serialRXCharacteristic!);
+          // } catch (e) {
+
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => MyDeviceControlPage(
-                connectedDevice: device,
-                btService: _btSerialService as BluetoothService,
-                serialRX: _serialRXCharacteristic as BluetoothCharacteristic,
-                serialTX: _serialTXCharacteristic as BluetoothCharacteristic,
-              ),
-            ),
+            MaterialPageRoute(builder: (context) => deviceSetup()),
           );
         });
       } else {

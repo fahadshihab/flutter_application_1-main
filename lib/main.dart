@@ -52,7 +52,14 @@ class DeviceControl extends StatelessWidget {
       ),
     );
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => exoDeviceFunctions())],
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => exoDeviceFunctions(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => exoBluetoothControlFunctions(),
+        )
+      ],
       child: MaterialApp(
           routes: {
             // '/home': (context) => HomeScreen(),
@@ -67,7 +74,7 @@ class DeviceControl extends StatelessWidget {
           },
           debugShowCheckedModeBanner: false,
           title: 'Device Control App',
-          home: deviceSetup()),
+          home: calibration_page()),
     );
   }
 }

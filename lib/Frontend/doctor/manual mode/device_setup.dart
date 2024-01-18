@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Frontend/doctor/Doctor_home.dart';
+
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/manual_Mode.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
@@ -28,7 +29,7 @@ class _deviceSetupState extends State<deviceSetup> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    setSpeedOnStartUp();
+    // setSpeedOnStartUp();
   }
 
   setSpeedOnStartUp() async {
@@ -52,6 +53,8 @@ class _deviceSetupState extends State<deviceSetup> {
   Widget build(BuildContext context) {
     double curFlexAngle = Provider.of<exoDeviceFunctions>(context).curFlexAngle;
     int currentSpeed = Provider.of<exoDeviceFunctions>(context).speed_setting;
+    BluetoothCharacteristic? serialTX =
+        Provider.of<exoBluetoothControlFunctions>(context).serialTX;
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -109,12 +112,15 @@ class _deviceSetupState extends State<deviceSetup> {
               children: [
                 GestureDetector(
                     onTapDown: (details) {
-                      startFlexing();
+                      // startFlexing();
+                      exoBluetoothControlFunctions().flex(null, serialTX!);
                     },
                     onTapUp: (details) {
-                      stopFlexing();
+                      // stopFlexing();
+                      exoBluetoothControlFunctions().stop(serialTX!);
                     },
-                    onTapCancel: () => stopFlexing(),
+                    onTapCancel: () =>
+                        exoBluetoothControlFunctions().stop(serialTX!),
                     child: _Flex_BUTTON()),
                 SizedBox(
                   width: 20,
@@ -125,12 +131,13 @@ class _deviceSetupState extends State<deviceSetup> {
                 ),
                 GestureDetector(
                     onTapDown: (details) {
-                      startextending();
+                      exoBluetoothControlFunctions().extend(50, serialTX!);
                     },
                     onTapUp: (details) {
-                      stopextending();
+                      exoBluetoothControlFunctions().stop(serialTX!);
                     },
-                    onTapCancel: () => stopextending(),
+                    onTapCancel: () =>
+                        exoBluetoothControlFunctions().stop(serialTX!),
                     child: _Extend_BUTTON()),
               ],
             ),
@@ -151,23 +158,43 @@ class _deviceSetupState extends State<deviceSetup> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _Speed_BUTTON(speed: 1, currentSpeed: currentSpeed),
+                _Speed_BUTTON(
+                  speed: 1,
+                  currentSpeed: currentSpeed,
+                  serialTX: serialTX,
+                ),
                 SizedBox(
                   width: 10,
                 ),
-                _Speed_BUTTON(speed: 2, currentSpeed: currentSpeed),
+                _Speed_BUTTON(
+                  speed: 2,
+                  currentSpeed: currentSpeed,
+                  serialTX: serialTX,
+                ),
                 SizedBox(
                   width: 10,
                 ),
-                _Speed_BUTTON(speed: 3, currentSpeed: currentSpeed),
+                _Speed_BUTTON(
+                  speed: 3,
+                  currentSpeed: currentSpeed,
+                  serialTX: serialTX,
+                ),
                 SizedBox(
                   width: 10,
                 ),
-                _Speed_BUTTON(speed: 4, currentSpeed: currentSpeed),
+                _Speed_BUTTON(
+                  speed: 4,
+                  currentSpeed: currentSpeed,
+                  serialTX: serialTX,
+                ),
                 SizedBox(
                   width: 10,
                 ),
-                _Speed_BUTTON(speed: 5, currentSpeed: currentSpeed),
+                _Speed_BUTTON(
+                  speed: 5,
+                  currentSpeed: currentSpeed,
+                  serialTX: serialTX,
+                ),
               ],
             ),
             SizedBox(
@@ -179,8 +206,7 @@ class _deviceSetupState extends State<deviceSetup> {
                     setState(() {
                       extlimit = curFlexAngle;
                     });
-                    Provider.of<exoDeviceFunctions>(context, listen: false)
-                        .setExtLimit(curFlexAngle);
+                    exoBluetoothControlFunctions().setExtLimit(serialTX!);
                     SnackBar snackBar = SnackBar(
                       content: Center(
                         child: Text('Extention Limit set to $curFlexAngle',
@@ -198,8 +224,7 @@ class _deviceSetupState extends State<deviceSetup> {
                     setState(() {
                       flexlimit = curFlexAngle;
                     });
-                    Provider.of<exoDeviceFunctions>(context, listen: false)
-                        .setFlexLimit(curFlexAngle);
+                    exoBluetoothControlFunctions().setFlexLimit(serialTX!);
                     showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
@@ -267,64 +292,24 @@ class _deviceSetupState extends State<deviceSetup> {
       ),
     );
   }
-
-  startFlexing() {
-    if (isFlexing == false) {
-      flextimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-        Provider.of<exoDeviceFunctions>(context, listen: false)
-            .test_flex(false);
-      });
-      setState(() {
-        isFlexing = true;
-      });
-    }
-  }
-
-  stopFlexing() {
-    if (isFlexing == true) {
-      flextimer!.cancel();
-      setState(() {
-        isFlexing = false;
-      });
-    }
-  }
-
-  startextending() {
-    if (isExtending == false) {
-      flextimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-        Provider.of<exoDeviceFunctions>(context, listen: false)
-            .test_extend(false);
-      });
-      setState(() {
-        isExtending = true;
-      });
-    }
-  }
-
-  stopextending() {
-    if (isExtending == true) {
-      flextimer!.cancel();
-      setState(() {
-        isExtending = false;
-      });
-    }
-  }
 }
 
 class _Speed_BUTTON extends StatelessWidget {
   int speed;
   int currentSpeed;
+  BluetoothCharacteristic? serialTX;
   _Speed_BUTTON({
     super.key,
     required this.speed,
     required this.currentSpeed,
+    required this.serialTX,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Provider.of<exoDeviceFunctions>(context, listen: false).setSpeed(speed);
+        exoBluetoothControlFunctions().setSpeed(speed, serialTX!);
         SnackBar snackBar = SnackBar(
           content: Center(
             child: Text('Speed set to $speed',

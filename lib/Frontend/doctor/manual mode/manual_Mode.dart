@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,6 +23,8 @@ class _manualModeState extends State<manualMode> {
   Timer? flextimer;
   @override
   Widget build(BuildContext context) {
+    BluetoothCharacteristic serialTX =
+        Provider.of<exoDeviceFunctions>(context).serialRX!;
     double currentAngle = Provider.of<exoDeviceFunctions>(context)
         .curFlexAngle; // double currentAngle = 90.0;
     double startLimit = Provider.of<exoDeviceFunctions>(context)
@@ -36,7 +39,7 @@ class _manualModeState extends State<manualMode> {
       appBar: AppBar(
         centerTitle: false,
         title: Text(
-          'Manual Mode',
+          '',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -77,12 +80,13 @@ class _manualModeState extends State<manualMode> {
                   children: [
                     GestureDetector(
                         onTapDown: (details) {
-                          startFlexing();
+                          exoBluetoothControlFunctions().flex(null, serialTX);
                         },
                         onTapUp: (details) {
-                          stopFlexing();
+                          exoBluetoothControlFunctions().flex(null, serialTX);
                         },
-                        onTapCancel: () => stopFlexing(),
+                        onTapCancel: () =>
+                            exoBluetoothControlFunctions().stop(serialTX),
                         child: _Flex_BUTTON()),
                     SizedBox(
                       height: 20,
@@ -93,12 +97,13 @@ class _manualModeState extends State<manualMode> {
                     ),
                     GestureDetector(
                         onTapDown: (details) {
-                          startextending();
+                          exoBluetoothControlFunctions().extend(null, serialTX);
                         },
                         onTapUp: (details) {
-                          stopextending();
+                          exoBluetoothControlFunctions().extend(null, serialTX);
                         },
-                        onTapCancel: () => stopextending(),
+                        onTapCancel: () =>
+                            exoBluetoothControlFunctions().stop(serialTX),
                         child: _Extend_BUTTON()),
                   ],
                 ),
@@ -145,27 +150,6 @@ class _manualModeState extends State<manualMode> {
       flextimer!.cancel();
       setState(() {
         isFlexing = false;
-      });
-    }
-  }
-
-  startextending() {
-    if (isExtending == false) {
-      flextimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-        Provider.of<exoDeviceFunctions>(context, listen: false)
-            .test_extend(false);
-      });
-      setState(() {
-        isExtending = true;
-      });
-    }
-  }
-
-  stopextending() {
-    if (isExtending == true) {
-      flextimer!.cancel();
-      setState(() {
-        isExtending = false;
       });
     }
   }
