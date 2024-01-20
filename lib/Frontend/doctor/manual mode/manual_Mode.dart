@@ -9,6 +9,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rive/rive.dart';
 
 class manualMode extends StatefulWidget {
   const manualMode({super.key});

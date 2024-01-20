@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_application_1/Frontend/doctor/manual%20mode/therapymode.
 import 'package:flutter_application_1/Frontend/doctor/therapyStart.dart';
 
 import 'package:flutter_application_1/auth/signinUI.dart';
+import 'package:flutter_application_1/ckeckBluetoothConnection.dart';
 
 import 'dart:async';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -58,7 +60,10 @@ class DeviceControl extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => exoBluetoothControlFunctions(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (_) => bluetoothState(),
+        ),
       ],
       child: MaterialApp(
           routes: {
@@ -74,7 +79,7 @@ class DeviceControl extends StatelessWidget {
           },
           debugShowCheckedModeBanner: false,
           title: 'Device Control App',
-          home: calibration_page()),
+          home: checkBluetoothConnection()),
     );
   }
 }
