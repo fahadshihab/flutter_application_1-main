@@ -80,9 +80,9 @@ class _findDeviceState extends State<findDevice> {
     subscription = FlutterBluePlus.onScanResults.listen((results) {
       for (ScanResult result in results) {
         if (_devices.contains(result.device)) continue;
-        if (result.device.platformName.contains('CREAID')) {
-          // if (result.device.platformName != '' &&
-          //     result.device.platformName != null) {
+        // if (result.device.platformName.contains('CREAID')) {
+        if (result.device.platformName != '' &&
+            result.device.platformName != null) {
           setState(() {
             _devices.add(result.device);
           });
