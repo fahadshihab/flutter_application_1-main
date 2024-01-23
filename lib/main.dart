@@ -1,26 +1,19 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
 import 'package:flutter_application_1/Backend/findDevice.dart';
+
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/calibration_Page.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/manual_Mode.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/therapymode.dart';
-import 'package:flutter_application_1/Frontend/doctor/therapyStart.dart';
+import 'package:flutter_application_1/Frontend/doctor/manual%20mode/voiceMode.dart';
 
-import 'package:flutter_application_1/auth/signinUI.dart';
 import 'package:flutter_application_1/ckeckBluetoothConnection.dart';
 
-import 'dart:async';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'dart:convert';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'Frontend/doctor/manual mode/device_setup.dart';
 import 'firebase_options.dart';
-
-import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -79,7 +72,7 @@ class DeviceControl extends StatelessWidget {
           },
           debugShowCheckedModeBanner: false,
           title: 'Device Control App',
-          home: checkBluetoothConnection()),
+          home: findDevice()),
     );
   }
 }

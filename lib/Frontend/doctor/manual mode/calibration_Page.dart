@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/manual_Mode.dart';
+import 'package:flutter_application_1/Frontend/widgets/hexoAnimation.dart';
 import 'package:provider/provider.dart';
 
 class calibration_page extends StatefulWidget {
@@ -443,7 +444,7 @@ class _calibration_pageState extends State<calibration_page> {
                 ],
               ),
               width: MediaQuery.of(context).size.width,
-              child: _person_BOX(currentAngle: currentAngle),
+              child: hexoAnimationWidget(),
             ),
           )
         ],

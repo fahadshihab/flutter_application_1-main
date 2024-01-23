@@ -5,6 +5,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
+import 'package:flutter_application_1/Frontend/widgets/hexoAnimation.dart';
+import 'package:flutter_application_1/Frontend/widgets/voiceAnimation.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -40,7 +42,7 @@ class _manualModeState extends State<manualMode> {
       appBar: AppBar(
         centerTitle: false,
         title: Text(
-          '',
+          'Manual Mode',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -76,18 +78,75 @@ class _manualModeState extends State<manualMode> {
             ),
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Column(
                   children: [
+                    //Limits display
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color.fromARGB(255, 241, 243, 246),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            spreadRadius: 0,
+                            blurRadius: 10,
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Limits',
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: Color.fromARGB(255, 90, 90, 90),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'Flex: $startLimit°',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: Color.fromARGB(255, 90, 90, 90),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                'Extend: $endLimit°',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: Color.fromARGB(255, 90, 90, 90),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     GestureDetector(
                         onTapDown: (details) {
+                          // startFlexing();
                           exoBluetoothControlFunctions().flex(null, serialTX);
                         },
                         onTapUp: (details) {
                           exoBluetoothControlFunctions().flex(null, serialTX);
+                          // stopFlexing();
                         },
-                        onTapCancel: () =>
-                            exoBluetoothControlFunctions().stop(serialTX),
+                        onTapCancel: () {
+                          // stopFlexing();
+                          exoBluetoothControlFunctions().stop(serialTX);
+                        },
                         child: _Flex_BUTTON()),
                     SizedBox(
                       height: 20,
@@ -113,132 +172,58 @@ class _manualModeState extends State<manualMode> {
           ),
           Expanded(
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color.fromARGB(255, 241, 243, 246),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    spreadRadius: 0,
-                    blurRadius: 10,
-                  ),
-                ],
-              ),
-              width: MediaQuery.of(context).size.width,
-              child: _person_BOX(currentAngle: currentAngle),
-            ),
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color.fromARGB(255, 241, 243, 246),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      spreadRadius: 0,
+                      blurRadius: 10,
+                    ),
+                  ],
+                ),
+                width: MediaQuery.of(context).size.width,
+                child: Stack(children: [
+                  hexoAnimationWidget(),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: voiceAnimation(),
+                  )
+                ])),
           )
         ],
       ),
     );
   }
 
-  startFlexing() {
-    if (isFlexing == false) {
-      flextimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-        Provider.of<exoDeviceFunctions>(context, listen: false)
-            .test_flex(false);
-      });
-      setState(() {
-        isFlexing = true;
-      });
-    }
-  }
+  /////////////////////////////// FOR TESTING PURPOSES ONLY  BELOW ///////////////////////////////
+  ///
+  ///
+  ///
+  // startFlexing() {
+  //   if (isFlexing == false) {
+  //     flextimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+  //       Provider.of<exoDeviceFunctions>(context, listen: false)
+  //           .test_flex(false);
+  //     });
+  //     setState(() {
+  //       isFlexing = true;
+  //     });
+  //   }
+  // }
 
-  stopFlexing() {
-    if (isFlexing == true) {
-      flextimer!.cancel();
-      setState(() {
-        isFlexing = false;
-      });
-    }
-  }
-}
+  // stopFlexing() {
+  //   if (isFlexing == true) {
+  //     flextimer!.cancel();
+  //     setState(() {
+  //       isFlexing = false;
+  //     });
+  //   }
+  // }
 
-class _person_BOX extends StatelessWidget {
-  const _person_BOX({
-    super.key,
-    required this.currentAngle,
-  });
-
-  final double currentAngle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Align(
-            alignment: Alignment.bottomRight,
-            child: FloatingActionButton.large(
-              elevation: 0,
-              onPressed: () {},
-              child: Text(
-                'Stop',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Color.fromARGB(255, 255, 252, 252),
-                ),
-              ),
-              backgroundColor: Color.fromARGB(255, 231, 10, 10),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.topRight,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color.fromARGB(255, 245, 245, 245),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    spreadRadius: 0,
-                    blurRadius: 3,
-                  ),
-                ],
-              ),
-              margin: EdgeInsets.only(top: 20),
-              child: Text(
-                '$currentAngle°',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Color.fromARGB(255, 27, 27, 27),
-                ),
-              ),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Image.asset(
-              'assets/images/Group 56 (1).png',
-            ),
-          ),
-        ),
-        Positioned(
-          top: 114,
-          left: 97,
-          child: Transform.rotate(
-            angle: ((currentAngle - 15) * pi) / 180 - 40,
-            origin: Offset(-20, -12),
-            child: Image.asset(
-              'assets/images/hand.png',
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+  ///////////////////////////////////////////////////////////////////////////////////////////// END
 }
 
 class _Extend_BUTTON extends StatelessWidget {
@@ -250,7 +235,7 @@ class _Extend_BUTTON extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(left: 20, right: 20),
-      height: 80,
+      height: 70,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -289,7 +274,7 @@ class _Stop_BUTTON extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
+      height: 70,
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(left: 20, right: 20),
       decoration: BoxDecoration(
@@ -329,7 +314,7 @@ class _Flex_BUTTON extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
+      height: 70,
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(left: 20, right: 20),
       decoration: BoxDecoration(

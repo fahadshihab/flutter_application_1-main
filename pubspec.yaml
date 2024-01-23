@@ -84,8 +84,9 @@ flutter:
     - assets/icons/colors/therapy icon B.png
     - assets/images/person_nohand.png
     - assets/images/Adult-Swim-Art-GIF-by-Micah-Bu-unscreen.gif
-    - assets/rive/new_file.riv
+    - assets\rive\new_file.riv
     - assets/images/backgroundHexo.gif
+    - assets\rive\google_assistant_redesign_-_animation.riv
    
   
 
