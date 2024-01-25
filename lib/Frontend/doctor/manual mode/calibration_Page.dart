@@ -17,6 +17,15 @@ class calibration_page extends StatefulWidget {
 
 class _calibration_pageState extends State<calibration_page> {
   bool flexionMode = true;
+  bool angleControlSwitch = false;
+  bool romLimitSwitch = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
@@ -313,71 +322,143 @@ class _calibration_pageState extends State<calibration_page> {
                           ),
                         ),
                       ),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: GestureDetector(
-                            onTap: () {
-                              if (flexionMode) {
-                                Provider.of<exoBluetoothControlFunctions>(
-                                        context,
-                                        listen: false)
-                                    .setFlexLimit(serialTX!);
-                                SnackBar snackBar = SnackBar(
-                                  backgroundColor: Color(0xFF004788),
-                                  content: Text(
-                                    'Flexion limit set to $currentAngle',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  duration: Duration(seconds: 1),
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              } else {
-                                Provider.of<exoBluetoothControlFunctions>(
-                                        context,
-                                        listen: false)
-                                    .setExtLimit(serialTX!);
-                                SnackBar snackBar = SnackBar(
-                                  backgroundColor: Color(0xFF004788),
-                                  content: Text(
-                                    'Extension limit set to $currentAngle',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  duration: Duration(seconds: 1),
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              }
-                            },
-                            child: Container(
-                                margin: EdgeInsets.only(left: 20, bottom: 10),
-                                height: 50,
-                                width: 150,
-                                padding: EdgeInsets.symmetric(vertical: 10),
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(100)),
-                                  color: Color(0xFFD9E5F0),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    flexionMode
-                                        ? 'Set Flex Limit'
-                                        : 'Set Exten Limit',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 15,
-                                      color: Color(0xFF004788),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.bottomLeft,
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (flexionMode) {
+                                    Provider.of<exoBluetoothControlFunctions>(
+                                            context,
+                                            listen: false)
+                                        .setFlexLimit(serialTX!);
+                                    SnackBar snackBar = SnackBar(
+                                      backgroundColor: Color(0xFF004788),
+                                      content: Text(
+                                        'Flexion limit set to $currentAngle',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      duration: Duration(seconds: 1),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  } else {
+                                    Provider.of<exoBluetoothControlFunctions>(
+                                            context,
+                                            listen: false)
+                                        .setExtLimit(serialTX!);
+                                    SnackBar snackBar = SnackBar(
+                                      backgroundColor: Color(0xFF004788),
+                                      content: Text(
+                                        'Extension limit set to $currentAngle',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      duration: Duration(seconds: 1),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  }
+                                },
+                                child: Container(
+                                    margin:
+                                        EdgeInsets.only(left: 20, bottom: 10),
+                                    height: 40,
+                                    width: 150,
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100)),
+                                      color: Color(0xFFD9E5F0),
                                     ),
-                                  ),
-                                )),
+                                    child: Center(
+                                      child: Text(
+                                        flexionMode
+                                            ? 'Set Flex Limit'
+                                            : 'Set Exten Limit',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15,
+                                          color: Color(0xFF004788),
+                                        ),
+                                      ),
+                                    )),
+                              ),
+                            ),
                           ),
-                        ),
+                          if (serialTX != null)
+                            _stopButton(
+                              serialTX: serialTX,
+                            ),
+                          SizedBox(
+                            width: 20,
+                          )
+                        ],
                       )
                     ],
                   ),
                 ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Text(
+                      'Angle Control',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                        color: Color(0xFF004788),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Container(
+                      child: Switch.adaptive(
+                          value: angleControlSwitch,
+                          onChanged: (value) {
+                            setState(() {
+                              angleControlSwitch = value;
+                            });
+                            if (serialTX != null) {
+                              Provider.of<exoBluetoothControlFunctions>(context,
+                                      listen: false)
+                                  .setAngleControlEnabled(value, serialTX!);
+                            }
+                          }),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Text(
+                      'ROM Limits',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                        color: Color(0xFF004788),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Container(
+                      child: Switch.adaptive(
+                          value: romLimitSwitch,
+                          onChanged: (value) {
+                            setState(() {
+                              romLimitSwitch = value;
+                            });
+                            if (serialTX != null) {
+                              Provider.of<exoBluetoothControlFunctions>(context,
+                                      listen: false)
+                                  .setROMLimitEnabled(value, serialTX!);
+                            }
+                          }),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
@@ -473,7 +554,8 @@ class _calibration_pageState extends State<calibration_page> {
                 ],
               ),
               width: MediaQuery.of(context).size.width,
-              child: hexoAnimationWidget(),
+              child: SizedBox(
+                  height: 200, width: 200, child: hexoAnimationWidget()),
             ),
           ),
         ],
@@ -509,15 +591,10 @@ class _movementCircleState extends State<_movementCircle> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (TapDownDetails details) {
+      onTap: () {
         setState(() {
           buttonPressed = true;
         });
-
-        if (widget.serialTX != null) {
-          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
-              .setROMLimitEnabled(false, widget.serialTX!);
-        }
 
         if (widget.anglePlus.isNegative && widget.serialTX != null) {
           Provider.of<exoBluetoothControlFunctions>(context, listen: false)
@@ -526,29 +603,6 @@ class _movementCircleState extends State<_movementCircle> {
             widget.serialTX != null) {
           Provider.of<exoBluetoothControlFunctions>(context, listen: false)
               .entendByAngle(widget.anglePlus.toDouble(), widget.serialTX!);
-        }
-      },
-      onTapUp: (details) {
-        setState(() {
-          buttonPressed = false;
-        });
-        buttonPressed = false;
-        if (widget.serialTX != null) {
-          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
-              .setROMLimitEnabled(true, widget.serialTX!);
-          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
-              .stop(widget.serialTX!);
-        }
-      },
-      onTapCancel: () {
-        setState(() {
-          buttonPressed = false;
-        });
-        if (widget.serialTX != null) {
-          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
-              .setROMLimitEnabled(true, widget.serialTX!);
-          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
-              .stop(widget.serialTX!);
         }
       },
       child: Container(
@@ -667,30 +721,38 @@ class _person_BOX extends StatelessWidget {
 }
 
 class _stopButton extends StatelessWidget {
-  const _stopButton({
+  BluetoothCharacteristic serialTX;
+  _stopButton({
     Key? key,
+    required this.serialTX,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 50,
-        width: 150,
-        padding: EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(100)),
-          color: Color.fromARGB(255, 224, 83, 83),
-        ),
-        child: Center(
-          child: Text(
-            'Stop',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 15,
-              color: Color.fromARGB(255, 255, 255, 255),
-            ),
+    return GestureDetector(
+      onTapDown: (details) {
+        Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+            .EmergencyStop(serialTX);
+      },
+      child: Container(
+          height: 40,
+          width: 150,
+          padding: EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(100)),
+            color: Color.fromARGB(255, 224, 83, 83),
           ),
-        ));
+          child: Center(
+            child: Text(
+              'Stop',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 15,
+                color: Color.fromARGB(255, 255, 255, 255),
+              ),
+            ),
+          )),
+    );
   }
 }
 

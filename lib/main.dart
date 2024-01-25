@@ -83,6 +83,7 @@ class _DeviceControlState extends State<DeviceControl> {
       navigatorKey: navigatorKey,
       title: 'Device Control App',
       home: findDevice(),
+      // home: calibration_page(),
       // home: manualMode(),
     );
   }
