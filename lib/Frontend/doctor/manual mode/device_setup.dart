@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Backend/checkBluetoothConnection.dart';
 
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/manual_Mode.dart';
@@ -22,6 +23,7 @@ class _deviceSetupState extends State<deviceSetup> {
   Timer? flextimer;
   bool isFlexing = false;
   bool isExtending = false;
+  bool zero_set = false;
   double? flexlimit;
   double? extlimit;
 
@@ -86,7 +88,11 @@ class _deviceSetupState extends State<deviceSetup> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              extlimit == null ? 'FIX Extention Limit' : 'FIX Flexion Limit',
+              !zero_set
+                  ? 'Set Zero'
+                  : extlimit == null
+                      ? 'Set Extention Limit'
+                      : 'Set Flexion Limit',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 25,
@@ -97,7 +103,9 @@ class _deviceSetupState extends State<deviceSetup> {
               padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
               child: Text(
                 textAlign: TextAlign.center,
-                'Please set the flex and extend limits of the device \n\n Current Angle : $curFlexAngle',
+                !zero_set
+                    ? "Set Max Extention of the device. The device shoule be stright"
+                    : 'Please set the flex and extend limits of the device \n\n Current Angle : $curFlexAngle',
                 style: TextStyle(
                   fontSize: 18,
                   color: Color.fromARGB(255, 90, 90, 90),
@@ -202,14 +210,14 @@ class _deviceSetupState extends State<deviceSetup> {
             ),
             GestureDetector(
                 onTap: () {
-                  if (extlimit == null) {
+                  if (zero_set == false) {
+                    exoBluetoothControlFunctions().setZero(serialTX!);
                     setState(() {
-                      extlimit = curFlexAngle;
+                      zero_set = true;
                     });
-                    exoBluetoothControlFunctions().setExtLimit(serialTX!);
                     SnackBar snackBar = SnackBar(
                       content: Center(
-                        child: Text('Extention Limit set to $curFlexAngle',
+                        child: Text('Zero set',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
@@ -221,71 +229,92 @@ class _deviceSetupState extends State<deviceSetup> {
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   } else {
-                    setState(() {
-                      flexlimit = curFlexAngle;
-                    });
-                    exoBluetoothControlFunctions().setFlexLimit(serialTX!);
-                    showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                              title: Center(
-                                child: Text('Calibration Complete',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: Color(0xFF004788),
-                                    )),
-                              ),
-                              content: Text(
-                                'Flexion Limit set to $flexlimit \nExtention Limit set to $extlimit',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Color.fromARGB(255, 90, 90, 90),
+                    if (extlimit == null) {
+                      setState(() {
+                        extlimit = curFlexAngle;
+                      });
+                      exoBluetoothControlFunctions().setExtLimit(serialTX!);
+                      SnackBar snackBar = SnackBar(
+                        content: Center(
+                          child: Text('Extention Limit set to $curFlexAngle',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Color.fromARGB(255, 255, 255, 255),
+                              )),
+                        ),
+                        duration: Duration(milliseconds: 500),
+                        backgroundColor: Color(0xFF004788),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else {
+                      setState(() {
+                        flexlimit = curFlexAngle;
+                      });
+                      exoBluetoothControlFunctions().setFlexLimit(serialTX!);
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Center(
+                                  child: Text('Calibration Complete',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Color(0xFF004788),
+                                      )),
                                 ),
-                              ),
-                              actions: [
-                                ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Color(0xFF004788),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  manualMode()),
-                                          (route) => false);
-                                    },
-                                    child: Text('OK',
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          color: Color.fromARGB(
-                                              255, 255, 255, 255),
-                                        ))),
-                                ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Color(0xFF004788),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        extlimit = null;
-                                        flexlimit = null;
-                                      });
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text('re-calibrate',
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          color: Color.fromARGB(
-                                              255, 255, 255, 255),
-                                        ))),
-                              ],
-                            ));
+                                content: Text(
+                                  'Flexion Limit set to $flexlimit \nExtention Limit set to $extlimit',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Color.fromARGB(255, 90, 90, 90),
+                                  ),
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Color(0xFF004788),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    manualMode()),
+                                            (route) => false);
+                                      },
+                                      child: Text('OK',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                          ))),
+                                  ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Color(0xFF004788),
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          extlimit = null;
+                                          flexlimit = null;
+                                        });
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('re-calibrate',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                          ))),
+                                ],
+                              ));
+                    }
                   }
                 },
                 child: _setLimit_BUTTON(
                   extention: extlimit == null ? true : false,
+                  set_zero: zero_set,
                 ))
           ],
         ),
@@ -474,10 +503,12 @@ class _Flex_BUTTON extends StatelessWidget {
 
 class _setLimit_BUTTON extends StatelessWidget {
   bool extention;
+  bool set_zero;
 
   _setLimit_BUTTON({
     super.key,
     required this.extention,
+    required this.set_zero,
   });
 
   @override
@@ -502,7 +533,11 @@ class _setLimit_BUTTON extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          extention == true ? 'Set Extition Limit' : 'Set Flexion Limit',
+          set_zero
+              ? extention == true
+                  ? 'Set Extition Limit'
+                  : 'Set Flexion Limit'
+              : 'Set Zero',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,

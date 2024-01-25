@@ -29,23 +29,21 @@ class hexoAnimationWidget extends StatelessWidget {
       child: GestureDetector(
         onTapDown: (details) {},
         onTapUp: (details) {},
-        child: Container(
-          child: RiveAnimation.asset(
-            'assets/rive/new_file.riv',
-            fit: BoxFit.fitHeight,
-            onInit: (artbord) {
-              _controller = StateMachineController.fromArtboard(
-                  artbord, 'State Machine 1');
-              if (_controller != null) {
-                artbord.addController(_controller!);
+        child: RiveAnimation.asset(
+          'assets/rive/new_file.riv',
+          fit: BoxFit.fitHeight,
+          onInit: (artbord) {
+            _controller =
+                StateMachineController.fromArtboard(artbord, 'State Machine 1');
+            if (_controller != null) {
+              artbord.addController(_controller!);
 
-                _input = _controller!.findInput('Number 1');
-                _input!.change(mapValue(
-                    Provider.of<exoDeviceFunctions>(context, listen: false)
-                        .curFlexAngle));
-              }
-            },
-          ),
+              _input = _controller!.findInput('Number 1');
+              _input!.change(mapValue(
+                  Provider.of<exoDeviceFunctions>(context, listen: false)
+                      .curFlexAngle));
+            }
+          },
         ),
       ),
     );

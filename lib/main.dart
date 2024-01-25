@@ -1,19 +1,19 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/Backend/checkBluetoothConnection.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
 import 'package:flutter_application_1/Backend/findDevice.dart';
 
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/calibration_Page.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/manual_Mode.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/therapymode.dart';
-import 'package:flutter_application_1/Frontend/doctor/manual%20mode/voiceMode.dart';
-
-import 'package:flutter_application_1/ckeckBluetoothConnection.dart';
 
 import 'package:provider/provider.dart';
 import 'Frontend/doctor/manual mode/device_setup.dart';
 import 'firebase_options.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,11 +22,31 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(DeviceControl());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+      create: (_) => exoDeviceFunctions(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => exoBluetoothControlFunctions(),
+    ),
+  ], child: DeviceControl()));
 }
 
-class DeviceControl extends StatelessWidget {
+class DeviceControl extends StatefulWidget {
   const DeviceControl({Key? key}) : super(key: key);
+
+  @override
+  State<DeviceControl> createState() => _DeviceControlState();
+}
+
+class _DeviceControlState extends State<DeviceControl> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    test();
+    checkBluetoothConnection(navigatorKey).bluetootchConnectionListner();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,33 +66,24 @@ class DeviceControl extends StatelessWidget {
         systemNavigationBarContrastEnforced: false,
       ),
     );
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => exoDeviceFunctions(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => exoBluetoothControlFunctions(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => bluetoothState(),
-        ),
-      ],
-      child: MaterialApp(
-          routes: {
-            // '/home': (context) => HomeScreen(),
-            '/deviceSetup': (context) => deviceSetup(),
-            '/manual': (context) => manualMode(),
-            // '/info': (context) => InfoScreen(),
-            '/calibration': (context) => calibration_page(),
-            '/therapy': (context) => therapyMode(),
+    return MaterialApp(
+      routes: {
+        // '/home': (context) => HomeScreen(),
+        '/findDevice': (context) => findDevice(),
+        '/deviceSetup': (context) => deviceSetup(),
+        '/manual': (context) => manualMode(),
+        // '/info': (context) => InfoScreen(),
+        '/calibration': (context) => calibration_page(),
+        '/therapy': (context) => therapyMode(),
 
-            '/info': (context) => deviceSetup(),
-            // Add other routes as needed
-          },
-          debugShowCheckedModeBanner: false,
-          title: 'Device Control App',
-          home: findDevice()),
+        '/info': (context) => deviceSetup(),
+        // Add other routes as needed
+      },
+      debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
+      title: 'Device Control App',
+      home: findDevice(),
+      // home: manualMode(),
     );
   }
 }

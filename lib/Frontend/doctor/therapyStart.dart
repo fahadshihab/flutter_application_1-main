@@ -64,7 +64,7 @@ class _therapyStartState extends State<therapyStart> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Rep 1',
+                    'Rep 0',
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 15,
@@ -72,7 +72,7 @@ class _therapyStartState extends State<therapyStart> {
                     ),
                   ),
                   Text(
-                    'Rep 10',
+                    'Rep ${widget.reps}',
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 15,
@@ -126,9 +126,7 @@ class _therapyStartState extends State<therapyStart> {
                 children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {
-                        startReps(context, 3);
-                      },
+                      onTap: () {},
                       child: Container(
                         height: 50,
                         decoration: BoxDecoration(
@@ -152,19 +150,29 @@ class _therapyStartState extends State<therapyStart> {
                     width: 15,
                   ),
                   Expanded(
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Color(0xffD20E0E),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'STOP',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 17,
-                            color: Colors.white,
+                    child: GestureDetector(
+                      onTap: () {
+                        Provider.of<exoBluetoothControlFunctions>(context,
+                                listen: false)
+                            .stop(Provider.of<exoBluetoothControlFunctions>(
+                                    context,
+                                    listen: false)
+                                .serialTX!);
+                      },
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Color(0xffD20E0E),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'STOP',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 17,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),

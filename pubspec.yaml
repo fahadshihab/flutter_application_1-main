@@ -51,6 +51,11 @@ dependencies:
   rive: ^0.12.4
 
 
+
+
+  
+
+
   #speech_to_text: ^6.5.1
   #permission_handler: ^8.1.4
   #picovoice_flutter: ^3.0.1
@@ -67,6 +72,13 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/app_icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -84,9 +96,9 @@ flutter:
     - assets/icons/colors/therapy icon B.png
     - assets/images/person_nohand.png
     - assets/images/Adult-Swim-Art-GIF-by-Micah-Bu-unscreen.gif
-    - assets\rive\new_file.riv
+    - assets/rive/new_file.riv
     - assets/images/backgroundHexo.gif
-    - assets\rive\google_assistant_redesign_-_animation.riv
+    - assets/rive/google_assistant_redesign_-_animation.riv
    
   
 

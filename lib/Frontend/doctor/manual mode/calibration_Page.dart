@@ -5,6 +5,7 @@ import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/manual_Mode.dart';
 import 'package:flutter_application_1/Frontend/widgets/hexoAnimation.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 
 class calibration_page extends StatefulWidget {
@@ -22,6 +23,8 @@ class _calibration_pageState extends State<calibration_page> {
     double currentAngle = Provider.of<exoDeviceFunctions>(context).curFlexAngle;
     double flexLimit = Provider.of<exoDeviceFunctions>(context).flexLimit;
     double extLimit = Provider.of<exoDeviceFunctions>(context).extLimit;
+    BluetoothCharacteristic? serialTX =
+        Provider.of<exoBluetoothControlFunctions>(context).serialTX;
     return Scaffold(
       bottomNavigationBar: bottomNavBar(),
       backgroundColor: Color(0xFFECEFF1),
@@ -200,6 +203,10 @@ class _calibration_pageState extends State<calibration_page> {
                               currentangle: currentAngle,
                               extLimit: extLimit,
                               flexLimit: flexLimit,
+                              serialTX:
+                                  Provider.of<exoBluetoothControlFunctions>(
+                                          context)
+                                      .serialTX,
                             ),
                             SizedBox(
                               width: 10,
@@ -210,6 +217,10 @@ class _calibration_pageState extends State<calibration_page> {
                               currentangle: currentAngle,
                               extLimit: extLimit,
                               flexLimit: flexLimit,
+                              serialTX:
+                                  Provider.of<exoBluetoothControlFunctions>(
+                                          context)
+                                      .serialTX,
                             ),
                             SizedBox(
                               width: 10,
@@ -220,6 +231,10 @@ class _calibration_pageState extends State<calibration_page> {
                               currentangle: currentAngle,
                               extLimit: extLimit,
                               flexLimit: flexLimit,
+                              serialTX:
+                                  Provider.of<exoBluetoothControlFunctions>(
+                                          context)
+                                      .serialTX,
                             ),
                             SizedBox(
                               width: 10,
@@ -230,6 +245,10 @@ class _calibration_pageState extends State<calibration_page> {
                               currentangle: currentAngle,
                               extLimit: extLimit,
                               flexLimit: flexLimit,
+                              serialTX:
+                                  Provider.of<exoBluetoothControlFunctions>(
+                                          context)
+                                      .serialTX,
                             ),
                             SizedBox(
                               width: 10,
@@ -240,6 +259,10 @@ class _calibration_pageState extends State<calibration_page> {
                               currentangle: currentAngle,
                               extLimit: extLimit,
                               flexLimit: flexLimit,
+                              serialTX:
+                                  Provider.of<exoBluetoothControlFunctions>(
+                                          context)
+                                      .serialTX,
                             ),
                             SizedBox(
                               width: 10,
@@ -250,6 +273,10 @@ class _calibration_pageState extends State<calibration_page> {
                               currentangle: currentAngle,
                               extLimit: extLimit,
                               flexLimit: flexLimit,
+                              serialTX:
+                                  Provider.of<exoBluetoothControlFunctions>(
+                                          context)
+                                      .serialTX,
                             ),
                           ],
                         ),
@@ -292,9 +319,10 @@ class _calibration_pageState extends State<calibration_page> {
                           child: GestureDetector(
                             onTap: () {
                               if (flexionMode) {
-                                Provider.of<exoDeviceFunctions>(context,
+                                Provider.of<exoBluetoothControlFunctions>(
+                                        context,
                                         listen: false)
-                                    .setFlexLimit(currentAngle);
+                                    .setFlexLimit(serialTX!);
                                 SnackBar snackBar = SnackBar(
                                   backgroundColor: Color(0xFF004788),
                                   content: Text(
@@ -306,9 +334,10 @@ class _calibration_pageState extends State<calibration_page> {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(snackBar);
                               } else {
-                                Provider.of<exoDeviceFunctions>(context,
+                                Provider.of<exoBluetoothControlFunctions>(
+                                        context,
                                         listen: false)
-                                    .setExtLimit(currentAngle);
+                                    .setExtLimit(serialTX!);
                                 SnackBar snackBar = SnackBar(
                                   backgroundColor: Color(0xFF004788),
                                   content: Text(
@@ -406,12 +435,12 @@ class _calibration_pageState extends State<calibration_page> {
                           activeColor: Color(0xFF004788),
                           value: speed.toDouble(),
                           onChanged: (double value) {
-                            Provider.of<exoDeviceFunctions>(context,
+                            Provider.of<exoBluetoothControlFunctions>(context,
                                     listen: false)
-                                .setSpeed(value.toInt());
+                                .setSpeed((value.toInt() * 40), serialTX!);
                           },
                           min: 1,
-                          max: 10,
+                          max: 5,
                           divisions: 5,
                         ),
                       ),
@@ -446,34 +475,80 @@ class _calibration_pageState extends State<calibration_page> {
               width: MediaQuery.of(context).size.width,
               child: hexoAnimationWidget(),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 }
 
-class _movementCircle extends StatelessWidget {
+class _movementCircle extends StatefulWidget {
   int anglePlus;
   double currentangle;
   String intString;
   double flexLimit;
   double extLimit;
+  BluetoothCharacteristic? serialTX;
+
   _movementCircle(
       {super.key,
       required this.anglePlus,
       required this.intString,
       required this.flexLimit,
       required this.extLimit,
-      required this.currentangle});
+      required this.currentangle,
+      required this.serialTX});
+
+  @override
+  State<_movementCircle> createState() => _movementCircleState();
+}
+
+class _movementCircleState extends State<_movementCircle> {
+  bool buttonPressed = false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        if (currentangle + anglePlus > 5 && currentangle + anglePlus < 180) {
-          Provider.of<exoDeviceFunctions>(context, listen: false)
-              .setCurFlexAngle(currentangle + anglePlus);
+      onTapDown: (TapDownDetails details) {
+        setState(() {
+          buttonPressed = true;
+        });
+
+        if (widget.serialTX != null) {
+          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+              .setROMLimitEnabled(false, widget.serialTX!);
+        }
+
+        if (widget.anglePlus.isNegative && widget.serialTX != null) {
+          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+              .flexByAngle(widget.anglePlus.toDouble(), widget.serialTX!);
+        } else if (widget.anglePlus.isNegative == false &&
+            widget.serialTX != null) {
+          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+              .entendByAngle(widget.anglePlus.toDouble(), widget.serialTX!);
+        }
+      },
+      onTapUp: (details) {
+        setState(() {
+          buttonPressed = false;
+        });
+        buttonPressed = false;
+        if (widget.serialTX != null) {
+          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+              .setROMLimitEnabled(true, widget.serialTX!);
+          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+              .stop(widget.serialTX!);
+        }
+      },
+      onTapCancel: () {
+        setState(() {
+          buttonPressed = false;
+        });
+        if (widget.serialTX != null) {
+          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+              .setROMLimitEnabled(true, widget.serialTX!);
+          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+              .stop(widget.serialTX!);
         }
       },
       child: Container(
@@ -481,21 +556,22 @@ class _movementCircle extends StatelessWidget {
           height: 40,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(100)),
-            color: Color.fromRGBO(242, 242, 242, 0.4000000059604645),
+            color: buttonPressed
+                ? Color.fromARGB(255, 0, 70, 136)
+                : Color.fromARGB(255, 245, 245, 245),
             border: Border.all(
               color: Color.fromARGB(133, 0, 70, 136),
               width: 1,
             ),
           ),
           child: Center(
-            child: Text(
-              intString,
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 15,
-                color: Color(0xFF004788),
-              ),
-            ),
+            child: Text(widget.intString,
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
+                    color: buttonPressed
+                        ? Color.fromARGB(255, 255, 255, 255)
+                        : Color.fromARGB(255, 0, 70, 136))),
           )),
     );
   }
@@ -587,5 +663,60 @@ class _person_BOX extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class _stopButton extends StatelessWidget {
+  const _stopButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: 50,
+        width: 150,
+        padding: EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(100)),
+          color: Color.fromARGB(255, 224, 83, 83),
+        ),
+        child: Center(
+          child: Text(
+            'Stop',
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 15,
+              color: Color.fromARGB(255, 255, 255, 255),
+            ),
+          ),
+        ));
+  }
+}
+
+class _testRomButton extends StatelessWidget {
+  const _testRomButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: 50,
+        width: 150,
+        padding: EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(100)),
+            color: Color.fromARGB(255, 0, 70, 136)),
+        child: Center(
+          child: Text(
+            'Range of Motion',
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 15,
+              color: Color.fromARGB(255, 255, 255, 255),
+            ),
+          ),
+        ));
   }
 }

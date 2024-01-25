@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
+
+import 'package:flutter_application_1/Backend/pinEncrypter.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/device_setup.dart';
-import 'package:flutter_application_1/ckeckBluetoothConnection.dart';
 
 import 'dart:async';
 import 'dart:convert';
@@ -264,7 +265,7 @@ class _findDeviceState extends State<findDevice> {
         //   title:is const Text('Connect Device'),
         // ),
         body: isBluetoothOff
-            // false
+            // body: false
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -449,6 +450,7 @@ class _findDeviceState extends State<findDevice> {
                         ],
                       )
                     : _selectedDevice == null
+                        // : false
                         ? Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -632,9 +634,13 @@ class _findDeviceState extends State<findDevice> {
                                     SimpleBtn1(
                                         text: "Connect",
                                         onPressed: () {
-                                          if (_pinController.text.trim() ==
-                                              '123456') {
+                                          if (true)
+                                          // if (getHexoDeviceName(
+                                          // _pinController.text.trim()) ==
+                                          // _selectedDevice!.platformName)
+                                          {
                                             FocusScope.of(context).unfocus();
+
                                             _connectToDevice(_selectedDevice!);
                                           } else {
                                             _pinController.clear();

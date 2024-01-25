@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
 import 'package:flutter_application_1/Frontend/doctor/therapyStart.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 
@@ -18,9 +19,12 @@ class _therapyModeState extends State<therapyMode> {
 
   @override
   Widget build(BuildContext context) {
+    BluetoothCharacteristic? serialTX =
+        Provider.of<exoBluetoothControlFunctions>(context).serialTX;
     double flexionLimit = Provider.of<exoDeviceFunctions>(context).flexLimit;
     double extensionLimit = Provider.of<exoDeviceFunctions>(context).extLimit;
     int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
+
     return Scaffold(
       bottomNavigationBar: bottomNavBar(),
       extendBodyBehindAppBar: true,
@@ -326,6 +330,9 @@ class _therapyModeState extends State<therapyMode> {
             ),
             GestureDetector(
               onTap: () {
+                Provider.of<exoBluetoothControlFunctions>(context,
+                        listen: false)
+                    .CPM(reps, serialTX!);
                 Navigator.push(
                     context,
                     MaterialPageRoute(

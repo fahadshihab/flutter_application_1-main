@@ -45,7 +45,7 @@ class _voiceAnimationState extends State<voiceAnimation> {
         height: 100,
         width: 100,
         decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 105, 105, 105),
+            color: const Color(0xFF004788),
             borderRadius: BorderRadius.all(Radius.circular(50))),
         child: Center(
           child: Padding(
@@ -72,57 +72,44 @@ class _voiceAnimationState extends State<voiceAnimation> {
 
   void _listenS() async {
     if (_isListening) {
-      await _speech.stop();
+      _speech.stop();
       setState(() {
+        _listen!.fire();
         _isListening = false;
       });
-      _listenToIdle?.fire();
     } else {
-      _listen?.fire();
-      setState(() {
-        _isListening = true;
-      });
-
       bool available = await _speech.initialize(
-        onStatus: (val) {
-          // print('onStatus: $val');
-          // if (val == "done") {
-          //   _listenToIdle?.fire();
-          //   _listenS();
-          // }
-        },
-        onError: (val) {
-          print('onError: $val');
-          _listenToIdle?.fire();
-          _listenS();
-        },
+        onStatus: (val) => print('onStatus: $val'),
+        onError: (val) => print('onError: $val'),
       );
       if (available) {
-        _speech.listen(
-          cancelOnError: true,
-          onResult: (val) {
-            setState(() {
-              _voiceText = val.recognizedWords;
-            });
+        _speech.listen(onResult: (val) {
+          setState(() {
+            _voiceText = val.recognizedWords;
+          });
 
-            if (_voiceText.contains("stop") || _voiceText.contains("Stop")) {
-              print("Stop");
-            }
+          if (_voiceText.contains("stop") || _voiceText.contains("Stop")) {
+            print("Stop");
+          }
 
-            if (_voiceText.contains("flex") || _voiceText.contains("Flex")) {
-              print("Flex");
-            }
-            if (_voiceText.contains("extend") ||
-                _voiceText.contains("Extend")) {
-              print("Extend");
-            }
+          if (_voiceText.contains("flex") || _voiceText.contains("Flex")) {
+            print("Flex");
+          }
 
-            // Add more conditions for other words
+          if (_voiceText.contains("extend") || _voiceText.contains("Extend")) {
+            print("Extend");
+          }
 
-            // Restart listening immediately
-            _listenS();
-          },
-        );
+          // Add more conditions for other words
+
+          // Restart listening immediately
+          _listenS();
+        });
+
+        setState(() {
+          _listenToIdle!.fire();
+          _isListening = true;
+        });
       }
     }
   }
