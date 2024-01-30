@@ -45,7 +45,7 @@ class _DeviceControlState extends State<DeviceControl> {
     // TODO: implement initState
     super.initState();
     test();
-    checkBluetoothConnection(navigatorKey).bluetootchConnectionListner();
+    checkBluetoothConnection(navigatorKey).bluetootchListner();
   }
 
   @override

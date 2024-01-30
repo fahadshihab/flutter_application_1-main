@@ -6,16 +6,21 @@ class checkBluetoothConnection {
 
   checkBluetoothConnection(this.navigatorKey);
 
-  bluetootchConnectionListner() {
+  bluetootchListner() {
     FlutterBluePlus.adapterState.listen((state) {
       if (state != BluetoothAdapterState.on) {
         navigatorKey.currentState!
             .pushNamedAndRemoveUntil('/findDevice', (route) => false);
-      } else {
-        if (FlutterBluePlus.connectedDevices.contains("CREAID")) {
-          navigatorKey.currentState!
-              .pushNamedAndRemoveUntil('/findDevice', (route) => false);
-        }
+      }
+    });
+    bluetoothDeviceConnectionListner();
+  }
+
+  bluetoothDeviceConnectionListner() {
+    FlutterBluePlus.events.onConnectionStateChanged.first.then((value) {
+      if (value == BluetoothConnectionState.disconnected) {
+        navigatorKey.currentState!
+            .pushNamedAndRemoveUntil('/findDevice', (route) => false);
       }
     });
   }

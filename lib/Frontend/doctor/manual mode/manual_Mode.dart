@@ -27,7 +27,7 @@ class _manualModeState extends State<manualMode> {
   @override
   Widget build(BuildContext context) {
     BluetoothCharacteristic serialTX =
-        Provider.of<exoDeviceFunctions>(context).serialRX!;
+        Provider.of<exoBluetoothControlFunctions>(context).serialTX!;
     double currentAngle = Provider.of<exoDeviceFunctions>(context)
         .curFlexAngle; // double currentAngle = 90.0;
     double startLimit = Provider.of<exoDeviceFunctions>(context)
@@ -137,10 +137,10 @@ class _manualModeState extends State<manualMode> {
                     GestureDetector(
                         onTapDown: (details) {
                           // startFlexing();
-                          exoBluetoothControlFunctions().flex(null, serialTX);
+                          exoBluetoothControlFunctions().flex(speed, serialTX);
                         },
                         onTapUp: (details) {
-                          exoBluetoothControlFunctions().flex(null, serialTX);
+                          exoBluetoothControlFunctions().flex(speed, serialTX);
                           // stopFlexing();
                         },
                         onTapCancel: () {
@@ -157,10 +157,12 @@ class _manualModeState extends State<manualMode> {
                     ),
                     GestureDetector(
                         onTapDown: (details) {
-                          exoBluetoothControlFunctions().extend(null, serialTX);
+                          exoBluetoothControlFunctions()
+                              .extend(speed, serialTX);
                         },
                         onTapUp: (details) {
-                          exoBluetoothControlFunctions().extend(null, serialTX);
+                          exoBluetoothControlFunctions()
+                              .extend(speed, serialTX);
                         },
                         onTapCancel: () =>
                             exoBluetoothControlFunctions().stop(serialTX),
@@ -273,32 +275,40 @@ class _Stop_BUTTON extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 70,
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(left: 20, right: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Color(0xffFBE9E9),
-        border: Border.all(
-          color: Color.fromARGB(223, 136, 0, 0),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            spreadRadius: 0,
-            blurRadius: 10,
+    return GestureDetector(
+      onTap: () {
+        Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+            .EmergencyStop(Provider.of<exoBluetoothControlFunctions>(context,
+                    listen: false)
+                .serialTX!);
+      },
+      child: Container(
+        height: 70,
+        width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.only(left: 20, right: 20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Color(0xffFBE9E9),
+          border: Border.all(
+            color: Color.fromARGB(223, 136, 0, 0),
+            width: 1,
           ),
-        ],
-      ),
-      child: Center(
-        child: Text(
-          'Stop',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: Color.fromARGB(255, 221, 10, 10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              spreadRadius: 0,
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            'Stop',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Color.fromARGB(255, 221, 10, 10),
+            ),
           ),
         ),
       ),

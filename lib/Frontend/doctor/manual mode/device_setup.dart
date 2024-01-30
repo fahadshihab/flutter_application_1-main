@@ -57,6 +57,7 @@ class _deviceSetupState extends State<deviceSetup> {
     int currentSpeed = Provider.of<exoDeviceFunctions>(context).speed_setting;
     BluetoothCharacteristic? serialTX =
         Provider.of<exoBluetoothControlFunctions>(context).serialTX;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -121,7 +122,8 @@ class _deviceSetupState extends State<deviceSetup> {
                 GestureDetector(
                     onTapDown: (details) {
                       // startFlexing();
-                      exoBluetoothControlFunctions().flex(null, serialTX!);
+                      exoBluetoothControlFunctions()
+                          .flex(currentSpeed, serialTX!);
                     },
                     onTapUp: (details) {
                       // stopFlexing();
@@ -133,7 +135,15 @@ class _deviceSetupState extends State<deviceSetup> {
                 SizedBox(
                   width: 20,
                 ),
-                _Stop_BUTTON(),
+                GestureDetector(
+                    onTap: () {
+                      print('disabled');
+                      exoBluetoothControlFunctions()
+                          .disableAngleControl(serialTX!);
+                      exoBluetoothControlFunctions()
+                          .setROMLimitEnabled(false, serialTX);
+                    },
+                    child: _Stop_BUTTON()),
                 SizedBox(
                   width: 20,
                 ),
