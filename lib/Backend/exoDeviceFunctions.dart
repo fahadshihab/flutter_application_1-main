@@ -118,7 +118,9 @@ class exoDeviceFunctions extends ChangeNotifier {
 
       List<String> commands = rx_str.split(" ");
       print(commands);
+
       if (commands[0] == "A") {
+        print('yoyo');
         setCurFlexAngle(double.parse(commands[1]));
       } else if (commands[0] == "P0") {
         setAngleControlEnabled(int.parse(commands[1]) == 1 ? true : false);
@@ -150,12 +152,12 @@ class exoBluetoothControlFunctions extends ChangeNotifier {
     int? speed,
     BluetoothCharacteristic serialTX,
   ) {
-    String tx_str = "E" + " " + "${speed ?? ""} ";
-    serialTX!.write(utf8.encode(tx_str));
+    String tx_str = "E" + " " + "${100} ";
+    serialTX.write(utf8.encode(tx_str));
   }
 
   void flex(int? speed, BluetoothCharacteristic serialTX) {
-    String tx_str = "F" + " " + "${speed ?? ""} ";
+    String tx_str = "F" + " " + "${100} ";
     serialTX.write(utf8.encode(tx_str));
   }
 

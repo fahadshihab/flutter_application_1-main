@@ -106,7 +106,7 @@ class _deviceSetupState extends State<deviceSetup> {
                 textAlign: TextAlign.center,
                 !zero_set
                     ? "Set Max Extention of the device. The device shoule be stright"
-                    : 'Please set the flex and extend limits of the device \n\n Current Angle : $curFlexAngle',
+                    : 'Please set the flex and extend limits of the device \n\n Current  ngle : $curFlexAngle',
                 style: TextStyle(
                   fontSize: 18,
                   color: Color.fromARGB(255, 90, 90, 90),
@@ -122,8 +122,7 @@ class _deviceSetupState extends State<deviceSetup> {
                 GestureDetector(
                     onTapDown: (details) {
                       // startFlexing();
-                      exoBluetoothControlFunctions()
-                          .flex(currentSpeed, serialTX!);
+                      exoBluetoothControlFunctions().flex(50, serialTX!);
                     },
                     onTapUp: (details) {
                       // stopFlexing();
@@ -137,11 +136,12 @@ class _deviceSetupState extends State<deviceSetup> {
                 ),
                 GestureDetector(
                     onTap: () {
-                      print('disabled');
-                      exoBluetoothControlFunctions()
-                          .disableAngleControl(serialTX!);
-                      exoBluetoothControlFunctions()
-                          .setROMLimitEnabled(false, serialTX);
+                      // print('disabled');
+                      // exoBluetoothControlFunctions()
+                      //     .disableAngleControl(serialTX!);
+                      // exoBluetoothControlFunctions()
+                      //     .setROMLimitEnabled(false, serialTX);
+                      exoDeviceFunctions().setCurFlexAngle(30);
                     },
                     child: _Stop_BUTTON()),
                 SizedBox(
