@@ -111,12 +111,12 @@ class exoDeviceFunctions with ChangeNotifier {
   void startreceiverSubscription(
       /////////////////////////////////////////////////////////// TO DO : ARDUNIO NOT REPORTING BACK/ FAHAD
       BluetoothDevice connectedDevice,
-      BluetoothCharacteristic serialRX,context) {
+      BluetoothCharacteristic serialRX,
+      context) {
     _receiverSubscription = serialRX.onValueReceived.listen((value) {
       String rx_str = ascii.decode(value);
 
       List<String> commands = rx_str.split(" ");
-
 
       if (commands[0] == "A") {
         //Provider.of<exoDeviceFunctions>(context, listen: false)
@@ -203,7 +203,7 @@ class exoBluetoothControlFunctions extends ChangeNotifier {
   }
 
   void setSpeed(int speed, BluetoothCharacteristic serialTX) {
-    String tx_str = "S" + " " + "${speed * 50}";
+    String tx_str = "S" + " " + "${speed * 40}";
     serialTX!.write(utf8.encode(tx_str));
   }
 

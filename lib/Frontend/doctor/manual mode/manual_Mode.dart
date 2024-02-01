@@ -64,7 +64,9 @@ class _manualModeState extends State<manualMode> {
           )
         ],
       ),
-      body: Column(
+      body: ListView(
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
@@ -137,10 +139,11 @@ class _manualModeState extends State<manualMode> {
                       height: 20,
                     ),
                     GestureDetector(
-                      onTapDown: (d){
-                        Provider.of<exoBluetoothControlFunctions>(context,
-                            listen: false).extend(speed, serialTX);
-                      },
+                        onTapDown: (d) {
+                          Provider.of<exoBluetoothControlFunctions>(context,
+                                  listen: false)
+                              .extend(speed, serialTX);
+                        },
                         // onTapDown: (details) {
                         //   // startFlexing();
                         //   exoBluetoothControlFunctions().flex(speed, serialTX);
@@ -153,10 +156,10 @@ class _manualModeState extends State<manualMode> {
                         //   // stopFlexing();
                         //   exoBluetoothControlFunctions().stop(serialTX);
                         // },
-                      // onTap: (){
-                      //   Provider.of<exoDeviceFunctions>(context)
-                      //       .setCurFlexAngle(30);
-                      // },
+                        // onTap: (){
+                        //   Provider.of<exoDeviceFunctions>(context)
+                        //       .setCurFlexAngle(30);
+                        // },
                         child: _Flex_BUTTON()),
                     SizedBox(
                       height: 20,
@@ -168,42 +171,42 @@ class _manualModeState extends State<manualMode> {
                     GestureDetector(
                         onTapDown: (details) {
                           Provider.of<exoBluetoothControlFunctions>(context,
-                              listen: false)
+                                  listen: false)
                               .extend(speed, serialTX);
                         },
                         onTapUp: (details) {},
                         onTapCancel: () =>
                             Provider.of<exoBluetoothControlFunctions>(context,
-                                listen: false).stop(serialTX),
+                                    listen: false)
+                                .stop(serialTX),
                         child: _Extend_BUTTON()),
                   ],
                 ),
               ),
             ),
           ),
-          Expanded(
-            child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color.fromARGB(255, 241, 243, 246),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      spreadRadius: 0,
-                      blurRadius: 10,
-                    ),
-                  ],
-                ),
-                width: MediaQuery.of(context).size.width,
-                child: Stack(children: [
-                  hexoAnimationWidget(),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: voiceAnimation(),
-                  )
-                ])),
-          )
+          Container(
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Color.fromARGB(255, 241, 243, 246),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    spreadRadius: 0,
+                    blurRadius: 10,
+                  ),
+                ],
+              ),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.4,
+              child: Stack(children: [
+                hexoAnimationWidget(),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: voiceAnimation(),
+                )
+              ]))
         ],
       ),
     );
@@ -334,10 +337,10 @@ class _Flex_BUTTON extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Provider.of<exoBluetoothControlFunctions>(context, listen: false)
-            .flex(100, Provider.of<exoBluetoothControlFunctions>(context,
-            listen: false)
-            .serialTX!);
+        Provider.of<exoBluetoothControlFunctions>(context, listen: false).flex(
+            100,
+            Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+                .serialTX!);
       },
       child: Container(
         height: 70,

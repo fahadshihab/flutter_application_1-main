@@ -53,9 +53,9 @@ class _therapyModeState extends State<therapyMode> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: ListView(
+          // mainAxisAlignment: MainAxisAlignment.start,
+          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
               height: 50,
@@ -71,9 +71,8 @@ class _therapyModeState extends State<therapyMode> {
                 ),
               ),
             ),
-            Container(
-              height: 45,
-              width: 150,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 70),
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.pushNamedAndRemoveUntil(
@@ -91,7 +90,7 @@ class _therapyModeState extends State<therapyMode> {
                   elevation: 0,
                   primary: Color.fromARGB(255, 194, 208, 221),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),
@@ -326,7 +325,7 @@ class _therapyModeState extends State<therapyMode> {
               ),
             ),
             SizedBox(
-              height: 80,
+              height: 50,
             ),
             GestureDetector(
               onTap: () {
@@ -342,6 +341,7 @@ class _therapyModeState extends State<therapyMode> {
                             )));
               },
               child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 25),
                 padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
                 decoration: BoxDecoration(
                   boxShadow: [
@@ -354,12 +354,14 @@ class _therapyModeState extends State<therapyMode> {
                   borderRadius: BorderRadius.circular(30),
                   color: Color(0xFF004788),
                 ),
-                child: Text('Start',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 17,
-                      color: Color.fromARGB(255, 255, 255, 255),
-                    )),
+                child: Center(
+                  child: Text('Start',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 17,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      )),
+                ),
               ),
             ),
           ],

@@ -32,16 +32,26 @@ class _deviceSetupState extends State<deviceSetup> {
     // TODO: implement initState
     super.initState();
 
-
     // setSpeedOnStartUp();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+          .disableAngleControl(
+              Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+                  .serialTX!);
+      Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+          .setROMLimitEnabled(
+              false,
+              Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+                  .serialTX!);
+    });
   }
 
-  setSpeedOnStartUp() async {
-    await Future.delayed(Duration(milliseconds: 100));
-    Provider.of<exoDeviceFunctions>(context, listen: false).setSpeed(1);
-    Provider.of<exoDeviceFunctions>(context, listen: false).setExtLimit(180);
-    Provider.of<exoDeviceFunctions>(context, listen: false).setFlexLimit(15);
-  }
+  // setSpeedOnStartUp() async {
+  //   await Future.delayed(Duration(milliseconds: 100));
+  //   Provider.of<exoDeviceFunctions>(context, listen: false).setSpeed(1);
+  //   Provider.of<exoDeviceFunctions>(context, listen: false).setExtLimit(180);
+  //   Provider.of<exoDeviceFunctions>(context, listen: false).setFlexLimit(15);
+  // }
 
   void dispose() {
     flextimer?.cancel();
@@ -131,19 +141,14 @@ class _deviceSetupState extends State<deviceSetup> {
                       // stopFlexing();
                       hexobt.stop(serialTX!);
                     },
-                    onTapCancel: () =>
-                        hexobt.stop(serialTX!),
+                    onTapCancel: () => hexobt.stop(serialTX!),
                     child: _Flex_BUTTON()),
                 SizedBox(
                   width: 20,
                 ),
                 GestureDetector(
                     onTap: () {
-                      print('disabled');
-                      hexobt
-                           .disableAngleControl(serialTX!);
-                      hexobt
-                           .setROMLimitEnabled(false, serialTX);
+                      hexobt.EmergencyStop(serialTX!);
                       // exoDeviceFunctions().setCurFlexAngle(30);
                     },
                     child: _Stop_BUTTON()),
@@ -157,8 +162,7 @@ class _deviceSetupState extends State<deviceSetup> {
                     onTapUp: (details) {
                       hexobt.stop(serialTX!);
                     },
-                    onTapCancel: () =>
-                        hexobt.stop(serialTX!),
+                    onTapCancel: () => hexobt.stop(serialTX!),
                     child: _Extend_BUTTON()),
               ],
             ),
@@ -350,10 +354,10 @@ class _Speed_BUTTON extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hexobt = Provider.of<exoBluetoothControlFunctions>(context);
+    print(currentSpeed);
     return GestureDetector(
       onTap: () {
-        Provider.of<exoDeviceFunctions>(context, listen: false)
-            .setSpeed(speed);
+        Provider.of<exoDeviceFunctions>(context, listen: false).setSpeed(speed);
         Provider.of<exoBluetoothControlFunctions>(context, listen: false)
             .setSpeed(speed, serialTX!);
         SnackBar snackBar = SnackBar(

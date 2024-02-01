@@ -34,8 +34,10 @@ class _calibration_pageState extends State<calibration_page> {
     double extLimit = Provider.of<exoDeviceFunctions>(context).extLimit;
     BluetoothCharacteristic? serialTX =
         Provider.of<exoBluetoothControlFunctions>(context).serialTX;
-    bool romLimitSwitch = Provider.of<exoDeviceFunctions>(context).isROMLimitEnabled;
-    bool angleControlSwitch = Provider.of<exoDeviceFunctions>(context).isAngleControlEnabled;
+    bool romLimitSwitch =
+        Provider.of<exoDeviceFunctions>(context).isROMLimitEnabled;
+    bool angleControlSwitch =
+        Provider.of<exoDeviceFunctions>(context).isAngleControlEnabled;
     return Scaffold(
       bottomNavigationBar: bottomNavBar(),
       backgroundColor: Color(0xFFECEFF1),
@@ -62,7 +64,8 @@ class _calibration_pageState extends State<calibration_page> {
           )
         ],
       ),
-      body: Column(
+      body: ListView(
+        shrinkWrap: true,
         children: [
           Container(
             margin: EdgeInsets.all(10),
@@ -97,7 +100,7 @@ class _calibration_pageState extends State<calibration_page> {
                     ),
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       GestureDetector(
                         onTap: () {
@@ -107,24 +110,20 @@ class _calibration_pageState extends State<calibration_page> {
                             });
                           }
                         },
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.3,
-                          child: Center(
-                            child: Text(
-                              'Flexion',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17,
-                                color: flexionMode
-                                    ? Color(0xFF004788)
-                                    : Color(0xFF7C7C7C),
-                              ),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 10),
+                          child: Text(
+                            'Flexion',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                              color: flexionMode
+                                  ? Color(0xFF004788)
+                                  : Color(0xFF7C7C7C),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 30,
                       ),
                       GestureDetector(
                         onTap: () {
@@ -134,18 +133,17 @@ class _calibration_pageState extends State<calibration_page> {
                             });
                           }
                         },
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.3,
-                          child: Center(
-                            child: Text(
-                              'Extension',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17,
-                                color: flexionMode
-                                    ? Color(0xFF7C7C7C)
-                                    : Color(0xFF004788),
-                              ),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 10),
+                          child: Text(
+                            'Extension',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                              color: flexionMode
+                                  ? Color(0xFF7C7C7C)
+                                  : Color(0xFF004788),
                             ),
                           ),
                         ),
@@ -154,7 +152,6 @@ class _calibration_pageState extends State<calibration_page> {
                   ),
                 ),
                 Container(
-                  height: 250,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Color.fromARGB(255, 255, 255, 255),
@@ -163,7 +160,8 @@ class _calibration_pageState extends State<calibration_page> {
                       bottomRight: Radius.circular(20),
                     ),
                   ),
-                  child: Column(
+                  child: ListView(
+                    shrinkWrap: true,
                     children: [
                       SizedBox(
                         height: 10,
@@ -401,59 +399,63 @@ class _calibration_pageState extends State<calibration_page> {
                     ],
                   ),
                 ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'Angle Control',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                        color: Color(0xFF004788),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Angle Control',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              color: Color(0xFF004788),
+                            ),
+                          ),
+                          Container(
+                            child: Switch.adaptive(
+                                value: angleControlSwitch,
+                                onChanged: (value) {
+                                  if (serialTX != null) {
+                                    Provider.of<exoBluetoothControlFunctions>(
+                                            context,
+                                            listen: false)
+                                        .setAngleControlEnabled(
+                                            value, serialTX!);
+                                  }
+                                }),
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      child: Switch.adaptive(
-                          value: angleControlSwitch,
-                          onChanged: (value) {
-                            if (serialTX != null) {
-                              Provider.of<exoBluetoothControlFunctions>(context,
-                                      listen: false)
-                                  .setAngleControlEnabled(value, serialTX!);
-                            }
-                          }),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'ROM Limits',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                        color: Color(0xFF004788),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'ROM Limits',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              color: Color(0xFF004788),
+                            ),
+                          ),
+                          Container(
+                            child: Switch.adaptive(
+                                value: romLimitSwitch,
+                                onChanged: (value) {
+                                  if (serialTX != null) {
+                                    Provider.of<exoBluetoothControlFunctions>(
+                                            context,
+                                            listen: false)
+                                        .setROMLimitEnabled(value, serialTX!);
+                                  }
+                                }),
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      child: Switch.adaptive(
-                          value: romLimitSwitch,
-                          onChanged: (value) {
-                            if (serialTX != null) {
-                              Provider.of<exoBluetoothControlFunctions>(context,
-                                      listen: false)
-                                  .setROMLimitEnabled(value, serialTX!);
-                            }
-                          }),
-                    ),
-                  ],
+                    ],
+                  ),
                 )
               ],
             ),
@@ -512,9 +514,8 @@ class _calibration_pageState extends State<calibration_page> {
                           activeColor: Color(0xFF004788),
                           value: speed.toDouble(),
                           onChanged: (double value) {
-
                             Provider.of<exoDeviceFunctions>(context,
-                                listen: false)
+                                    listen: false)
                                 .setSpeed(value.toInt());
                             Provider.of<exoBluetoothControlFunctions>(context,
                                     listen: false)
@@ -539,24 +540,22 @@ class _calibration_pageState extends State<calibration_page> {
               ],
             ),
           ),
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color.fromARGB(255, 241, 243, 246),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    spreadRadius: 0,
-                    blurRadius: 10,
-                  ),
-                ],
-              ),
-              width: MediaQuery.of(context).size.width,
-              child: SizedBox(
-                  height: 200, width: 200, child: hexoAnimationWidget()),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Color.fromARGB(255, 241, 243, 246),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  spreadRadius: 0,
+                  blurRadius: 10,
+                ),
+              ],
             ),
+            width: MediaQuery.of(context).size.width,
+            child:
+                SizedBox(height: 300, width: 300, child: hexoAnimationWidget()),
           ),
         ],
       ),
@@ -591,18 +590,22 @@ class _movementCircleState extends State<_movementCircle> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        if (buttonPressed){
+      onTapDown: (details) {
+        setState(() {
+          buttonPressed = true;
+        });
+      },
+      onTapUp: (details) {
         setState(() {
           buttonPressed = false;
         });
-        }
-        else {
-          setState(() {
-            buttonPressed = true;
-          });
-        }
-
+      },
+      onTapCancel: () {
+        setState(() {
+          buttonPressed = false;
+        });
+      },
+      onTap: () {
         if (widget.anglePlus.isNegative && widget.serialTX != null) {
           Provider.of<exoBluetoothControlFunctions>(context, listen: false)
               .flexByAngle(widget.anglePlus.toDouble(), widget.serialTX!);
