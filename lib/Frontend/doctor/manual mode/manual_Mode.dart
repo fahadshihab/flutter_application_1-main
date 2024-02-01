@@ -24,6 +24,20 @@ class _manualModeState extends State<manualMode> {
   bool isFlexing = false;
   bool isExtending = false;
   Timer? flextimer;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      BluetoothCharacteristic? serialTX =
+          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+              .serialTX;
+      Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+          .getData(serialTX!);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     BluetoothCharacteristic serialTX =
@@ -151,7 +165,13 @@ class _manualModeState extends State<manualMode> {
                     SizedBox(
                       height: 20,
                     ),
-                    _Stop_BUTTON(),
+                    GestureDetector(
+                        onTap: (() {
+                          Provider.of<exoBluetoothControlFunctions>(context,
+                                  listen: false)
+                              .EmergencyStop(serialTX);
+                        }),
+                        child: _Stop_BUTTON()),
                     SizedBox(
                       height: 20,
                     ),

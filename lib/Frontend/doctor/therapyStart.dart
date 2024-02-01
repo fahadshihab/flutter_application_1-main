@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
 import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
@@ -20,6 +21,13 @@ class _therapyStartState extends State<therapyStart> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      BluetoothCharacteristic? serialTX =
+          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+              .serialTX;
+      Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+          .getData(serialTX!);
+    });
   }
 
   @override

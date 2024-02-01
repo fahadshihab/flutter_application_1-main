@@ -24,6 +24,13 @@ class _calibration_pageState extends State<calibration_page> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      BluetoothCharacteristic? serialTX =
+          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+              .serialTX;
+      Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+          .getData(serialTX!);
+    });
   }
 
   @override
@@ -60,7 +67,8 @@ class _calibration_pageState extends State<calibration_page> {
           )
         ],
       ),
-      body: Column(
+      body: ListView(
+        shrinkWrap: true,
         children: [
           Container(
             margin: EdgeInsets.all(10),
@@ -152,7 +160,6 @@ class _calibration_pageState extends State<calibration_page> {
                   ),
                 ),
                 Container(
-                  height: 250,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Color.fromARGB(255, 255, 255, 255),
@@ -309,7 +316,7 @@ class _calibration_pageState extends State<calibration_page> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 18, vertical: 5),
+                            horizontal: 18, vertical: 10),
                         child: Text(
                           flexionMode
                               ? 'Current Flexion Limit: $flexLimit'
@@ -399,66 +406,71 @@ class _calibration_pageState extends State<calibration_page> {
                     ],
                   ),
                 ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'Angle Control',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                        color: Color(0xFF004788),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Angle Control',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          color: Color(0xFF004788),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      child: Switch.adaptive(
-                          value: angleControlSwitch,
-                          onChanged: (value) {
-                            setState(() {
-                              angleControlSwitch = value;
-                            });
-                            if (serialTX != null) {
-                              Provider.of<exoBluetoothControlFunctions>(context,
-                                      listen: false)
-                                  .setAngleControlEnabled(value, serialTX!);
-                            }
-                          }),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'ROM Limits',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                        color: Color(0xFF004788),
+                      SizedBox(
+                        width: 20,
                       ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      child: Switch.adaptive(
-                          value: romLimitSwitch,
-                          onChanged: (value) {
-                            setState(() {
-                              romLimitSwitch = value;
-                            });
-                            if (serialTX != null) {
-                              Provider.of<exoBluetoothControlFunctions>(context,
-                                      listen: false)
-                                  .setROMLimitEnabled(value, serialTX!);
-                            }
-                          }),
-                    ),
-                  ],
-                )
+                      Container(
+                        child: Switch.adaptive(
+                            value: angleControlSwitch,
+                            onChanged: (value) {
+                              setState(() {
+                                angleControlSwitch = value;
+                              });
+                              if (serialTX != null) {
+                                Provider.of<exoBluetoothControlFunctions>(
+                                        context,
+                                        listen: false)
+                                    .setAngleControlEnabled(value, serialTX!);
+                              }
+                            }),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'ROM Limits',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          color: Color(0xFF004788),
+                        ),
+                      ),
+                      Container(
+                        child: Switch.adaptive(
+                            value: romLimitSwitch,
+                            onChanged: (value) {
+                              setState(() {
+                                romLimitSwitch = value;
+                              });
+                              if (serialTX != null) {
+                                Provider.of<exoBluetoothControlFunctions>(
+                                        context,
+                                        listen: false)
+                                    .setROMLimitEnabled(value, serialTX!);
+                              }
+                            }),
+                      )
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -555,7 +567,7 @@ class _calibration_pageState extends State<calibration_page> {
               ),
               width: MediaQuery.of(context).size.width,
               child: SizedBox(
-                  height: 200, width: 200, child: hexoAnimationWidget()),
+                  height: 300, width: 300, child: hexoAnimationWidget()),
             ),
           ),
         ],

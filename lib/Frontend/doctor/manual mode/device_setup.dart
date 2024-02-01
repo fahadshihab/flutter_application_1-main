@@ -32,6 +32,19 @@ class _deviceSetupState extends State<deviceSetup> {
     // TODO: implement initState
     super.initState();
     // setSpeedOnStartUp();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      BluetoothCharacteristic? serialTX =
+          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+              .serialTX;
+
+      Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+          .setROMLimitEnabled(false, serialTX!);
+
+      Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+          .disableAngleControl(serialTX);
+      Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+          .getData(serialTX);
+    });
   }
 
   setSpeedOnStartUp() async {
@@ -122,7 +135,8 @@ class _deviceSetupState extends State<deviceSetup> {
                 GestureDetector(
                     onTapDown: (details) {
                       // startFlexing();
-                      exoBluetoothControlFunctions().flex(50, serialTX!);
+                      exoBluetoothControlFunctions()
+                          .flex(currentSpeed, serialTX!);
                     },
                     onTapUp: (details) {
                       // stopFlexing();
@@ -136,12 +150,7 @@ class _deviceSetupState extends State<deviceSetup> {
                 ),
                 GestureDetector(
                     onTap: () {
-                      // print('disabled');
-                      // exoBluetoothControlFunctions()
-                      //     .disableAngleControl(serialTX!);
-                      // exoBluetoothControlFunctions()
-                      //     .setROMLimitEnabled(false, serialTX);
-                      exoDeviceFunctions().setCurFlexAngle(30);
+                      exoBluetoothControlFunctions().EmergencyStop(serialTX!);
                     },
                     child: _Stop_BUTTON()),
                 SizedBox(
@@ -149,7 +158,8 @@ class _deviceSetupState extends State<deviceSetup> {
                 ),
                 GestureDetector(
                     onTapDown: (details) {
-                      exoBluetoothControlFunctions().extend(50, serialTX!);
+                      exoBluetoothControlFunctions()
+                          .extend(currentSpeed, serialTX!);
                     },
                     onTapUp: (details) {
                       exoBluetoothControlFunctions().stop(serialTX!);
@@ -287,6 +297,10 @@ class _deviceSetupState extends State<deviceSetup> {
                                         primary: Color(0xFF004788),
                                       ),
                                       onPressed: () {
+                                        Provider.of<exoBluetoothControlFunctions>(
+                                                context,
+                                                listen: false)
+                                            .setROMLimitEnabled(true, serialTX);
                                         Navigator.pushAndRemoveUntil(
                                             context,
                                             MaterialPageRoute(

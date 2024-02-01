@@ -108,33 +108,6 @@ class exoDeviceFunctions extends ChangeNotifier {
   test() {
     print("test");
   }
-
-  startreceiverSubscription(
-      /////////////////////////////////////////////////////////// TO DO : ARDUNIO NOT REPORTING BACK/ FAHAD
-      BluetoothDevice connectedDevice,
-      BluetoothCharacteristic serialRX) {
-    _receiverSubscription = serialRX.onValueReceived.listen((value) {
-      String rx_str = ascii.decode(value);
-
-      List<String> commands = rx_str.split(" ");
-      print(commands);
-
-      if (commands[0] == "A") {
-        print('yoyo');
-        setCurFlexAngle(double.parse(commands[1]));
-      } else if (commands[0] == "P0") {
-        setAngleControlEnabled(int.parse(commands[1]) == 1 ? true : false);
-      } else if (commands[0] == "P1") {
-        setROMLimitEnabled(int.parse(commands[1]) == 1 ? true : false);
-      } else if (commands[0] == "P2") {
-        setFlexLimit(double.parse(commands[1]));
-      } else if (commands[0] == "P3") {
-        setExtLimit(double.parse(commands[1]));
-      }
-    });
-    connectedDevice.cancelWhenDisconnected(_receiverSubscription);
-    serialRX.setNotifyValue(true);
-  }
 }
 
 class exoBluetoothControlFunctions extends ChangeNotifier {
@@ -152,82 +125,119 @@ class exoBluetoothControlFunctions extends ChangeNotifier {
     int? speed,
     BluetoothCharacteristic serialTX,
   ) {
-    String tx_str = "E" + " " + "${100} ";
+    String tx_str = "E" + " " + "$speed";
+    String get_data = "P 0";
     serialTX.write(utf8.encode(tx_str));
+    serialTX.write(utf8.encode(get_data));
   }
 
   void flex(int? speed, BluetoothCharacteristic serialTX) {
-    String tx_str = "F" + " " + "${100} ";
+    String tx_str = "F" + " " + "$speed";
     serialTX.write(utf8.encode(tx_str));
+    String get_data = "P 0";
+    serialTX.write(utf8.encode(get_data));
   }
 
   void CPM(int cpm, BluetoothCharacteristic serialTX) {
     String tx_str = "C" + " " + cpm.toString();
     serialTX!.write(utf8.encode(tx_str));
+    String get_data = "P 0";
+    serialTX.write(utf8.encode(get_data));
   }
 
   void entendByAngle(double angle, BluetoothCharacteristic serialTX) {
     String tx_str = "J" + " " + angle.toString();
     serialTX!.write(utf8.encode(tx_str));
+    String get_data = "P 0";
+    serialTX.write(utf8.encode(get_data));
   }
 
   void flexByAngle(double angle, BluetoothCharacteristic serialTX) {
     String tx_str = "I" + " " + angle.toString();
     serialTX!.write(utf8.encode(tx_str));
+    String get_data = "P 0";
+    serialTX.write(utf8.encode(get_data));
   }
 
   void angleControl(BluetoothCharacteristic serialTX) {
     String tx_str = "G" + " " + "3";
     serialTX!.write(utf8.encode(tx_str));
+    String get_data = "P 0";
+    serialTX.write(utf8.encode(get_data));
   }
 
   void disableAngleControl(BluetoothCharacteristic serialTX) {
     String tx_str = "G" + " " + "2";
     serialTX!.write(utf8.encode(tx_str));
+    String get_data = "P 0";
+    serialTX.write(utf8.encode(get_data));
   }
 
   void setSpeed(int speed, BluetoothCharacteristic serialTX) {
     String tx_str = "S" + " " + "${speed * 40}";
     serialTX!.write(utf8.encode(tx_str));
+    String get_data = "P 0";
+    serialTX.write(utf8.encode(get_data));
   }
 
   void setFlexLimit(BluetoothCharacteristic serialTX) {
     String tx_str = "M" + " " + "0";
     serialTX!.write(utf8.encode(tx_str));
+    String get_data = "P 0";
+    serialTX.write(utf8.encode(get_data));
   }
 
   void setExtLimit(BluetoothCharacteristic serialTX) {
     String tx_str = "M" + " " + "1";
     serialTX!.write(utf8.encode(tx_str));
+    String get_data = "P 0";
+    serialTX.write(utf8.encode(get_data));
   }
 
   void setROMLimitEnabled(bool enabled, BluetoothCharacteristic serialTX) {
     String tx_str = "G" + " " + (enabled ? "1" : "0");
     serialTX!.write(utf8.encode(tx_str));
+    String get_data = "P 0";
+    serialTX.write(utf8.encode(get_data));
   }
 
   void setAngleControlEnabled(bool enabled, BluetoothCharacteristic serialTX) {
     String tx_str = "G" + " " + (enabled ? "3" : "2");
     serialTX!.write(utf8.encode(tx_str));
+    String get_data = "P 0";
+    serialTX.write(utf8.encode(get_data));
   }
 
   void resetSetPoint(BluetoothCharacteristic serialTX) {
     String tx_str = "G 5";
     serialTX!.write(utf8.encode(tx_str));
+    String get_data = "P 0";
+    serialTX.write(utf8.encode(get_data));
   }
 
   void setZero(BluetoothCharacteristic serialTX) {
     String tx_str = "Z 0";
     serialTX!.write(utf8.encode(tx_str));
+    String get_data = "P 0";
+    serialTX.write(utf8.encode(get_data));
   }
 
   void stop(BluetoothCharacteristic serialTX) {
     String tx_str = "S 0";
     serialTX.write(utf8.encode(tx_str));
+    String get_data = "P 0";
+    serialTX.write(utf8.encode(get_data));
   }
 
   void EmergencyStop(BluetoothCharacteristic serialTX) {
     String tx_str = "X 0";
+    serialTX!.write(utf8.encode(tx_str));
+    String get_data = "P 0";
+    serialTX.write(utf8.encode(get_data));
+  }
+
+  void getData(BluetoothCharacteristic serialTX) {
+    String tx_str = "P 0";
     serialTX!.write(utf8.encode(tx_str));
   }
 
@@ -235,4 +245,39 @@ class exoBluetoothControlFunctions extends ChangeNotifier {
   //   String tx_str = "G 4";
   //   serialTX.write(utf8.encode(tx_str));
   // }
+}
+
+class bluetoothListner {
+  late StreamSubscription _receiverSubscription;
+  startreceiverSubscription(
+
+      /////////////////////////////////////////////////////////// TO DO : ARDUNIO NOT REPORTING BACK/ FAHAD
+      BluetoothDevice connectedDevice,
+      BluetoothCharacteristic serialRX,
+      BuildContext context) {
+    _receiverSubscription = serialRX.onValueReceived.listen((value) {
+      String rx_str = ascii.decode(value);
+
+      List<String> commands = rx_str.split(" ");
+
+      if (commands[0] == "A") {
+        Provider.of<exoDeviceFunctions>(context, listen: false)
+            .setCurFlexAngle(double.parse(commands[1]));
+      } else if (commands[0] == "P0") {
+        Provider.of<exoDeviceFunctions>(context, listen: false)
+            .setAngleControlEnabled(int.parse(commands[1]) == 1 ? true : false);
+      } else if (commands[0] == "P1") {
+        Provider.of<exoDeviceFunctions>(context, listen: false)
+            .setROMLimitEnabled(int.parse(commands[1]) == 1 ? true : false);
+      } else if (commands[0] == "P2") {
+        Provider.of<exoDeviceFunctions>(context, listen: false)
+            .setFlexLimit(double.parse(commands[1]));
+      } else if (commands[0] == "P3") {
+        Provider.of<exoDeviceFunctions>(context, listen: false)
+            .setExtLimit(double.parse(commands[1]));
+      }
+    });
+    connectedDevice.cancelWhenDisconnected(_receiverSubscription);
+    serialRX.setNotifyValue(true);
+  }
 }

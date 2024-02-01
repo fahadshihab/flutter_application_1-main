@@ -92,7 +92,7 @@ class _findDeviceState extends State<findDevice> {
     });
 
     FlutterBluePlus.startScan().then((val) {
-      Future.delayed(const Duration(seconds: 10)).then((value) {
+      Future.delayed(const Duration(seconds: 2)).then((value) {
         _stopScan();
 
         print(_devices);
@@ -163,8 +163,8 @@ class _findDeviceState extends State<findDevice> {
           Provider.of<exoDeviceFunctions>(context, listen: false)
               .setConnectedDevice(device);
 
-          exoDeviceFunctions().startreceiverSubscription(
-              _connectedDevice!, _serialRXCharacteristic!);
+          bluetoothListner().startreceiverSubscription(
+              device, _serialRXCharacteristic!, context);
           // } catch (e) {
 
           Navigator.pushAndRemoveUntil(
@@ -186,8 +186,11 @@ class _findDeviceState extends State<findDevice> {
 
   @override
   void dispose() {
-    _stopScan();
     super.dispose();
+    FlutterBluePlus.stopScan().then((val) {
+      _isScanning = false;
+      subscription.cancel();
+    });
   }
 
   @override
