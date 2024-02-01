@@ -17,8 +17,8 @@ class calibration_page extends StatefulWidget {
 
 class _calibration_pageState extends State<calibration_page> {
   bool flexionMode = true;
-  bool angleControlSwitch = false;
-  bool romLimitSwitch = false;
+  //bool angleControlSwitch = false;
+  //bool romLimitSwitch = false;
 
   @override
   void initState() {
@@ -34,6 +34,8 @@ class _calibration_pageState extends State<calibration_page> {
     double extLimit = Provider.of<exoDeviceFunctions>(context).extLimit;
     BluetoothCharacteristic? serialTX =
         Provider.of<exoBluetoothControlFunctions>(context).serialTX;
+    bool romLimitSwitch = Provider.of<exoDeviceFunctions>(context).isROMLimitEnabled;
+    bool angleControlSwitch = Provider.of<exoDeviceFunctions>(context).isAngleControlEnabled;
     return Scaffold(
       bottomNavigationBar: bottomNavBar(),
       backgroundColor: Color(0xFFECEFF1),
@@ -376,7 +378,7 @@ class _calibration_pageState extends State<calibration_page> {
                                       child: Text(
                                         flexionMode
                                             ? 'Set Flex Limit'
-                                            : 'Set Exten Limit',
+                                            : 'Set Ext. Limit',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 15,
@@ -419,9 +421,6 @@ class _calibration_pageState extends State<calibration_page> {
                       child: Switch.adaptive(
                           value: angleControlSwitch,
                           onChanged: (value) {
-                            setState(() {
-                              angleControlSwitch = value;
-                            });
                             if (serialTX != null) {
                               Provider.of<exoBluetoothControlFunctions>(context,
                                       listen: false)
@@ -447,9 +446,6 @@ class _calibration_pageState extends State<calibration_page> {
                       child: Switch.adaptive(
                           value: romLimitSwitch,
                           onChanged: (value) {
-                            setState(() {
-                              romLimitSwitch = value;
-                            });
                             if (serialTX != null) {
                               Provider.of<exoBluetoothControlFunctions>(context,
                                       listen: false)
@@ -516,13 +512,17 @@ class _calibration_pageState extends State<calibration_page> {
                           activeColor: Color(0xFF004788),
                           value: speed.toDouble(),
                           onChanged: (double value) {
+
+                            Provider.of<exoDeviceFunctions>(context,
+                                listen: false)
+                                .setSpeed(value.toInt());
                             Provider.of<exoBluetoothControlFunctions>(context,
                                     listen: false)
-                                .setSpeed((value.toInt() * 40), serialTX!);
+                                .setSpeed(value.toInt(), serialTX!);
                           },
                           min: 1,
                           max: 5,
-                          divisions: 5,
+                          divisions: 4,
                         ),
                       ),
                       Text(
@@ -592,9 +592,16 @@ class _movementCircleState extends State<_movementCircle> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        if (buttonPressed){
         setState(() {
-          buttonPressed = true;
+          buttonPressed = false;
         });
+        }
+        else {
+          setState(() {
+            buttonPressed = true;
+          });
+        }
 
         if (widget.anglePlus.isNegative && widget.serialTX != null) {
           Provider.of<exoBluetoothControlFunctions>(context, listen: false)
@@ -641,6 +648,7 @@ class _person_BOX extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final curAngle = Provider.of<exoDeviceFunctions>(context);
     return Stack(
       children: [
         Padding(
@@ -681,7 +689,7 @@ class _person_BOX extends StatelessWidget {
               ),
               margin: const EdgeInsets.only(top: 20),
               child: Text(
-                '$currentAngle°',
+                '$curAngle.curFlexAngle°',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -704,7 +712,7 @@ class _person_BOX extends StatelessWidget {
           top: 20, // Adjust these values as needed (e.g., 9% from the top)
           left: 11, // 8% from the left
           child: Transform.rotate(
-            angle: ((currentAngle - 5) * pi) / 180 - 40,
+            angle: ((curAngle.curFlexAngle - 5) * pi) / 180 - 40,
             origin: const Offset(-20, -12),
             child: SizedBox(
               height: 200,

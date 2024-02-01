@@ -52,18 +52,22 @@ class _findDeviceState extends State<findDevice> {
         FlutterBluePlus.adapterState.listen((BluetoothAdapterState state) {
       print(state);
       if (state == BluetoothAdapterState.on) {
-        setState(() {
-          isBluetoothOff = false;
-        });
+        if(mounted) {
+          setState(() {
+            isBluetoothOff = false;
+          });
+        }
         Future.delayed(const Duration(seconds: 1)).then((value) async {
           await checkAndDisconnectDevice("CREAID");
 
           _startScan();
         });
       } else {
-        setState(() {
-          isBluetoothOff = true;
-        });
+        if(mounted) {
+          setState(() {
+            isBluetoothOff = true;
+          });
+        }
         Future.delayed(const Duration(seconds: 1)).then((value) {
           _stopScan();
         });
@@ -72,11 +76,13 @@ class _findDeviceState extends State<findDevice> {
   }
 
   void _startScan() {
-    setState(() {
-      FlutterBluePlus.setLogLevel(LogLevel.warning);
-      _devices.clear();
-      _isScanning = true;
-    });
+    if(mounted) {
+      setState(() {
+        FlutterBluePlus.setLogLevel(LogLevel.warning);
+        _devices.clear();
+        _isScanning = true;
+      });
+    }
 
     subscription = FlutterBluePlus.onScanResults.listen((results) {
       for (ScanResult result in results) {
@@ -84,9 +90,11 @@ class _findDeviceState extends State<findDevice> {
         if (result.device.platformName.contains('CREAID')) {
           // if (result.device.platformName != '' &&
           //     result.device.platformName != null) {
-          setState(() {
-            _devices.add(result.device);
-          });
+          if(mounted) {
+            setState(() {
+              _devices.add(result.device);
+            });
+          }
         }
       }
     });
@@ -97,14 +105,18 @@ class _findDeviceState extends State<findDevice> {
 
         print(_devices);
         if (_devices.length == 1) {
-          setState(() {
-            deviceFound = true;
-            _selectedDevice = _devices[0];
-          });
+          if(mounted) {
+            setState(() {
+              deviceFound = true;
+              _selectedDevice = _devices[0];
+            });
+          }
         } else if (_devices.length > 1) {
-          setState(() {
-            deviceFound = true;
-          });
+          if(mounted) {
+            setState(() {
+              deviceFound = true;
+            });
+          }
         }
       });
     });
@@ -112,17 +124,21 @@ class _findDeviceState extends State<findDevice> {
 
   void _stopScan() {
     FlutterBluePlus.stopScan().then((val) {
-      setState(() {
-        _isScanning = false;
-        subscription.cancel();
-      });
+      if(mounted) {
+        setState(() {
+          _isScanning = false;
+        });
+      }
+      subscription.cancel();
     });
   }
 
   void _connectToDevice(BluetoothDevice device) async {
-    setState(() {
-      _connectedDevice = null;
-    });
+    if(mounted) {
+      setState(() {
+        _connectedDevice = null;
+      });
+    }
 
     try {
       print("Connecting to device: ${device.name} (${device.id})");
@@ -137,13 +153,15 @@ class _findDeviceState extends State<findDevice> {
         _btSerialService =
             service; ///////////////////////////// potential probles  here witht he if statments
         service.characteristics.forEach((characteristic) {
-          setState(() {
-            if (characteristic.uuid.toString() == RX_UUID) {
-              _serialRXCharacteristic = characteristic;
-            } else if (characteristic.uuid.toString() == TX_UUID) {
-              _serialTXCharacteristic = characteristic;
-            }
-          });
+          if(mounted) {
+            setState(() {
+              if (characteristic.uuid.toString() == RX_UUID) {
+                _serialRXCharacteristic = characteristic;
+              } else if (characteristic.uuid.toString() == TX_UUID) {
+                _serialTXCharacteristic = characteristic;
+              }
+            });
+          }
         });
         // }
       });
@@ -153,36 +171,39 @@ class _findDeviceState extends State<findDevice> {
           _serialTXCharacteristic != null) {
         print(
             "Required services and characteristics found. Starting MyDeviceControlPage.");
-        setState(() {
-          _connectedDevice = device;
+        if(mounted) {
+          setState(() {
+            _connectedDevice = device;
 
-          Provider.of<exoDeviceFunctions>(context, listen: false)
-              .setSerialRX(_serialRXCharacteristic!);
-          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
-              .setSerialTX(_serialTXCharacteristic!);
-          Provider.of<exoDeviceFunctions>(context, listen: false)
-              .setConnectedDevice(device);
+            Provider.of<exoDeviceFunctions>(context, listen: false)
+                .setSerialRX(_serialRXCharacteristic!);
+            Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+                .setSerialTX(_serialTXCharacteristic!);
+            Provider.of<exoDeviceFunctions>(context, listen: false)
+                .setConnectedDevice(device);
+            Provider.of<exoDeviceFunctions>(context, listen: false).startreceiverSubscription(
+                _connectedDevice!, _serialRXCharacteristic!, context);
+            // } catch (e) {
 
-          exoDeviceFunctions().startreceiverSubscription(
-              _connectedDevice!, _serialRXCharacteristic!);
-          // } catch (e) {
-
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => deviceSetup()),
-              (route) => false);
-        });
-      } else {
-        print("Error: Required services or characteristics not found");
-        await device.disconnect();
-      }
-    } catch (e) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => deviceSetup()),
+                    (route) => false);
+          });
+        }
+        } else {
+          print("Error: Required services or characteristics not found");
+          await device.disconnect();
+        }
+      } catch (e) {
       print("Error connecting to device: $e");
-      setState(() {
-        _connectedDevice = null;
-      });
     }
-  }
+      if(mounted) {
+        setState(() {
+          _connectedDevice = null;
+        });
+      }
+    }
 
   @override
   void dispose() {
@@ -505,9 +526,11 @@ class _findDeviceState extends State<findDevice> {
                                       itemBuilder: (context, index) {
                                         return GestureDetector(
                                           onTap: () {
-                                            setState(() {
-                                              _selectedDevice = _devices[index];
-                                            });
+                                            if(mounted) {
+                                              setState(() {
+                                                _selectedDevice = _devices[index];
+                                              });
+                                            }
                                           },
                                           child: Container(
                                             margin: const EdgeInsets.symmetric(

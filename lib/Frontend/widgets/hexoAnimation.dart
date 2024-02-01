@@ -5,45 +5,54 @@ import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 
-class hexoAnimationWidget extends StatelessWidget {
+class hexoAnimationWidget extends StatefulWidget {
   hexoAnimationWidget({super.key});
 
+  @override
+  hexoAnimationWidgetState createState() => hexoAnimationWidgetState();
+}
+
+class hexoAnimationWidgetState extends State<hexoAnimationWidget> {
   bool isFlexing = false;
 
   bool isExtending = false;
 
   Timer? flextimer;
 
-  StateMachineController? _controller;
+  late StateMachineController _controller;
 
   SMIInput<double>? _input;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  void _onInit(Artboard art) {
+    var ctrl = StateMachineController.fromArtboard(art, 'State Machine 1') as StateMachineController;
+    ctrl.isActive  = false;
+    art.addController(ctrl);
+    setState(() {
+      _controller = ctrl;
+      _input = ctrl.findInput('Number 1');
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final hexostate = Provider.of<exoDeviceFunctions>(context);
+
     if (_input != null) {
-      _input!.change(mapValue(
-          Provider.of<exoDeviceFunctions>(context, listen: false)
-              .curFlexAngle));
+      _input!.change(mapValue(hexostate.curFlexAngle));
     }
     return Center(
       child: GestureDetector(
-        onTapDown: (details) {},
+        onTapDown: (details) {print(hexostate.curFlexAngle);},
         onTapUp: (details) {},
         child: RiveAnimation.asset(
           'assets/rive/new_file.riv',
           fit: BoxFit.fitHeight,
-          onInit: (artbord) {
-            _controller =
-                StateMachineController.fromArtboard(artbord, 'State Machine 1');
-            if (_controller != null) {
-              artbord.addController(_controller!);
-
-              _input = _controller!.findInput('Number 1');
-              _input!.change(mapValue(
-                  Provider.of<exoDeviceFunctions>(context, listen: false)
-                      .curFlexAngle));
-            }
-          },
+          onInit: _onInit,
         ),
       ),
     );
@@ -52,6 +61,6 @@ class hexoAnimationWidget extends StatelessWidget {
   double mapValue(double originalValue) {
     // Assuming originalValue is in the range 0 to 180
     // Map it to the range 100 to 0
-    return 100 - (originalValue / 180 - 15) * 100;
+    return (originalValue / 120) * 100;
   }
 }

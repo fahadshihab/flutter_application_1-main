@@ -34,6 +34,8 @@ class _manualModeState extends State<manualMode> {
         .flexLimit; // double flexLimit = 120.0;
     double endLimit = Provider.of<exoDeviceFunctions>(context)
         .extLimit; // double extLimit = 0.0;
+    final currentState = Provider.of<exoDeviceFunctions>(context);
+
     int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
     return Scaffold(
       bottomNavigationBar: bottomNavBar(),
@@ -135,18 +137,26 @@ class _manualModeState extends State<manualMode> {
                       height: 20,
                     ),
                     GestureDetector(
-                        onTapDown: (details) {
-                          // startFlexing();
-                          exoBluetoothControlFunctions().flex(speed, serialTX);
-                        },
-                        onTapUp: (details) {
-                          exoBluetoothControlFunctions().flex(speed, serialTX);
-                          // stopFlexing();
-                        },
-                        onTapCancel: () {
-                          // stopFlexing();
-                          exoBluetoothControlFunctions().stop(serialTX);
-                        },
+                      onTapDown: (d){
+                        Provider.of<exoBluetoothControlFunctions>(context,
+                            listen: false).extend(speed, serialTX);
+                      },
+                        // onTapDown: (details) {
+                        //   // startFlexing();
+                        //   exoBluetoothControlFunctions().flex(speed, serialTX);
+                        // },
+                        // onTapUp: (details) {
+                        //   exoBluetoothControlFunctions().flex(speed, serialTX);
+                        //   // stopFlexing();
+                        // },
+                        // onTapCancel: () {
+                        //   // stopFlexing();
+                        //   exoBluetoothControlFunctions().stop(serialTX);
+                        // },
+                      // onTap: (){
+                      //   Provider.of<exoDeviceFunctions>(context)
+                      //       .setCurFlexAngle(30);
+                      // },
                         child: _Flex_BUTTON()),
                     SizedBox(
                       height: 20,
@@ -157,15 +167,14 @@ class _manualModeState extends State<manualMode> {
                     ),
                     GestureDetector(
                         onTapDown: (details) {
-                          exoBluetoothControlFunctions()
+                          Provider.of<exoBluetoothControlFunctions>(context,
+                              listen: false)
                               .extend(speed, serialTX);
                         },
-                        onTapUp: (details) {
-                          exoBluetoothControlFunctions()
-                              .extend(speed, serialTX);
-                        },
+                        onTapUp: (details) {},
                         onTapCancel: () =>
-                            exoBluetoothControlFunctions().stop(serialTX),
+                            Provider.of<exoBluetoothControlFunctions>(context,
+                                listen: false).stop(serialTX),
                         child: _Extend_BUTTON()),
                   ],
                 ),
@@ -204,17 +213,17 @@ class _manualModeState extends State<manualMode> {
   ///
   ///
   ///
-  // startFlexing() {
-  //   if (isFlexing == false) {
-  //     flextimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-  //       Provider.of<exoDeviceFunctions>(context, listen: false)
-  //           .test_flex(false);
-  //     });
-  //     setState(() {
-  //       isFlexing = true;
-  //     });
-  //   }
-  // }
+  startFlexing() {
+    if (isFlexing == false) {
+      flextimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+        Provider.of<exoDeviceFunctions>(context, listen: false)
+            .test_flex(false);
+      });
+      setState(() {
+        isFlexing = true;
+      });
+    }
+  }
 
   // stopFlexing() {
   //   if (isFlexing == true) {
@@ -323,32 +332,40 @@ class _Flex_BUTTON extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 70,
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(left: 20, right: 20),
-      decoration: BoxDecoration(
-        color: Color.fromARGB(255, 243, 244, 246),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Color.fromARGB(224, 0, 70, 136),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            spreadRadius: 0,
-            blurRadius: 10,
+    return GestureDetector(
+      onTap: () {
+        Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+            .flex(100, Provider.of<exoBluetoothControlFunctions>(context,
+            listen: false)
+            .serialTX!);
+      },
+      child: Container(
+        height: 70,
+        width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.only(left: 20, right: 20),
+        decoration: BoxDecoration(
+          color: Color.fromARGB(255, 243, 244, 246),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: Color.fromARGB(224, 0, 70, 136),
+            width: 1,
           ),
-        ],
-      ),
-      child: Center(
-        child: Text(
-          'Flex',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: const Color(0xFF004788),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              spreadRadius: 0,
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            'Flex',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: const Color(0xFF004788),
+            ),
           ),
         ),
       ),

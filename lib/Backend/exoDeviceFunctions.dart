@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 
-class exoDeviceFunctions extends ChangeNotifier {
+class exoDeviceFunctions with ChangeNotifier {
   late StreamSubscription _receiverSubscription;
   int _speed_setting = 1;
   double _flexionCounter = 0;
@@ -64,8 +64,8 @@ class exoDeviceFunctions extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSpeed(int speed) {
-    _speed_setting = speed;
+  void setSpeed(int spd) {
+    _speed_setting = spd;
     notifyListeners();
   }
 
@@ -91,7 +91,6 @@ class exoDeviceFunctions extends ChangeNotifier {
 
   void setCurFlexAngle(double angle) {
     _curFlexAngle = angle;
-
     notifyListeners();
   }
 
@@ -105,22 +104,25 @@ class exoDeviceFunctions extends ChangeNotifier {
     notifyListeners();
   }
 
-  test() {
+  void test() {
     print("test");
   }
 
-  startreceiverSubscription(
+  void startreceiverSubscription(
       /////////////////////////////////////////////////////////// TO DO : ARDUNIO NOT REPORTING BACK/ FAHAD
       BluetoothDevice connectedDevice,
-      BluetoothCharacteristic serialRX) {
+      BluetoothCharacteristic serialRX,context) {
     _receiverSubscription = serialRX.onValueReceived.listen((value) {
       String rx_str = ascii.decode(value);
 
       List<String> commands = rx_str.split(" ");
-      print(commands);
+
 
       if (commands[0] == "A") {
-        print('yoyo');
+        //Provider.of<exoDeviceFunctions>(context, listen: false)
+        //    .setCurFlexAngle(double.parse(commands[1]));
+        // Provider.of<exoDeviceFunctions>(context)
+        //     .setCurFlexAngle(30);
         setCurFlexAngle(double.parse(commands[1]));
       } else if (commands[0] == "P0") {
         setAngleControlEnabled(int.parse(commands[1]) == 1 ? true : false);
@@ -135,12 +137,24 @@ class exoDeviceFunctions extends ChangeNotifier {
     connectedDevice.cancelWhenDisconnected(_receiverSubscription);
     serialRX.setNotifyValue(true);
   }
+
+  @override
+  void dispose() {
+    print("deleted");
+    super.dispose();
+  }
 }
 
 class exoBluetoothControlFunctions extends ChangeNotifier {
   BluetoothCharacteristic? _serialTX;
 
   BluetoothCharacteristic? get serialTX => _serialTX;
+  int counter = 0;
+
+  void incrementCounter() {
+    counter++;
+    notifyListeners();
+  }
 
   void setSerialTX(BluetoothCharacteristic serialTX) {
     _serialTX = serialTX;
@@ -149,15 +163,15 @@ class exoBluetoothControlFunctions extends ChangeNotifier {
   }
 
   void extend(
-    int? speed,
+    int speed,
     BluetoothCharacteristic serialTX,
   ) {
-    String tx_str = "E" + " " + "${100} ";
+    String tx_str = "E" + " " + "${speed * 50} ";
     serialTX.write(utf8.encode(tx_str));
   }
 
-  void flex(int? speed, BluetoothCharacteristic serialTX) {
-    String tx_str = "F" + " " + "${100} ";
+  void flex(int speed, BluetoothCharacteristic serialTX) {
+    String tx_str = "F" + " " + "${speed * 50}";
     serialTX.write(utf8.encode(tx_str));
   }
 
@@ -179,46 +193,54 @@ class exoBluetoothControlFunctions extends ChangeNotifier {
   void angleControl(BluetoothCharacteristic serialTX) {
     String tx_str = "G" + " " + "3";
     serialTX!.write(utf8.encode(tx_str));
+    serialTX!.write(ascii.encode("P 0"));
   }
 
   void disableAngleControl(BluetoothCharacteristic serialTX) {
     String tx_str = "G" + " " + "2";
     serialTX!.write(utf8.encode(tx_str));
+    serialTX!.write(ascii.encode("P 0"));
   }
 
   void setSpeed(int speed, BluetoothCharacteristic serialTX) {
-    String tx_str = "S" + " " + "${speed * 40}";
+    String tx_str = "S" + " " + "${speed * 50}";
     serialTX!.write(utf8.encode(tx_str));
   }
 
   void setFlexLimit(BluetoothCharacteristic serialTX) {
     String tx_str = "M" + " " + "0";
     serialTX!.write(utf8.encode(tx_str));
+    serialTX!.write(ascii.encode("P 0"));
   }
 
   void setExtLimit(BluetoothCharacteristic serialTX) {
     String tx_str = "M" + " " + "1";
     serialTX!.write(utf8.encode(tx_str));
+    serialTX!.write(ascii.encode("P 0"));
   }
 
   void setROMLimitEnabled(bool enabled, BluetoothCharacteristic serialTX) {
     String tx_str = "G" + " " + (enabled ? "1" : "0");
     serialTX!.write(utf8.encode(tx_str));
+    serialTX!.write(ascii.encode("P 0"));
   }
 
   void setAngleControlEnabled(bool enabled, BluetoothCharacteristic serialTX) {
     String tx_str = "G" + " " + (enabled ? "3" : "2");
     serialTX!.write(utf8.encode(tx_str));
+    serialTX!.write(ascii.encode("P 0"));
   }
 
   void resetSetPoint(BluetoothCharacteristic serialTX) {
     String tx_str = "G 5";
     serialTX!.write(utf8.encode(tx_str));
+    serialTX!.write(ascii.encode("P 0"));
   }
 
   void setZero(BluetoothCharacteristic serialTX) {
     String tx_str = "Z 0";
     serialTX!.write(utf8.encode(tx_str));
+    serialTX!.write(ascii.encode("P 0"));
   }
 
   void stop(BluetoothCharacteristic serialTX) {

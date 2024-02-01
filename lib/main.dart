@@ -15,20 +15,26 @@ import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+class MainApp extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_) => new exoDeviceFunctions()),
+      ChangeNotifierProvider(create: (_) => new exoBluetoothControlFunctions()),
+    ],
+    child: DeviceControl(),
+    );
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
   
 
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(
-      create: (_) => exoDeviceFunctions(),
-    ),
-    ChangeNotifierProvider(
-      create: (_) => exoBluetoothControlFunctions(),
-    ),
-  ], child: DeviceControl()));
+  runApp(MainApp());
 }
 
 class DeviceControl extends StatefulWidget {
