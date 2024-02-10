@@ -591,15 +591,15 @@ class _movementCircleState extends State<_movementCircle> {
         });
       },
       onTap: () {
-        if (widget.anglePlus.isNegative && widget.serialTX != null) {
+        if (widget.anglePlus.isNegative == false && widget.serialTX != null) {
           print('flexion');
           Provider.of<exoBluetoothControlFunctions>(context, listen: false)
               .flexByAngle(widget.anglePlus.toDouble(), widget.serialTX!);
-        } else if (widget.anglePlus.isNegative == false &&
+        } else if (widget.anglePlus.isNegative &&
             widget.serialTX != null) {
           print('extension');
           Provider.of<exoBluetoothControlFunctions>(context, listen: false)
-              .entendByAngle(widget.anglePlus.toDouble(), widget.serialTX!);
+              .entendByAngle(-widget.anglePlus.toDouble(), widget.serialTX!);
         }
       },
       child: Container(
