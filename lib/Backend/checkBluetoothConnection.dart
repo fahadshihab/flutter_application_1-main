@@ -17,8 +17,10 @@ class checkBluetoothConnection {
   }
 
   bluetoothDeviceConnectionListner() {
+    print('Bluetooth Connection State: ');
     FlutterBluePlus.events.onConnectionStateChanged.listen((value) {
-      if (value == BluetoothConnectionState.disconnected) {
+      print('Bluetooth Connection State: ${value.connectionState}');
+      if (value.connectionState == BluetoothConnectionState.disconnected) {
         navigatorKey.currentState!
             .pushNamedAndRemoveUntil('/findDevice', (route) => false);
       }
