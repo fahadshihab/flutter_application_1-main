@@ -29,7 +29,7 @@ class _calibration_pageState extends State<calibration_page> {
   @override
   Widget build(BuildContext context) {
     int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
-    double currentAngle = Provider.of<exoDeviceFunctions>(context).curFlexAngle;
+    double currentAngle = 0;
     double flexLimit = Provider.of<exoDeviceFunctions>(context).flexLimit;
     double extLimit = Provider.of<exoDeviceFunctions>(context).extLimit;
     BluetoothCharacteristic? serialTX =
@@ -210,8 +210,6 @@ class _calibration_pageState extends State<calibration_page> {
                               anglePlus: -10,
                               intString: '-10',
                               currentangle: currentAngle,
-                              extLimit: extLimit,
-                              flexLimit: flexLimit,
                               serialTX:
                                   Provider.of<exoBluetoothControlFunctions>(
                                           context)
@@ -224,8 +222,6 @@ class _calibration_pageState extends State<calibration_page> {
                               anglePlus: -5,
                               intString: '-5',
                               currentangle: currentAngle,
-                              extLimit: extLimit,
-                              flexLimit: flexLimit,
                               serialTX:
                                   Provider.of<exoBluetoothControlFunctions>(
                                           context)
@@ -238,8 +234,6 @@ class _calibration_pageState extends State<calibration_page> {
                               anglePlus: -1,
                               intString: '-1',
                               currentangle: currentAngle,
-                              extLimit: extLimit,
-                              flexLimit: flexLimit,
                               serialTX:
                                   Provider.of<exoBluetoothControlFunctions>(
                                           context)
@@ -252,8 +246,6 @@ class _calibration_pageState extends State<calibration_page> {
                               anglePlus: 1,
                               intString: '+1',
                               currentangle: currentAngle,
-                              extLimit: extLimit,
-                              flexLimit: flexLimit,
                               serialTX:
                                   Provider.of<exoBluetoothControlFunctions>(
                                           context)
@@ -266,8 +258,6 @@ class _calibration_pageState extends State<calibration_page> {
                               anglePlus: 5,
                               intString: '+5',
                               currentangle: currentAngle,
-                              extLimit: extLimit,
-                              flexLimit: flexLimit,
                               serialTX:
                                   Provider.of<exoBluetoothControlFunctions>(
                                           context)
@@ -280,8 +270,6 @@ class _calibration_pageState extends State<calibration_page> {
                               anglePlus: 10,
                               intString: '+10',
                               currentangle: currentAngle,
-                              extLimit: extLimit,
-                              flexLimit: flexLimit,
                               serialTX:
                                   Provider.of<exoBluetoothControlFunctions>(
                                           context)
@@ -567,16 +555,13 @@ class _movementCircle extends StatefulWidget {
   int anglePlus;
   double currentangle;
   String intString;
-  double flexLimit;
-  double extLimit;
+
   BluetoothCharacteristic? serialTX;
 
   _movementCircle(
       {super.key,
       required this.anglePlus,
       required this.intString,
-      required this.flexLimit,
-      required this.extLimit,
       required this.currentangle,
       required this.serialTX});
 
@@ -607,10 +592,12 @@ class _movementCircleState extends State<_movementCircle> {
       },
       onTap: () {
         if (widget.anglePlus.isNegative && widget.serialTX != null) {
+          print('flexion');
           Provider.of<exoBluetoothControlFunctions>(context, listen: false)
               .flexByAngle(widget.anglePlus.toDouble(), widget.serialTX!);
         } else if (widget.anglePlus.isNegative == false &&
             widget.serialTX != null) {
+          print('extension');
           Provider.of<exoBluetoothControlFunctions>(context, listen: false)
               .entendByAngle(widget.anglePlus.toDouble(), widget.serialTX!);
         }

@@ -17,7 +17,7 @@ class checkBluetoothConnection {
   }
 
   bluetoothDeviceConnectionListner() {
-    FlutterBluePlus.events.onConnectionStateChanged.first.then((value) {
+    FlutterBluePlus.events.onConnectionStateChanged.listen((value) {
       if (value == BluetoothConnectionState.disconnected) {
         navigatorKey.currentState!
             .pushNamedAndRemoveUntil('/findDevice', (route) => false);

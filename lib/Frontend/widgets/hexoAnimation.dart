@@ -29,8 +29,9 @@ class hexoAnimationWidgetState extends State<hexoAnimationWidget> {
   }
 
   void _onInit(Artboard art) {
-    var ctrl = StateMachineController.fromArtboard(art, 'State Machine 1') as StateMachineController;
-    ctrl.isActive  = false;
+    var ctrl = StateMachineController.fromArtboard(art, 'State Machine 1')
+        as StateMachineController;
+    ctrl.isActive = false;
     art.addController(ctrl);
     setState(() {
       _controller = ctrl;
@@ -47,7 +48,9 @@ class hexoAnimationWidgetState extends State<hexoAnimationWidget> {
     }
     return Center(
       child: GestureDetector(
-        onTapDown: (details) {print(hexostate.curFlexAngle);},
+        onTapDown: (details) {
+          print(hexostate.curFlexAngle);
+        },
         onTapUp: (details) {},
         child: RiveAnimation.asset(
           'assets/rive/new_file.riv',
@@ -61,6 +64,6 @@ class hexoAnimationWidgetState extends State<hexoAnimationWidget> {
   double mapValue(double originalValue) {
     // Assuming originalValue is in the range 0 to 180
     // Map it to the range 100 to 0
-    return (originalValue / 120) * 100;
+    return (originalValue / 140) * 100;
   }
 }

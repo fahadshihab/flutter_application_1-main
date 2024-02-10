@@ -87,6 +87,7 @@ class _manualModeState extends State<manualMode> {
                   children: [
                     //Limits display
                     Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                       margin: EdgeInsets.symmetric(horizontal: 20),
@@ -114,7 +115,7 @@ class _manualModeState extends State<manualMode> {
                           Row(
                             children: [
                               Text(
-                                'Flex: $startLimit°',
+                                'Flex: ${startLimit.toInt()}°',
                                 style: TextStyle(
                                   fontSize: 17,
                                   color: Color.fromARGB(255, 90, 90, 90),
@@ -124,7 +125,7 @@ class _manualModeState extends State<manualMode> {
                                 width: 20,
                               ),
                               Text(
-                                'Extend: $endLimit°',
+                                'Extend: ${endLimit.toInt()}°',
                                 style: TextStyle(
                                   fontSize: 17,
                                   color: Color.fromARGB(255, 90, 90, 90),
@@ -139,32 +140,29 @@ class _manualModeState extends State<manualMode> {
                       height: 20,
                     ),
                     GestureDetector(
-                        onTapDown: (d) {
-                          Provider.of<exoBluetoothControlFunctions>(context,
-                                  listen: false)
-                              .extend(speed, serialTX);
+                        onTapDown: (details) {
+                          // startFlexing();
+                          exoBluetoothControlFunctions().flex(speed, serialTX);
                         },
-                        // onTapDown: (details) {
-                        //   // startFlexing();
-                        //   exoBluetoothControlFunctions().flex(speed, serialTX);
-                        // },
-                        // onTapUp: (details) {
-                        //   exoBluetoothControlFunctions().flex(speed, serialTX);
-                        //   // stopFlexing();
-                        // },
-                        // onTapCancel: () {
-                        //   // stopFlexing();
-                        //   exoBluetoothControlFunctions().stop(serialTX);
-                        // },
-                        // onTap: (){
-                        //   Provider.of<exoDeviceFunctions>(context)
-                        //       .setCurFlexAngle(30);
-                        // },
+                        onTapUp: (details) {
+                          exoBluetoothControlFunctions().stop(serialTX);
+                          // stopFlexing();
+                        },
+                        onTapCancel: () {
+                          // stopFlexing();
+                          exoBluetoothControlFunctions().stop(serialTX);
+                        },
                         child: _Flex_BUTTON()),
                     SizedBox(
                       height: 20,
                     ),
-                    _Stop_BUTTON(),
+                    GestureDetector(
+                        onTap: () {
+                          Provider.of<exoBluetoothControlFunctions>(context,
+                                  listen: false)
+                              .EmergencyStop(serialTX);
+                        },
+                        child: _Stop_BUTTON()),
                     SizedBox(
                       height: 20,
                     ),
@@ -174,7 +172,11 @@ class _manualModeState extends State<manualMode> {
                                   listen: false)
                               .extend(speed, serialTX);
                         },
-                        onTapUp: (details) {},
+                        onTapUp: (details) {
+                          Provider.of<exoBluetoothControlFunctions>(context,
+                                  listen: false)
+                              .stop(serialTX);
+                        },
                         onTapCancel: () =>
                             Provider.of<exoBluetoothControlFunctions>(context,
                                     listen: false)
@@ -287,40 +289,32 @@ class _Stop_BUTTON extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Provider.of<exoBluetoothControlFunctions>(context, listen: false)
-            .EmergencyStop(Provider.of<exoBluetoothControlFunctions>(context,
-                    listen: false)
-                .serialTX!);
-      },
-      child: Container(
-        height: 70,
-        width: MediaQuery.of(context).size.width,
-        margin: EdgeInsets.only(left: 20, right: 20),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Color(0xffFBE9E9),
-          border: Border.all(
-            color: Color.fromARGB(223, 136, 0, 0),
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey,
-              spreadRadius: 0,
-              blurRadius: 10,
-            ),
-          ],
+    return Container(
+      height: 70,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.only(left: 20, right: 20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Color(0xffFBE9E9),
+        border: Border.all(
+          color: Color.fromARGB(223, 136, 0, 0),
+          width: 1,
         ),
-        child: Center(
-          child: Text(
-            'Stop',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color: Color.fromARGB(255, 221, 10, 10),
-            ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            spreadRadius: 0,
+            blurRadius: 10,
+          ),
+        ],
+      ),
+      child: Center(
+        child: Text(
+          'Stop',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Color.fromARGB(255, 221, 10, 10),
           ),
         ),
       ),
@@ -335,40 +329,32 @@ class _Flex_BUTTON extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Provider.of<exoBluetoothControlFunctions>(context, listen: false).flex(
-            100,
-            Provider.of<exoBluetoothControlFunctions>(context, listen: false)
-                .serialTX!);
-      },
-      child: Container(
-        height: 70,
-        width: MediaQuery.of(context).size.width,
-        margin: EdgeInsets.only(left: 20, right: 20),
-        decoration: BoxDecoration(
-          color: Color.fromARGB(255, 243, 244, 246),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Color.fromARGB(224, 0, 70, 136),
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey,
-              spreadRadius: 0,
-              blurRadius: 10,
-            ),
-          ],
+    return Container(
+      height: 70,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.only(left: 20, right: 20),
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 243, 244, 246),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: Color.fromARGB(224, 0, 70, 136),
+          width: 1,
         ),
-        child: Center(
-          child: Text(
-            'Flex',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color: const Color(0xFF004788),
-            ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            spreadRadius: 0,
+            blurRadius: 10,
+          ),
+        ],
+      ),
+      child: Center(
+        child: Text(
+          'Flex',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: const Color(0xFF004788),
           ),
         ),
       ),
