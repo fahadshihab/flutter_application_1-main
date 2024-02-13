@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
+import 'package:flutter_application_1/Frontend/pages/bottomNavBar.dart';
 
 class infoPage extends StatelessWidget {
   const infoPage({super.key});

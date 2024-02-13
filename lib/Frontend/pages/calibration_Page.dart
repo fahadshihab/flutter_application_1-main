@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
-import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
-import 'package:flutter_application_1/Frontend/doctor/manual%20mode/manual_Mode.dart';
+import 'package:flutter_application_1/Frontend/pages/bottomNavBar.dart';
+import 'package:flutter_application_1/Frontend/pages/manual_Mode.dart';
 import 'package:flutter_application_1/Frontend/widgets/hexoAnimation.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
@@ -595,8 +595,7 @@ class _movementCircleState extends State<_movementCircle> {
           print('flexion');
           Provider.of<exoBluetoothControlFunctions>(context, listen: false)
               .flexByAngle(widget.anglePlus.toDouble(), widget.serialTX!);
-        } else if (widget.anglePlus.isNegative &&
-            widget.serialTX != null) {
+        } else if (widget.anglePlus.isNegative && widget.serialTX != null) {
           print('extension');
           Provider.of<exoBluetoothControlFunctions>(context, listen: false)
               .entendByAngle(-widget.anglePlus.toDouble(), widget.serialTX!);

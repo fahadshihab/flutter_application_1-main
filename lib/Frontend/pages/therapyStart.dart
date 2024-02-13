@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
-import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
+import 'package:flutter_application_1/Frontend/pages/bottomNavBar.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Frontend/doctor/manual%20mode/calibration_Page.dart';
-import 'package:flutter_application_1/Frontend/doctor/manual%20mode/info.dart';
-import 'package:flutter_application_1/Frontend/doctor/manual%20mode/manual_Mode.dart';
-import 'package:flutter_application_1/Frontend/doctor/manual%20mode/therapymode.dart';
+import 'package:flutter_application_1/Frontend/pages/calibration_Page.dart';
+import 'package:flutter_application_1/Frontend/pages/info.dart';
+import 'package:flutter_application_1/Frontend/pages/manual_Mode.dart';
+import 'package:flutter_application_1/Frontend/pages/therapymode.dart';
 
 class bottomNavBar extends StatelessWidget {
   const bottomNavBar({super.key});

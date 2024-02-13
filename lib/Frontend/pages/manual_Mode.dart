@@ -4,7 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
-import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
+import 'package:flutter_application_1/Frontend/pages/bottomNavBar.dart';
 import 'package:flutter_application_1/Frontend/widgets/hexoAnimation.dart';
 import 'package:flutter_application_1/Frontend/widgets/voiceAnimation.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';

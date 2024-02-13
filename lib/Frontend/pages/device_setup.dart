@@ -4,13 +4,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Backend/checkBluetoothConnection.dart';
 
-import 'package:flutter_application_1/Frontend/doctor/manual%20mode/bottomNavBar.dart';
-import 'package:flutter_application_1/Frontend/doctor/manual%20mode/manual_Mode.dart';
+import 'package:flutter_application_1/Frontend/pages/bottomNavBar.dart';
+import 'package:flutter_application_1/Frontend/pages/manual_Mode.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-import '../../../Backend/exoDeviceFunctions.dart';
+import '../../Backend/exoDeviceFunctions.dart';
 
 class deviceSetup extends StatefulWidget {
   const deviceSetup({super.key});

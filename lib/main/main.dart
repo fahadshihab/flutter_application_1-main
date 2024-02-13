@@ -5,12 +5,12 @@ import 'package:flutter_application_1/Backend/checkBluetoothConnection.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
 import 'package:flutter_application_1/Backend/findDevice.dart';
 
-import 'package:flutter_application_1/Frontend/doctor/manual%20mode/calibration_Page.dart';
-import 'package:flutter_application_1/Frontend/doctor/manual%20mode/manual_Mode.dart';
-import 'package:flutter_application_1/Frontend/doctor/manual%20mode/therapymode.dart';
+import 'package:flutter_application_1/Frontend/pages/calibration_Page.dart';
+import 'package:flutter_application_1/Frontend/pages/manual_Mode.dart';
+import 'package:flutter_application_1/Frontend/pages/therapymode.dart';
 
 import 'package:provider/provider.dart';
-import 'Frontend/doctor/manual mode/device_setup.dart';
+import '../Frontend/pages/device_setup.dart';
 import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
