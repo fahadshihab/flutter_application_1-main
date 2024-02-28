@@ -53,7 +53,7 @@ class hexoAnimationWidgetState extends State<hexoAnimationWidget> {
         },
         onTapUp: (details) {},
         child: RiveAnimation.asset(
-          'assets/rive/new_file.riv',
+          'assets/rive/new_file (1).riv',
           fit: BoxFit.fitHeight,
           onInit: _onInit,
         ),

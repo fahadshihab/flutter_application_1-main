@@ -39,33 +39,19 @@ class _voiceAnimationState extends State<voiceAnimation> {
       onTap: () {
         _listenS();
       },
-      child: Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.all(30),
-        height: 100,
-        width: 100,
-        decoration: BoxDecoration(
-            color: const Color(0xFF004788),
-            borderRadius: BorderRadius.all(Radius.circular(50))),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 5, right: 2),
-            child: RiveAnimation.asset(
-              'assets/rive/google_assistant_redesign_-_animation.riv',
-              fit: BoxFit.fitHeight,
-              onInit: (artbord) {
-                _controller = StateMachineController.fromArtboard(
-                    artbord, 'State Machine 1');
-                if (_controller != null) {
-                  artbord.addController(_controller!);
-                  _listen = _controller!.findSMI('listen');
-                  _listenToIdle = _controller!.findSMI('listen to idle');
-                  _Speaking = _controller!.findSMI('speak & listen');
-                }
-              },
-            ),
-          ),
-        ),
+      child: RiveAnimation.asset(
+        'assets/rive/google_assistant_redesign_-_animation.riv',
+        fit: BoxFit.fitHeight,
+        onInit: (artbord) {
+          _controller =
+              StateMachineController.fromArtboard(artbord, 'State Machine 1');
+          if (_controller != null) {
+            artbord.addController(_controller!);
+            _listen = _controller!.findSMI('listen');
+            _listenToIdle = _controller!.findSMI('listen to idle');
+            _Speaking = _controller!.findSMI('speak & listen');
+          }
+        },
       ),
     );
   }

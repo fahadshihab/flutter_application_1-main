@@ -10,7 +10,7 @@ import 'package:flutter_application_1/Frontend/pages/device_setup.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:flutter_application_1/main/main.dart';
+import 'package:flutter_application_1/main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';

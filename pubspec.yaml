@@ -49,6 +49,7 @@ dependencies:
   flutter_time_picker_spinner: ^2.0.0
   animated_text_kit: ^4.2.2
   rive: ^0.12.4
+  item_count_number_button: ^1.9.2
 
 
 
@@ -97,8 +98,15 @@ flutter:
     - assets/images/person_nohand.png
     - assets/images/Adult-Swim-Art-GIF-by-Micah-Bu-unscreen.gif
     - assets/rive/new_file.riv
+    - assets/rive/new_file_dum.riv
     - assets/images/backgroundHexo.gif
     - assets/rive/google_assistant_redesign_-_animation.riv
+    - assets/app V2/steps bar/step1.png
+    - assets/app V2/steps bar/step2.png
+    - assets/app V2/steps bar/step3.png
+    - assets/app V2/steps bar/Warnings/dont wear this device yet.png
+    - assets/app V2/Device Gif/output-onlinegiftools.gif
+    - assets/rive/new_file (1).riv
    
   
 

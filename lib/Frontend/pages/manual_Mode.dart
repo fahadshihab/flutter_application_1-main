@@ -11,7 +11,8 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rive/rive.dart';
+import 'package:rive/rive.dart' hide LinearGradient;
+import 'package:item_count_number_button/item_count_number_button.dart';
 
 class manualMode extends StatefulWidget {
   const manualMode({super.key});
@@ -31,17 +32,20 @@ class _manualModeState extends State<manualMode> {
     double currentAngle = Provider.of<exoDeviceFunctions>(context)
         .curFlexAngle; // double currentAngle = 90.0;
     double startLimit = Provider.of<exoDeviceFunctions>(context)
-        .flexLimit; // double flexLimit = 120.0;
+        .flexLimit; // double flexLimit = 110
+    .0;
     double endLimit = Provider.of<exoDeviceFunctions>(context)
         .extLimit; // double extLimit = 0.0;
     final currentState = Provider.of<exoDeviceFunctions>(context);
 
     int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
+
     return Scaffold(
       bottomNavigationBar: bottomNavBar(),
       extendBodyBehindAppBar: true,
       backgroundColor: Color(0xffF0F0F2),
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         centerTitle: false,
         title: Text(
           'Manual Mode',
@@ -64,153 +68,186 @@ class _manualModeState extends State<manualMode> {
           )
         ],
       ),
-      body: ListView(
+      body: SafeArea(
+          child: ListView(
         shrinkWrap: true,
         padding: EdgeInsets.zero,
         children: [
           Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 225, 229, 232),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey,
-                  spreadRadius: 0,
-                  blurRadius: 8,
-                ),
-              ],
-            ),
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Column(
-                  children: [
-                    //Limits display
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Color.fromARGB(255, 241, 243, 246),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            spreadRadius: 0,
-                            blurRadius: 10,
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Limits',
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: Color.fromARGB(255, 90, 90, 90),
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                'Flex: ${startLimit.toInt()}°',
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  color: Color.fromARGB(255, 90, 90, 90),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Text(
-                                'Extend: ${endLimit.toInt()}°',
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  color: Color.fromARGB(255, 90, 90, 90),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    GestureDetector(
-                        onTapDown: (details) {
-                          // startFlexing();
-                          exoBluetoothControlFunctions().flex(speed, serialTX);
-                        },
-                        onTapUp: (details) {
-                          exoBluetoothControlFunctions().stop(serialTX);
-                          // stopFlexing();
-                        },
-                        onTapCancel: () {
-                          // stopFlexing();
-                          exoBluetoothControlFunctions().stop(serialTX);
-                        },
-                        child: _Flex_BUTTON()),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          Provider.of<exoBluetoothControlFunctions>(context,
-                                  listen: false)
-                              .EmergencyStop(serialTX);
-                        },
-                        child: _Stop_BUTTON()),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    GestureDetector(
-                        onTapDown: (details) {
-                          Provider.of<exoBluetoothControlFunctions>(context,
-                                  listen: false)
-                              .extend(speed, serialTX);
-                        },
-                        onTapUp: (details) {
-                          Provider.of<exoBluetoothControlFunctions>(context,
-                                  listen: false)
-                              .stop(serialTX);
-                        },
-                        onTapCancel: () =>
-                            Provider.of<exoBluetoothControlFunctions>(context,
-                                    listen: false)
-                                .stop(serialTX),
-                        child: _Extend_BUTTON()),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Container(
-              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
+              margin: EdgeInsets.symmetric(horizontal: 40, vertical: 13),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(40),
                 color: Color.fromARGB(255, 241, 243, 246),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey,
                     spreadRadius: 0,
-                    blurRadius: 10,
+                    blurRadius: 3,
+                    offset: Offset(0, 3),
                   ),
                 ],
               ),
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.4,
-              child: Stack(children: [
-                hexoAnimationWidget(),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: voiceAnimation(),
-                )
-              ]))
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Range of Motion',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.roboto(
+                            textStyle: TextStyle(
+                              fontSize: 16,
+                              color: Color.fromARGB(255, 90, 90, 90),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          '$startLimit° to $endLimit°',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Color.fromARGB(255, 90, 90, 90),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  //devider line
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    height: 1,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    color: Color.fromARGB(70, 0, 0, 0),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      child: hexoAnimationWidget()),
+                ],
+              )),
+          // voiceAnimation(),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                //Limits display
+
+                SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                    onTapDown: (details) {
+                      // startFlexing();
+                      exoBluetoothControlFunctions().flex(speed, serialTX);
+                    },
+                    onTapUp: (details) {
+                      exoBluetoothControlFunctions().stop(serialTX);
+                      // stopFlexing();
+                    },
+                    onTapCancel: () {
+                      // stopFlexing();
+                      exoBluetoothControlFunctions().stop(serialTX);
+                    },
+                    child: _Flex_BUTTON()),
+                SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                    onTap: () {
+                      Provider.of<exoBluetoothControlFunctions>(context,
+                              listen: false)
+                          .EmergencyStop(serialTX);
+                    },
+                    child: _Stop_BUTTON()),
+                SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                    onTapDown: (details) {
+                      Provider.of<exoBluetoothControlFunctions>(context,
+                              listen: false)
+                          .extend(speed, serialTX);
+                    },
+                    onTapUp: (details) {
+                      Provider.of<exoBluetoothControlFunctions>(context,
+                              listen: false)
+                          .stop(serialTX);
+                    },
+                    onTapCancel: () =>
+                        Provider.of<exoBluetoothControlFunctions>(context,
+                                listen: false)
+                            .stop(serialTX),
+                    child: _Extend_BUTTON()),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              //intrementer
+              Column(
+                children: [
+                  Text('Speed Control',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                        color: Color(0xFF004788),
+                      )),
+                  SizedBox(height: 10),
+                  ItemCount(
+                      color: Color.fromARGB(109, 0, 70, 136),
+                      buttonSizeHeight: 40,
+                      buttonSizeWidth: 40,
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      ),
+                      initialValue: Provider.of<exoDeviceFunctions>(context)
+                          .speed_setting,
+                      minValue: 1,
+                      maxValue: 5,
+                      onChanged: ((value) {
+                        Provider.of<exoDeviceFunctions>(context, listen: false)
+                            .setSpeed(value.toInt());
+                        Provider.of<exoBluetoothControlFunctions>(context,
+                                listen: false)
+                            .setSpeed(value.toInt(), serialTX!);
+                      }),
+                      decimalPlaces: 1),
+                ],
+              ),
+
+              Container(
+                  padding: EdgeInsets.only(top: 5, right: 5),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 0,
+                    ),
+                    shape: BoxShape.circle,
+                    color: Color(0xff004788),
+                  ),
+                  child:
+                      SizedBox(height: 80, width: 80, child: voiceAnimation()))
+            ],
+          )
         ],
-      ),
+      )),
     );
   }
 
@@ -250,21 +287,20 @@ class _Extend_BUTTON extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 20, right: 20),
-      height: 70,
-      width: MediaQuery.of(context).size.width,
+      height: 110,
+      width: 110,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Color.fromARGB(255, 241, 243, 246),
+        color: Color.fromARGB(255, 243, 244, 246),
+        borderRadius: BorderRadius.circular(1),
         border: Border.all(
-          color: Color.fromARGB(169, 0, 70, 136),
+          color: Color(0xDFA8BED2),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
             color: Colors.grey,
             spreadRadius: 0,
-            blurRadius: 10,
+            blurRadius: 0,
           ),
         ],
       ),
@@ -290,21 +326,20 @@ class _Stop_BUTTON extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(left: 20, right: 20),
+      height: 110,
+      width: 110,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(2),
         color: Color(0xffFBE9E9),
         border: Border.all(
-          color: Color.fromARGB(223, 136, 0, 0),
+          color: Color(0xDFD2A8A8),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
             color: Colors.grey,
             spreadRadius: 0,
-            blurRadius: 10,
+            blurRadius: 0,
           ),
         ],
       ),
@@ -314,7 +349,7 @@ class _Stop_BUTTON extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
-            color: Color.fromARGB(255, 221, 10, 10),
+            color: Color(0xFF880000),
           ),
         ),
       ),
@@ -330,21 +365,20 @@ class _Flex_BUTTON extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(left: 20, right: 20),
+      height: 110,
+      width: 110,
       decoration: BoxDecoration(
         color: Color.fromARGB(255, 243, 244, 246),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(1),
         border: Border.all(
-          color: Color.fromARGB(224, 0, 70, 136),
+          color: Color(0xDFA8BED2),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
             color: Colors.grey,
             spreadRadius: 0,
-            blurRadius: 10,
+            blurRadius: 0,
           ),
         ],
       ),

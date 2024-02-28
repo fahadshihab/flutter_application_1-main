@@ -10,7 +10,7 @@ import 'package:flutter_application_1/Frontend/pages/manual_Mode.dart';
 import 'package:flutter_application_1/Frontend/pages/therapymode.dart';
 
 import 'package:provider/provider.dart';
-import '../Frontend/pages/device_setup.dart';
+import 'Frontend/pages/device_setup.dart';
 import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -50,7 +50,8 @@ class _DeviceControlState extends State<DeviceControl> {
     // TODO: implement initState
     super.initState();
     test();
-    checkBluetoothConnection(navigatorKey).bluetootchListner();
+    checkBluetoothConnection(navigatorKey)
+        .bluetootchListner(); ///////// UNCOMMENT THISSSSSS
   }
 
   @override
@@ -88,8 +89,7 @@ class _DeviceControlState extends State<DeviceControl> {
       navigatorKey: navigatorKey,
       title: 'Device Control App',
       home: findDevice(),
-      // home: calibration_page(),
-      // home: manualMode(),
+      // home: deviceSetup(),
     );
   }
 }
