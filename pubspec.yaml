@@ -50,6 +50,7 @@ dependencies:
   animated_text_kit: ^4.2.2
   rive: ^0.12.4
   item_count_number_button: ^1.9.2
+  syncfusion_flutter_sliders: ^24.2.8
 
 
 
@@ -107,6 +108,8 @@ flutter:
     - assets/app V2/steps bar/Warnings/dont wear this device yet.png
     - assets/app V2/Device Gif/output-onlinegiftools.gif
     - assets/rive/new_file (1).riv
+    - assets/app V2/calibration page/Calibration tab Flexion selected.png
+    - assets/app V2/calibration page/Calibration tab extention selected.png
    
   
 
