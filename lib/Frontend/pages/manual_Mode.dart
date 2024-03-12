@@ -158,6 +158,7 @@ class _manualModeState extends State<manualMode> {
                   SizedBox(
                     height: 20,
                   ),
+                  //button #1
                   GestureDetector(
                       onTapDown: (details) {
                         // startFlexing();
@@ -175,6 +176,7 @@ class _manualModeState extends State<manualMode> {
                   SizedBox(
                     height: 20,
                   ),
+                  //button #2
                   GestureDetector(
                       onTap: () {
                         Provider.of<exoBluetoothControlFunctions>(context,
@@ -185,6 +187,7 @@ class _manualModeState extends State<manualMode> {
                   SizedBox(
                     height: 20,
                   ),
+                  //button #3
                   GestureDetector(
                       onTapDown: (details) {
                         Provider.of<exoBluetoothControlFunctions>(context,
@@ -234,6 +237,7 @@ class _manualModeState extends State<manualMode> {
                         minValue: 1,
                         maxValue: 5,
                         onChanged: ((value) {
+                          //#4
                           Provider.of<exoDeviceFunctions>(context,
                                   listen: false)
                               .setSpeed(value.toInt());
@@ -244,7 +248,7 @@ class _manualModeState extends State<manualMode> {
                         decimalPlaces: 1),
                   ],
                 ),
-
+//button #5
                 Container(
                     padding: EdgeInsets.only(top: 5, right: 5),
                     decoration: BoxDecoration(

@@ -82,6 +82,7 @@ class _calibration_pageState extends State<calibration_page> {
                 Row(
                   children: [
                     GestureDetector(
+                      //Button #1
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
                         setState(() {
@@ -94,6 +95,7 @@ class _calibration_pageState extends State<calibration_page> {
                       ),
                     ),
                     GestureDetector(
+                      //Button #2
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
                         setState(() {
@@ -231,6 +233,7 @@ class _calibration_pageState extends State<calibration_page> {
                     inactiveColor: Color.fromARGB(51, 0, 70, 136),
                     value: speed.toDouble(),
                     onChanged: (double value) {
+                      //#5
                       Provider.of<exoDeviceFunctions>(context, listen: false)
                           .setSpeed(value.toInt());
                       Provider.of<exoBluetoothControlFunctions>(context,
@@ -286,6 +289,7 @@ class _calibration_pageState extends State<calibration_page> {
             height: 20,
           ),
           GestureDetector(
+            //Button #3
             onTap: () {
               if (flexionMode) {
                 Provider.of<exoBluetoothControlFunctions>(context,
@@ -367,6 +371,7 @@ class _movementCircleState extends State<_movementCircle> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      //Button #4
       onTapDown: (details) {
         setState(() {
           buttonPressed = true;

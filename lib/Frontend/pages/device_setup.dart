@@ -125,6 +125,7 @@ class _deviceSetupState extends State<deviceSetup> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
+                // BUTTON #1
                 onTap: () {
                   setState(() {
                     if (extlimit != null) {
@@ -160,6 +161,7 @@ class _deviceSetupState extends State<deviceSetup> {
                 ),
               ),
               GestureDetector(
+                  // BUTTON #2
                   onTap: () {
                     if (zero_set == false) {
                       // hexobt.setZero(serialTX!);
@@ -361,6 +363,7 @@ class _deviceSetupState extends State<deviceSetup> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
+                  // BUTTON #3
                   onTapDown: (details) {
                     // startFlexing();
                     hexobt.flex(currentSpeed, serialTX!);
@@ -375,6 +378,7 @@ class _deviceSetupState extends State<deviceSetup> {
                 width: 10,
               ),
               GestureDetector(
+                  // BUTTON #4
                   onTap: () {
                     hexobt.EmergencyStop(serialTX!);
                     // exoDeviceFunctions().setCurFlexAngle(30);
@@ -384,6 +388,7 @@ class _deviceSetupState extends State<deviceSetup> {
                 width: 10,
               ),
               GestureDetector(
+                  // BUTTON #5
                   onTapDown: (details) {
                     hexobt.extend(currentSpeed, serialTX!);
                   },
@@ -479,6 +484,7 @@ class _Speed_BUTTON extends StatelessWidget {
     final hexobt = Provider.of<exoBluetoothControlFunctions>(context);
     print(currentSpeed);
     return GestureDetector(
+      // BUTTON #6
       onTap: () {
         Provider.of<exoDeviceFunctions>(context, listen: false).setSpeed(speed);
         Provider.of<exoBluetoothControlFunctions>(context, listen: false)

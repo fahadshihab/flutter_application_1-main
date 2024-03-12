@@ -100,7 +100,8 @@ class _findDeviceState extends State<findDevice> {
     });
 
     FlutterBluePlus.startScan().then((val) {
-      Future.delayed(const Duration(seconds: 10)).then((value) {
+      //TODO // change the seconds to around 10
+      Future.delayed(const Duration(seconds: 3)).then((value) {
         _stopScan();
 
         print(_devices);

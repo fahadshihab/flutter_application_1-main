@@ -146,6 +146,7 @@ class _therapyModeState extends State<therapyMode> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         GestureDetector(
+                          //Button #1
                           onTap: () {
                             setState(() {
                               reps++;
@@ -164,6 +165,7 @@ class _therapyModeState extends State<therapyMode> {
                               color: Color.fromARGB(255, 71, 71, 71),
                             )),
                         GestureDetector(
+                          //Button #2
                           onTap: () {
                             setState(() {
                               reps--;
@@ -214,6 +216,7 @@ class _therapyModeState extends State<therapyMode> {
                     height: 20,
                   ),
                   GestureDetector(
+                    //Button #3
                     onTap: () {
                       showModalBottomSheet(
                           context: context,
@@ -328,6 +331,7 @@ class _therapyModeState extends State<therapyMode> {
               height: 50,
             ),
             GestureDetector(
+              //Button #4
               onTap: () {
                 Provider.of<exoBluetoothControlFunctions>(context,
                         listen: false)

@@ -13,7 +13,7 @@ class voiceAnimation extends StatefulWidget {
 
 class _voiceAnimationState extends State<voiceAnimation> {
   late stt.SpeechToText _speech;
-  String _voiceText = '';
+
   bool _isListening = false;
 
   StateMachineController? _controller;
@@ -60,40 +60,55 @@ class _voiceAnimationState extends State<voiceAnimation> {
     if (_isListening) {
       _speech.stop();
       setState(() {
-        _listen!.fire();
+        _listenToIdle!.fire();
         _isListening = false;
       });
     } else {
       bool available = await _speech.initialize(
-        onStatus: (val) => print('onStatus: $val'),
-        onError: (val) => print('onError: $val'),
+        onStatus: (val) {
+          if (val != "listening") {
+            _speech.stop();
+            print('not listening');
+            setState(() {
+              _listenToIdle!.fire();
+              _isListening = false;
+            });
+          }
+        },
+        onError: (val) {
+          _speech.stop();
+          setState(() {
+            _listenToIdle!.fire();
+            _isListening = false;
+          });
+        },
       );
       if (available) {
         _speech.listen(onResult: (val) {
-          setState(() {
-            _voiceText = val.recognizedWords;
-          });
-
-          if (_voiceText.contains("stop") || _voiceText.contains("Stop")) {
+          if (val.recognizedWords.contains("stop") ||
+              val.recognizedWords.contains("Stop")) {
             print("Stop");
           }
 
-          if (_voiceText.contains("flex") || _voiceText.contains("Flex")) {
+          if (val.recognizedWords.contains("flex") ||
+              val.recognizedWords.contains("Flex")) {
             print("Flex");
           }
 
-          if (_voiceText.contains("extend") || _voiceText.contains("Extend")) {
+          if (val.recognizedWords.contains("extend") ||
+              val.recognizedWords.contains("Extend")) {
             print("Extend");
           }
 
           // Add more conditions for other words
 
           // Restart listening immediately
-          _listenS();
+          // _listenS();
         });
 
         setState(() {
-          _listenToIdle!.fire();
+          _listen!.fire();
+
           _isListening = true;
         });
       }
