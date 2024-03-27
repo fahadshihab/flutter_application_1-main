@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
+import 'package:flutter_application_1/Frontend/color_theme/theme.dart';
 import 'package:flutter_application_1/Frontend/pages/bottomNavBar.dart';
 import 'package:flutter_application_1/Frontend/widgets/hexoAnimation.dart';
 import 'package:flutter_application_1/Frontend/widgets/voiceAnimation.dart';
@@ -37,10 +38,10 @@ class _manualModeState extends State<manualMode> {
     final currentState = Provider.of<exoDeviceFunctions>(context);
 
     int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
-    return Scaffold(
+       return Scaffold(
       bottomNavigationBar: bottomNavBar(),
       extendBodyBehindAppBar: true,
-      backgroundColor: Color(0xffF0F0F2),
+      backgroundColor: manual_mode_ColorConstants.primaryBackground,
       appBar: AppBar(
         centerTitle: false,
         title: Text(
@@ -48,7 +49,7 @@ class _manualModeState extends State<manualMode> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
-            color: Color.fromARGB(255, 90, 90, 90),
+            color: manual_mode_ColorConstants.appBarText,
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -71,10 +72,10 @@ class _manualModeState extends State<manualMode> {
           Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 225, 229, 232),
+              color: manual_mode_ColorConstants.cardBackground,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey,
+                  color: manual_mode_ColorConstants.boxShadow,
                   spreadRadius: 0,
                   blurRadius: 8,
                 ),
@@ -93,10 +94,10 @@ class _manualModeState extends State<manualMode> {
                       margin: EdgeInsets.symmetric(horizontal: 20),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Color.fromARGB(255, 241, 243, 246),
+                        color: manual_mode_ColorConstants.cardBackground,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey,
+                            color: manual_mode_ColorConstants.boxShadow,
                             spreadRadius: 0,
                             blurRadius: 10,
                           ),
@@ -109,7 +110,7 @@ class _manualModeState extends State<manualMode> {
                             'Limits',
                             style: TextStyle(
                               fontSize: 17,
-                              color: Color.fromARGB(255, 90, 90, 90),
+                              color: manual_mode_ColorConstants.appBarText,
                             ),
                           ),
                           Row(
@@ -118,7 +119,7 @@ class _manualModeState extends State<manualMode> {
                                 'Flex: ${startLimit.toInt()}°',
                                 style: TextStyle(
                                   fontSize: 17,
-                                  color: Color.fromARGB(255, 90, 90, 90),
+                                  color: manual_mode_ColorConstants.appBarText,
                                 ),
                               ),
                               SizedBox(
@@ -128,7 +129,7 @@ class _manualModeState extends State<manualMode> {
                                 'Extend: ${endLimit.toInt()}°',
                                 style: TextStyle(
                                   fontSize: 17,
-                                  color: Color.fromARGB(255, 90, 90, 90),
+                                  color: manual_mode_ColorConstants.appBarText,
                                 ),
                               ),
                             ],
@@ -139,6 +140,7 @@ class _manualModeState extends State<manualMode> {
                     SizedBox(
                       height: 20,
                     ),
+                    //button 1
                     GestureDetector(
                         onTapDown: (details) {
                           // startFlexing();
@@ -156,6 +158,7 @@ class _manualModeState extends State<manualMode> {
                     SizedBox(
                       height: 20,
                     ),
+                    //button2
                     GestureDetector(
                         onTap: () {
                           Provider.of<exoBluetoothControlFunctions>(context,
@@ -166,6 +169,7 @@ class _manualModeState extends State<manualMode> {
                     SizedBox(
                       height: 20,
                     ),
+                    //button3
                     GestureDetector(
                         onTapDown: (details) {
                           Provider.of<exoBluetoothControlFunctions>(context,
@@ -191,10 +195,10 @@ class _manualModeState extends State<manualMode> {
               margin: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Color.fromARGB(255, 241, 243, 246),
+                color: manual_mode_ColorConstants.cardBackground,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey,
+                    color: manual_mode_ColorConstants.boxShadow,
                     spreadRadius: 0,
                     blurRadius: 10,
                   ),
@@ -206,6 +210,7 @@ class _manualModeState extends State<manualMode> {
                 hexoAnimationWidget(),
                 Align(
                   alignment: Alignment.bottomRight,
+                  //button4
                   child: voiceAnimation(),
                 )
               ]))
@@ -213,6 +218,7 @@ class _manualModeState extends State<manualMode> {
       ),
     );
   }
+
 
   /////////////////////////////// FOR TESTING PURPOSES ONLY  BELOW ///////////////////////////////
   ///
@@ -245,7 +251,7 @@ class _manualModeState extends State<manualMode> {
 class _Extend_BUTTON extends StatelessWidget {
   const _Extend_BUTTON({
     super.key,
-  });
+  }) ;
 
   @override
   Widget build(BuildContext context) {
@@ -255,14 +261,14 @@ class _Extend_BUTTON extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Color.fromARGB(255, 241, 243, 246),
+        color: manual_mode_ColorConstants.primaryButtonBackground,
         border: Border.all(
-          color: Color.fromARGB(169, 0, 70, 136),
+          color: manual_mode_ColorConstants.primaryButtonBorder,
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: manual_mode_ColorConstants.boxShadow,
             spreadRadius: 0,
             blurRadius: 10,
           ),
@@ -274,7 +280,7 @@ class _Extend_BUTTON extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
-            color: const Color(0xFF004788),
+            color: manual_mode_ColorConstants.primaryButtonText,
           ),
         ),
       ),
@@ -285,7 +291,7 @@ class _Extend_BUTTON extends StatelessWidget {
 class _Stop_BUTTON extends StatelessWidget {
   const _Stop_BUTTON({
     super.key,
-  });
+  }) ;
 
   @override
   Widget build(BuildContext context) {
@@ -295,14 +301,14 @@ class _Stop_BUTTON extends StatelessWidget {
       margin: EdgeInsets.only(left: 20, right: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Color(0xffFBE9E9),
+        color: manual_mode_ColorConstants.stopButtonBackground,
         border: Border.all(
-          color: Color.fromARGB(223, 136, 0, 0),
+          color: manual_mode_ColorConstants.stopButtonBorder,
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: manual_mode_ColorConstants.boxShadow,
             spreadRadius: 0,
             blurRadius: 10,
           ),
@@ -314,7 +320,7 @@ class _Stop_BUTTON extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
-            color: Color.fromARGB(255, 221, 10, 10),
+            color: manual_mode_ColorConstants.stopButtonText,
           ),
         ),
       ),
@@ -325,7 +331,7 @@ class _Stop_BUTTON extends StatelessWidget {
 class _Flex_BUTTON extends StatelessWidget {
   const _Flex_BUTTON({
     super.key,
-  });
+  }) ;
 
   @override
   Widget build(BuildContext context) {
@@ -334,15 +340,15 @@ class _Flex_BUTTON extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(left: 20, right: 20),
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 243, 244, 246),
+        color: manual_mode_ColorConstants.primaryButtonBackground,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: Color.fromARGB(224, 0, 70, 136),
+          color: manual_mode_ColorConstants.primaryButtonBorder,
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: manual_mode_ColorConstants.boxShadow,
             spreadRadius: 0,
             blurRadius: 10,
           ),
@@ -354,7 +360,7 @@ class _Flex_BUTTON extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
-            color: const Color(0xFF004788),
+            color: manual_mode_ColorConstants.primaryButtonText,
           ),
         ),
       ),

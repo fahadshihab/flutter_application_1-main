@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
+import 'package:flutter_application_1/Frontend/color_theme/theme.dart';
 import 'package:flutter_application_1/Frontend/pages/bottomNavBar.dart';
 import 'package:flutter_application_1/Frontend/pages/manual_Mode.dart';
 import 'package:flutter_application_1/Frontend/widgets/hexoAnimation.dart';
@@ -25,6 +26,7 @@ class _calibration_pageState extends State<calibration_page> {
     // TODO: implement initState
     super.initState();
   }
+  //
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +42,16 @@ class _calibration_pageState extends State<calibration_page> {
         Provider.of<exoDeviceFunctions>(context).isAngleControlEnabled;
     return Scaffold(
       bottomNavigationBar: bottomNavBar(),
-      backgroundColor: Color(0xFFECEFF1),
+      backgroundColor: calibration_ColorConstants.backgroundColor,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         centerTitle: false,
         title: Text(
           'Calibration Mode',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
-            color: Color.fromARGB(255, 90, 90, 90),
+            color: calibration_ColorConstants.primaryColor,
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -72,19 +75,14 @@ class _calibration_pageState extends State<calibration_page> {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
+                  color: calibration_ColorConstants.shadowColor.withOpacity(0.5),
                   spreadRadius: 0.5,
                   blurRadius: 7,
-                  offset: Offset(0, 0), // changes position of shadow
+                  offset: Offset(0, 0),
                 ),
               ],
-              color: Color(0xFFECEFF1),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-              ),
+              color: calibration_ColorConstants.backgroundColor,
+              borderRadius: BorderRadius.circular(20),
             ),
             width: double.infinity,
             child: Column(
@@ -93,7 +91,7 @@ class _calibration_pageState extends State<calibration_page> {
                 Container(
                   height: 50,
                   decoration: BoxDecoration(
-                    color: Color(0xFFD9E5F0),
+                    color: calibration_ColorConstants.buttonColor,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20),
@@ -102,7 +100,8 @@ class _calibration_pageState extends State<calibration_page> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      GestureDetector(
+                      //button1
+                      GestureDetector(           
                         onTap: () {
                           if (!flexionMode) {
                             setState(() {
@@ -119,12 +118,13 @@ class _calibration_pageState extends State<calibration_page> {
                               fontWeight: FontWeight.bold,
                               fontSize: 17,
                               color: flexionMode
-                                  ? Color(0xFF004788)
-                                  : Color(0xFF7C7C7C),
+                                  ? calibration_ColorConstants.primaryColor
+                                  : calibration_ColorConstants.secondaryColor,
                             ),
                           ),
                         ),
                       ),
+                      //button2
                       GestureDetector(
                         onTap: () {
                           if (flexionMode) {
@@ -142,8 +142,8 @@ class _calibration_pageState extends State<calibration_page> {
                               fontWeight: FontWeight.bold,
                               fontSize: 17,
                               color: flexionMode
-                                  ? Color(0xFF7C7C7C)
-                                  : Color(0xFF004788),
+                                  ? calibration_ColorConstants.secondaryColor
+                                  : calibration_ColorConstants.primaryColor,
                             ),
                           ),
                         ),
@@ -154,7 +154,7 @@ class _calibration_pageState extends State<calibration_page> {
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 255, 255, 255),
+                    color: calibration_ColorConstants.whiteColor,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(20),
                       bottomRight: Radius.circular(20),
@@ -169,10 +169,9 @@ class _calibration_pageState extends State<calibration_page> {
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(8)),
-                          color:
-                              Color.fromRGBO(242, 242, 242, 0.4000000059604645),
+                          color: calibration_ColorConstants.Container1,
                           border: Border.all(
-                            color: Color.fromRGBO(215, 215, 215, 1),
+                            color: calibration_ColorConstants.ContainerBorder1,
                             width: 1,
                           ),
                         ),
@@ -187,13 +186,13 @@ class _calibration_pageState extends State<calibration_page> {
                                   : 'set Extension limit to: $currentAngle',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  color: Color.fromRGBO(16, 16, 16, 1),
-                                  fontFamily: 'Roboto',
-                                  fontSize: 17,
-                                  letterSpacing:
-                                      0 /*percentages not used in flutter. defaulting to zero*/,
-                                  fontWeight: FontWeight.normal,
-                                  height: 1),
+                                color: calibration_ColorConstants.textColor,
+                                fontFamily: 'Roboto',
+                                fontSize: 17,
+                                letterSpacing: 0,
+                                fontWeight: FontWeight.normal,
+                                height: 1,
+                              ),
                             ),
                           ],
                         ),
@@ -212,8 +211,8 @@ class _calibration_pageState extends State<calibration_page> {
                               currentangle: currentAngle,
                               serialTX:
                                   Provider.of<exoBluetoothControlFunctions>(
-                                          context)
-                                      .serialTX,
+                                context,
+                              ).serialTX,
                             ),
                             SizedBox(
                               width: 10,
@@ -224,8 +223,8 @@ class _calibration_pageState extends State<calibration_page> {
                               currentangle: currentAngle,
                               serialTX:
                                   Provider.of<exoBluetoothControlFunctions>(
-                                          context)
-                                      .serialTX,
+                                context,
+                              ).serialTX,
                             ),
                             SizedBox(
                               width: 10,
@@ -236,8 +235,8 @@ class _calibration_pageState extends State<calibration_page> {
                               currentangle: currentAngle,
                               serialTX:
                                   Provider.of<exoBluetoothControlFunctions>(
-                                          context)
-                                      .serialTX,
+                                context,
+                              ).serialTX,
                             ),
                             SizedBox(
                               width: 10,
@@ -248,8 +247,8 @@ class _calibration_pageState extends State<calibration_page> {
                               currentangle: currentAngle,
                               serialTX:
                                   Provider.of<exoBluetoothControlFunctions>(
-                                          context)
-                                      .serialTX,
+                                context,
+                              ).serialTX,
                             ),
                             SizedBox(
                               width: 10,
@@ -260,8 +259,8 @@ class _calibration_pageState extends State<calibration_page> {
                               currentangle: currentAngle,
                               serialTX:
                                   Provider.of<exoBluetoothControlFunctions>(
-                                          context)
-                                      .serialTX,
+                                context,
+                              ).serialTX,
                             ),
                             SizedBox(
                               width: 10,
@@ -272,8 +271,8 @@ class _calibration_pageState extends State<calibration_page> {
                               currentangle: currentAngle,
                               serialTX:
                                   Provider.of<exoBluetoothControlFunctions>(
-                                          context)
-                                      .serialTX,
+                                context,
+                              ).serialTX,
                             ),
                           ],
                         ),
@@ -291,7 +290,7 @@ class _calibration_pageState extends State<calibration_page> {
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 14,
-                            color: Color(0xFF8E8E8E),
+                            color: calibration_ColorConstants.textColor,
                           ),
                         ),
                       ),
@@ -306,7 +305,7 @@ class _calibration_pageState extends State<calibration_page> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: Color.fromARGB(255, 142, 142, 142),
+                            color: calibration_ColorConstants.textColor,
                           ),
                         ),
                       ),
@@ -315,63 +314,73 @@ class _calibration_pageState extends State<calibration_page> {
                           Expanded(
                             child: Align(
                               alignment: Alignment.bottomLeft,
+                              //button4
                               child: GestureDetector(
                                 onTap: () {
                                   if (flexionMode) {
                                     Provider.of<exoBluetoothControlFunctions>(
-                                            context,
-                                            listen: false)
-                                        .setFlexLimit(serialTX!);
+                                      context,
+                                      listen: false,
+                                    ).setFlexLimit(serialTX!);
                                     SnackBar snackBar = SnackBar(
-                                      backgroundColor: Color(0xFF004788),
+                                      backgroundColor:
+                                          calibration_ColorConstants.primaryColor,
                                       content: Text(
                                         'Flexion limit set to $currentAngle',
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(
+                                          color: calibration_ColorConstants.whiteColor,
+                                        ),
                                       ),
                                       duration: Duration(seconds: 1),
                                     );
+
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBar);
                                   } else {
                                     Provider.of<exoBluetoothControlFunctions>(
-                                            context,
-                                            listen: false)
-                                        .setExtLimit(serialTX!);
+                                      context,
+                                      listen: false,
+                                    ).setExtLimit(serialTX!);
+
                                     SnackBar snackBar = SnackBar(
-                                      backgroundColor: Color(0xFF004788),
+                                      backgroundColor:
+                                          calibration_ColorConstants.primaryColor,
                                       content: Text(
                                         'Extension limit set to $currentAngle',
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(
+                                          color: calibration_ColorConstants.whiteColor,
+                                        ),
                                       ),
                                       duration: Duration(seconds: 1),
                                     );
+
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBar);
                                   }
                                 },
                                 child: Container(
-                                    margin:
-                                        EdgeInsets.only(left: 20, bottom: 10),
-                                    height: 40,
-                                    width: 150,
-                                    padding: EdgeInsets.symmetric(vertical: 10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(100)),
-                                      color: Color(0xFFD9E5F0),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        flexionMode
-                                            ? 'Set Flex Limit'
-                                            : 'Set Ext. Limit',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 15,
-                                          color: Color(0xFF004788),
-                                        ),
+                                  margin: EdgeInsets.only(left: 20, bottom: 10),
+                                  height: 40,
+                                  width: 150,
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(100)),
+                                    color: calibration_ColorConstants.buttonColor,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      flexionMode
+                                          ? 'Set Flex Limit'
+                                          : 'Set Ext. Limit',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15,
+                                        color: calibration_ColorConstants.primaryColor,
                                       ),
-                                    )),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -399,21 +408,22 @@ class _calibration_pageState extends State<calibration_page> {
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 15,
-                              color: Color(0xFF004788),
+                              color: calibration_ColorConstants.primaryColor,
                             ),
                           ),
                           Container(
+                            //button6
                             child: Switch.adaptive(
-                                value: angleControlSwitch,
-                                onChanged: (value) {
-                                  if (serialTX != null) {
-                                    Provider.of<exoBluetoothControlFunctions>(
-                                            context,
-                                            listen: false)
-                                        .setAngleControlEnabled(
-                                            value, serialTX!);
-                                  }
-                                }),
+                              value: angleControlSwitch,
+                              onChanged: (value) {
+                                if (serialTX != null) {
+                                  Provider.of<exoBluetoothControlFunctions>(
+                                    context,
+                                    listen: false,
+                                  ).setAngleControlEnabled(value, serialTX!);
+                                }
+                              },
+                            ),
                           ),
                         ],
                       ),
@@ -425,20 +435,22 @@ class _calibration_pageState extends State<calibration_page> {
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 15,
-                              color: Color(0xFF004788),
+                              color: calibration_ColorConstants.primaryColor,
                             ),
                           ),
                           Container(
+                            //button7
                             child: Switch.adaptive(
-                                value: romLimitSwitch,
-                                onChanged: (value) {
-                                  if (serialTX != null) {
-                                    Provider.of<exoBluetoothControlFunctions>(
-                                            context,
-                                            listen: false)
-                                        .setROMLimitEnabled(value, serialTX!);
-                                  }
-                                }),
+                              value: romLimitSwitch,
+                              onChanged: (value) {
+                                if (serialTX != null) {
+                                  Provider.of<exoBluetoothControlFunctions>(
+                                    context,
+                                    listen: false,
+                                  ).setROMLimitEnabled(value, serialTX!);
+                                }
+                              },
+                            ),
                           ),
                         ],
                       ),
@@ -456,13 +468,13 @@ class _calibration_pageState extends State<calibration_page> {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: Color.fromARGB(255, 162, 162, 162),
+                  color: calibration_ColorConstants.shadowColor,
                   spreadRadius: 0.5,
                   blurRadius: 7,
                   offset: Offset(0, 0), // changes position of shadow
                 ),
               ],
-              color: Color.fromARGB(255, 255, 255, 255),
+              color: calibration_ColorConstants.whiteColor,
               borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
             child: Column(
@@ -481,7 +493,7 @@ class _calibration_pageState extends State<calibration_page> {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
-                      color: Color(0xFF004788),
+                      color: calibration_ColorConstants.primaryColor,
                     ),
                   ),
                 ),
@@ -494,12 +506,13 @@ class _calibration_pageState extends State<calibration_page> {
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 15,
-                          color: Color.fromARGB(255, 98, 98, 98),
+                          color: calibration_ColorConstants.textColor2,
                         ),
                       ),
                       Expanded(
+                        //button8
                         child: Slider(
-                          activeColor: Color(0xFF004788),
+                          activeColor: calibration_ColorConstants.primaryColor,
                           value: speed.toDouble(),
                           onChanged: (double value) {
                             Provider.of<exoDeviceFunctions>(context,
@@ -519,7 +532,7 @@ class _calibration_pageState extends State<calibration_page> {
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 15,
-                          color: Color.fromARGB(255, 98, 98, 98),
+                          color: calibration_ColorConstants.textColor2,
                         ),
                       ),
                     ],
@@ -532,18 +545,21 @@ class _calibration_pageState extends State<calibration_page> {
             margin: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Color.fromARGB(255, 241, 243, 246),
+              color: calibration_ColorConstants.backgroundColor,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey,
+                  color: calibration_ColorConstants.shadowColor,
                   spreadRadius: 0,
                   blurRadius: 10,
                 ),
               ],
             ),
             width: MediaQuery.of(context).size.width,
-            child:
-                SizedBox(height: 300, width: 300, child: hexoAnimationWidget()),
+            child: SizedBox(
+              height: 300,
+              width: 300,
+              child: hexoAnimationWidget(),
+            ),
           ),
         ],
       ),
@@ -551,6 +567,7 @@ class _calibration_pageState extends State<calibration_page> {
   }
 }
 
+//button3
 class _movementCircle extends StatefulWidget {
   int anglePlus;
   double currentangle;
@@ -558,12 +575,13 @@ class _movementCircle extends StatefulWidget {
 
   BluetoothCharacteristic? serialTX;
 
-  _movementCircle(
-      {super.key,
-      required this.anglePlus,
-      required this.intString,
-      required this.currentangle,
-      required this.serialTX});
+  _movementCircle({
+    Key? key,
+    required this.anglePlus,
+    required this.intString,
+    required this.currentangle,
+    required this.serialTX,
+  }) : super(key: key);
 
   @override
   State<_movementCircle> createState() => _movementCircleState();
@@ -602,27 +620,31 @@ class _movementCircleState extends State<_movementCircle> {
         }
       },
       child: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(100)),
-            color: buttonPressed
-                ? Color.fromARGB(255, 0, 70, 136)
-                : Color.fromARGB(255, 245, 245, 245),
-            border: Border.all(
-              color: Color.fromARGB(133, 0, 70, 136),
-              width: 1,
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(100)),
+          color: buttonPressed
+              ? calibration_ColorConstants.primaryColor
+              : calibration_ColorConstants.buttonColor,
+          border: Border.all(
+            color: calibration_ColorConstants.primaryColor,
+            width: 1,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            widget.intString,
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 15,
+              color: buttonPressed
+                  ? calibration_ColorConstants.whiteColor
+                  : calibration_ColorConstants.primaryColor,
             ),
           ),
-          child: Center(
-            child: Text(widget.intString,
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15,
-                    color: buttonPressed
-                        ? Color.fromARGB(255, 255, 255, 255)
-                        : Color.fromARGB(255, 0, 70, 136))),
-          )),
+        ),
+      ),
     );
   }
 }
@@ -652,10 +674,10 @@ class _person_BOX extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
-                  color: Color.fromARGB(255, 255, 252, 252),
+                  color: calibration_ColorConstants.whiteColor,
                 ),
               ),
-              backgroundColor: Color.fromARGB(255, 231, 10, 10),
+              backgroundColor: calibration_ColorConstants.stopButtonColor,
             ),
           ),
         ),
@@ -667,10 +689,10 @@ class _person_BOX extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Color.fromARGB(255, 245, 245, 245),
+                color: calibration_ColorConstants.backgroundColor,
                 boxShadow: const [
                   BoxShadow(
-                    color: Colors.grey,
+                    color: calibration_ColorConstants.shadowColor,
                     spreadRadius: 0,
                     blurRadius: 3,
                   ),
@@ -682,7 +704,7 @@ class _person_BOX extends StatelessWidget {
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
-                  color: Color.fromARGB(255, 27, 27, 27),
+                  color: calibration_ColorConstants.textColor,
                 ),
               ),
             ),
@@ -698,8 +720,8 @@ class _person_BOX extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 20, // Adjust these values as needed (e.g., 9% from the top)
-          left: 11, // 8% from the left
+          top: 20,
+          left: 11,
           child: Transform.rotate(
             angle: ((curAngle.curFlexAngle - 5) * pi) / 180 - 40,
             origin: const Offset(-20, -12),
@@ -726,29 +748,31 @@ class _stopButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //button5
     return GestureDetector(
       onTapDown: (details) {
         Provider.of<exoBluetoothControlFunctions>(context, listen: false)
             .EmergencyStop(serialTX);
       },
       child: Container(
-          height: 40,
-          width: 150,
-          padding: EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(100)),
-            color: Color.fromARGB(255, 224, 83, 83),
-          ),
-          child: Center(
-            child: Text(
-              'Stop',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 15,
-                color: Color.fromARGB(255, 255, 255, 255),
-              ),
+        height: 40,
+        width: 150,
+        padding: EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(100)),
+          color: calibration_ColorConstants.stopButtonColor,
+        ),
+        child: Center(
+          child: Text(
+            'Stop',
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 15,
+              color: calibration_ColorConstants.whiteColor,
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -761,21 +785,23 @@ class _testRomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 50,
-        width: 150,
-        padding: EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(100)),
-            color: Color.fromARGB(255, 0, 70, 136)),
-        child: Center(
-          child: Text(
-            'Range of Motion',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 15,
-              color: Color.fromARGB(255, 255, 255, 255),
-            ),
+      height: 50,
+      width: 150,
+      padding: EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(100)),
+        color: calibration_ColorConstants.primaryColor,
+      ),
+      child: Center(
+        child: Text(
+          'Range of Motion',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 15,
+            color: calibration_ColorConstants.whiteColor,
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

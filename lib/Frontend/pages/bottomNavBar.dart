@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Frontend/color_theme/theme.dart';
 import 'package:flutter_application_1/Frontend/pages/calibration_Page.dart';
 import 'package:flutter_application_1/Frontend/pages/info.dart';
 import 'package:flutter_application_1/Frontend/pages/manual_Mode.dart';
@@ -26,12 +27,12 @@ class bottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
         elevation: 5,
-        backgroundColor: Color(0xffEAEBF1),
+        backgroundColor: bottomNavBad_ColorConstrants.backgroundColor,
         type: BottomNavigationBarType.fixed,
         selectedFontSize: 15,
         unselectedFontSize: 15,
-        selectedItemColor: Color.fromARGB(255, 0, 70, 136),
-        unselectedItemColor: Color.fromARGB(255, 0, 70, 136),
+        selectedItemColor: bottomNavBad_ColorConstrants.selectedItemColor,
+        unselectedItemColor: bottomNavBad_ColorConstrants.unselectedItemColor,
         onTap: (value) {
           if (value >= 0 && value <= 3) {
             String currentRoute = ModalRoute.of(context)!.settings.name ?? '';

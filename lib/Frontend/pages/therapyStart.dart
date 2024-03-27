@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
+import 'package:flutter_application_1/Frontend/color_theme/theme.dart';
 import 'package:flutter_application_1/Frontend/pages/bottomNavBar.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -30,7 +31,7 @@ class _therapyStartState extends State<therapyStart> {
     return Scaffold(
       bottomNavigationBar: bottomNavBar(),
       extendBodyBehindAppBar: true,
-      backgroundColor: Color(0xffF0F0F2),
+      backgroundColor: therapyStart_ColorConstrants.primaryBackground,
       appBar: AppBar(
         centerTitle: false,
         title: Text(
@@ -38,7 +39,7 @@ class _therapyStartState extends State<therapyStart> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18,
-            color: Color.fromARGB(255, 90, 90, 90),
+            color: therapyStart_ColorConstrants.appBarTitle,
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -68,7 +69,7 @@ class _therapyStartState extends State<therapyStart> {
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 15,
-                      color: Color.fromARGB(255, 90, 90, 90),
+                      color: therapyStart_ColorConstrants.appBarTitle,
                     ),
                   ),
                   Text(
@@ -76,7 +77,7 @@ class _therapyStartState extends State<therapyStart> {
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 15,
-                      color: Color.fromARGB(255, 90, 90, 90),
+                      color: therapyStart_ColorConstrants.appBarTitle,
                     ),
                   ),
                 ],
@@ -85,8 +86,8 @@ class _therapyStartState extends State<therapyStart> {
                 borderRadius: BorderRadius.circular(5),
                 minHeight: 11,
                 value: 0.5,
-                backgroundColor: Color(0xffD9E5F0),
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xff004788)),
+                backgroundColor: therapyStart_ColorConstrants.linearProgressBackground,
+                valueColor: AlwaysStoppedAnimation<Color>(therapyStart_ColorConstrants.linearProgressValue),
               ),
               SizedBox(
                 height: 140,
@@ -131,7 +132,7 @@ class _therapyStartState extends State<therapyStart> {
                         height: 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
-                          color: Color(0xff003B73).withOpacity(0.6),
+                          color: therapyStart_ColorConstrants.buttonBackground.withOpacity(0.6),
                         ),
                         child: Center(
                           child: Text(
@@ -139,7 +140,7 @@ class _therapyStartState extends State<therapyStart> {
                             style: TextStyle(
                               fontWeight: FontWeight.w800,
                               fontSize: 17,
-                              color: Colors.white,
+                              color: therapyStart_ColorConstrants.text1,
                             ),
                           ),
                         ),
@@ -163,7 +164,7 @@ class _therapyStartState extends State<therapyStart> {
                         height: 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
-                          color: Color(0xffD20E0E),
+                          color: therapyStart_ColorConstrants.stopButtonBackground,
                         ),
                         child: Center(
                           child: Text(
@@ -171,7 +172,7 @@ class _therapyStartState extends State<therapyStart> {
                             style: TextStyle(
                               fontWeight: FontWeight.w800,
                               fontSize: 17,
-                              color: Colors.white,
+                              color: therapyStart_ColorConstrants.text1,
                             ),
                           ),
                         ),
@@ -214,14 +215,14 @@ class _ArmRangeGauge extends StatelessWidget {
           axisLineStyle: AxisLineStyle(
             thickness: 0.0,
             cornerStyle: CornerStyle.bothCurve,
-            color: Color(0xff003B73),
+            color: therapyStart_ColorConstrants.buttonBackground,
             thicknessUnit: GaugeSizeUnit.factor,
           ),
           pointers: <GaugePointer>[
             MarkerPointer(
               value: maxRange != null ? maxRange! : currentAngle,
               markerType: MarkerType.circle,
-              color: Color(0xff003B73),
+              color: therapyStart_ColorConstrants.buttonBackground,
               markerHeight: 15,
               markerWidth: 15,
               markerOffset: 0,
@@ -229,41 +230,18 @@ class _ArmRangeGauge extends StatelessWidget {
             MarkerPointer(
               value: minRange != null ? minRange! : currentAngle,
               markerType: MarkerType.circle,
-              color: Color(0xff003B73),
+              color: therapyStart_ColorConstrants.buttonBackground,
               markerHeight: 15,
               markerWidth: 15,
               markerOffset: 0,
             ),
-            // NeedlePointer(
-            //   value: maxRange != null ? maxRange! : currentAngle,
-            //   needleLength: 1,
-            //   needleColor: Color.fromARGB(255, 131, 119, 247),
-            //   needleStartWidth: 1,
-            //   needleEndWidth: 5,
-            //   knobStyle: KnobStyle(
-            //     knobRadius: 0.04,
-            //     sizeUnit: GaugeSizeUnit.factor,
-            //     color: Color.fromARGB(255, 131, 119, 247),
-            //   ),
-            // ),
-            // NeedlePointer(
-            //   value: minRange != null ? minRange! : currentAngle,
-            //   needleLength: 1,
-            //   needleColor: Color.fromARGB(255, 131, 119, 247),
-            //   needleStartWidth: 1,
-            //   needleEndWidth: 5,
-            //   knobStyle: KnobStyle(
-            //     knobRadius: 0.04,
-            //     sizeUnit: GaugeSizeUnit.factor,
-            //     color: Color.fromARGB(255, 131, 119, 247),
-            //   ),
-            // ),
           ],
         ),
       ],
     );
   }
 }
+
 
 Future<void> startReps(BuildContext context, int numberOfReps) async {
   for (int i = 0; i < numberOfReps; i++) {
