@@ -41,7 +41,7 @@ class hexoAnimationWidgetState extends State<hexoAnimationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final hexostate = Provider.of<exoDeviceFunctions>(context);
+    final hexostate = Provider.of<HexoDeviceFunctions>(context);
 
     if (_input != null) {
       _input!.change(mapValue(hexostate.curFlexAngle));

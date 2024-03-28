@@ -110,9 +110,10 @@ class _deviceSetupState extends State<deviceSetup> {
 
   @override
   Widget build(BuildContext context) {
-    double curFlexAngle = Provider.of<exoDeviceFunctions>(context).curFlexAngle;
+    double curFlexAngle =
+        Provider.of<HexoDeviceFunctions>(context).curFlexAngle;
     final hexobt = Provider.of<exoBluetoothControlFunctions>(context);
-    int currentSpeed = Provider.of<exoDeviceFunctions>(context).speed_setting;
+    int currentSpeed = Provider.of<HexoDeviceFunctions>(context).speed_setting;
     BluetoothCharacteristic? serialTX =
         Provider.of<exoBluetoothControlFunctions>(context).serialTX;
 
@@ -164,7 +165,7 @@ class _deviceSetupState extends State<deviceSetup> {
                   // BUTTON #2
                   onTap: () {
                     if (zero_set == false) {
-                      // hexobt.setZero(serialTX!);
+                      hexobt.setZero(serialTX!);
                       setState(() {
                         zero_set = true;
                       });
@@ -230,6 +231,9 @@ class _deviceSetupState extends State<deviceSetup> {
                                           primary: Color(0xFF004788),
                                         ),
                                         onPressed: () {
+                                          Provider.of<exoBluetoothControlFunctions>(
+                                                  context)
+                                              .CPM(10, serialTX);
                                           Navigator.pushAndRemoveUntil(
                                               context,
                                               MaterialPageRoute(
@@ -486,7 +490,8 @@ class _Speed_BUTTON extends StatelessWidget {
     return GestureDetector(
       // BUTTON #6
       onTap: () {
-        Provider.of<exoDeviceFunctions>(context, listen: false).setSpeed(speed);
+        Provider.of<HexoDeviceFunctions>(context, listen: false)
+            .setSpeed(speed);
         Provider.of<exoBluetoothControlFunctions>(context, listen: false)
             .setSpeed(speed, serialTX!);
         SnackBar snackBar = SnackBar(

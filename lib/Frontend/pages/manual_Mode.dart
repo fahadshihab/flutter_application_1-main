@@ -29,16 +29,16 @@ class _manualModeState extends State<manualMode> {
   Widget build(BuildContext context) {
     BluetoothCharacteristic serialTX =
         Provider.of<exoBluetoothControlFunctions>(context).serialTX!;
-    double currentAngle = Provider.of<exoDeviceFunctions>(context)
+    double currentAngle = Provider.of<HexoDeviceFunctions>(context)
         .curFlexAngle; // double currentAngle = 90.0;
-    double startLimit = Provider.of<exoDeviceFunctions>(context)
+    double startLimit = Provider.of<HexoDeviceFunctions>(context)
         .flexLimit; // double flexLimit = 110
     .0;
-    double endLimit = Provider.of<exoDeviceFunctions>(context)
+    double endLimit = Provider.of<HexoDeviceFunctions>(context)
         .extLimit; // double extLimit = 0.0;
-    final currentState = Provider.of<exoDeviceFunctions>(context);
+    final currentState = Provider.of<HexoDeviceFunctions>(context);
 
-    int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
+    int speed = Provider.of<HexoDeviceFunctions>(context).speed_setting;
 
     return Container(
       decoration: BoxDecoration(
@@ -119,7 +119,7 @@ class _manualModeState extends State<manualMode> {
                             height: 5,
                           ),
                           Text(
-                            '$startLimit° to $endLimit°',
+                            '${endLimit.toInt()}° to ${startLimit.toInt()}°',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
@@ -232,13 +232,13 @@ class _manualModeState extends State<manualMode> {
                           fontSize: 20,
                           color: Color.fromARGB(255, 0, 0, 0),
                         ),
-                        initialValue: Provider.of<exoDeviceFunctions>(context)
+                        initialValue: Provider.of<HexoDeviceFunctions>(context)
                             .speed_setting,
                         minValue: 1,
                         maxValue: 5,
                         onChanged: ((value) {
                           //#4
-                          Provider.of<exoDeviceFunctions>(context,
+                          Provider.of<HexoDeviceFunctions>(context,
                                   listen: false)
                               .setSpeed(value.toInt());
                           Provider.of<exoBluetoothControlFunctions>(context,
@@ -275,7 +275,7 @@ class _manualModeState extends State<manualMode> {
   startFlexing() {
     if (isFlexing == false) {
       flextimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-        Provider.of<exoDeviceFunctions>(context, listen: false)
+        Provider.of<HexoDeviceFunctions>(context, listen: false)
             .test_flex(false);
       });
       setState(() {

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 
-class exoDeviceFunctions with ChangeNotifier {
+class HexoDeviceFunctions with ChangeNotifier {
   late StreamSubscription _receiverSubscription;
   int _speed_setting = 1;
   double _flexionCounter = 0;

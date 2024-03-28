@@ -21,9 +21,9 @@ class _therapyModeState extends State<therapyMode> {
   Widget build(BuildContext context) {
     BluetoothCharacteristic? serialTX =
         Provider.of<exoBluetoothControlFunctions>(context).serialTX;
-    double flexionLimit = Provider.of<exoDeviceFunctions>(context).flexLimit;
-    double extensionLimit = Provider.of<exoDeviceFunctions>(context).extLimit;
-    int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
+    double flexionLimit = Provider.of<HexoDeviceFunctions>(context).flexLimit;
+    double extensionLimit = Provider.of<HexoDeviceFunctions>(context).extLimit;
+    int speed = Provider.of<HexoDeviceFunctions>(context).speed_setting;
 
     return Scaffold(
       bottomNavigationBar: bottomNavBar(),

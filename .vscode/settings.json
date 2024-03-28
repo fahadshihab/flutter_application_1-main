@@ -1,3 +1,4 @@
 {
     "dart.updateImportsOnRename": true,
+    "cmake.configureOnOpen": false,
 }

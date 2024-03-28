@@ -28,16 +28,16 @@ class _calibration_pageState extends State<calibration_page> {
 
   @override
   Widget build(BuildContext context) {
-    int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
+    int speed = Provider.of<HexoDeviceFunctions>(context).speed_setting;
     double currentAngle = 0;
-    double flexLimit = Provider.of<exoDeviceFunctions>(context).flexLimit;
-    double extLimit = Provider.of<exoDeviceFunctions>(context).extLimit;
+    double flexLimit = Provider.of<HexoDeviceFunctions>(context).flexLimit;
+    double extLimit = Provider.of<HexoDeviceFunctions>(context).extLimit;
     BluetoothCharacteristic? serialTX =
         Provider.of<exoBluetoothControlFunctions>(context).serialTX;
     bool romLimitSwitch =
-        Provider.of<exoDeviceFunctions>(context).isROMLimitEnabled;
+        Provider.of<HexoDeviceFunctions>(context).isROMLimitEnabled;
     bool angleControlSwitch =
-        Provider.of<exoDeviceFunctions>(context).isAngleControlEnabled;
+        Provider.of<HexoDeviceFunctions>(context).isAngleControlEnabled;
     return Scaffold(
       bottomNavigationBar: const bottomNavBar(),
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -234,7 +234,7 @@ class _calibration_pageState extends State<calibration_page> {
                     value: speed.toDouble(),
                     onChanged: (double value) {
                       //#5
-                      Provider.of<exoDeviceFunctions>(context, listen: false)
+                      Provider.of<HexoDeviceFunctions>(context, listen: false)
                           .setSpeed(value.toInt());
                       Provider.of<exoBluetoothControlFunctions>(context,
                               listen: false)
@@ -441,7 +441,7 @@ class _person_BOX extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final curAngle = Provider.of<exoDeviceFunctions>(context);
+    final curAngle = Provider.of<HexoDeviceFunctions>(context);
     return Stack(
       children: [
         Padding(

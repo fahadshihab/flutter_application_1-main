@@ -176,13 +176,13 @@ class _findDeviceState extends State<findDevice> {
           setState(() {
             _connectedDevice = device;
 
-            Provider.of<exoDeviceFunctions>(context, listen: false)
+            Provider.of<HexoDeviceFunctions>(context, listen: false)
                 .setSerialRX(_serialRXCharacteristic!);
             Provider.of<exoBluetoothControlFunctions>(context, listen: false)
                 .setSerialTX(_serialTXCharacteristic!);
-            Provider.of<exoDeviceFunctions>(context, listen: false)
+            Provider.of<HexoDeviceFunctions>(context, listen: false)
                 .setConnectedDevice(device);
-            Provider.of<exoDeviceFunctions>(context, listen: false)
+            Provider.of<HexoDeviceFunctions>(context, listen: false)
                 .startreceiverSubscription(
                     _connectedDevice!, _serialRXCharacteristic!, context);
             // } catch (e) {

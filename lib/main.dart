@@ -20,7 +20,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => new exoDeviceFunctions()),
+        ChangeNotifierProvider(create: (_) => new HexoDeviceFunctions()),
         ChangeNotifierProvider(
             create: (_) => new exoBluetoothControlFunctions()),
       ],

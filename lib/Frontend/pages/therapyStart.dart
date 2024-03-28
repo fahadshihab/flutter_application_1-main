@@ -24,9 +24,10 @@ class _therapyStartState extends State<therapyStart> {
 
   @override
   Widget build(BuildContext context) {
-    double currentangle = Provider.of<exoDeviceFunctions>(context).curFlexAngle;
-    double flexLimit = Provider.of<exoDeviceFunctions>(context).flexLimit;
-    double extLimit = Provider.of<exoDeviceFunctions>(context).extLimit;
+    double currentangle =
+        Provider.of<HexoDeviceFunctions>(context).curFlexAngle;
+    double flexLimit = Provider.of<HexoDeviceFunctions>(context).flexLimit;
+    double extLimit = Provider.of<HexoDeviceFunctions>(context).extLimit;
     return Scaffold(
       bottomNavigationBar: bottomNavBar(),
       extendBodyBehindAppBar: true,
@@ -268,17 +269,17 @@ class _ArmRangeGauge extends StatelessWidget {
 Future<void> startReps(BuildContext context, int numberOfReps) async {
   for (int i = 0; i < numberOfReps; i++) {
     double currentAngle =
-        Provider.of<exoDeviceFunctions>(context, listen: false).curFlexAngle;
+        Provider.of<HexoDeviceFunctions>(context, listen: false).curFlexAngle;
     double flexLimit =
-        Provider.of<exoDeviceFunctions>(context, listen: false).flexLimit;
+        Provider.of<HexoDeviceFunctions>(context, listen: false).flexLimit;
     double extLimit =
-        Provider.of<exoDeviceFunctions>(context, listen: false).extLimit;
+        Provider.of<HexoDeviceFunctions>(context, listen: false).extLimit;
 
     if (currentAngle > flexLimit) {
-      await Provider.of<exoDeviceFunctions>(context, listen: false)
+      await Provider.of<HexoDeviceFunctions>(context, listen: false)
           .test_flex(false);
     } else if (currentAngle < extLimit) {
-      await Provider.of<exoDeviceFunctions>(context, listen: false)
+      await Provider.of<HexoDeviceFunctions>(context, listen: false)
           .test_extend(false);
     }
   }
