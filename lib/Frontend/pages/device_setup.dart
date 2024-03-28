@@ -320,14 +320,14 @@ class _deviceSetupState extends State<deviceSetup> {
                                       builder: (context) => manualMode()),
                                   (route) => false,
                                 );
-                                // Provider.of<exoBluetoothControlFunctions>(context,
-                                //         listen: false)
-                                //     .setROMLimitEnabled(
-                                //         true,
-                                //         Provider.of<exoBluetoothControlFunctions>(
-                                //                 context,
-                                //                 listen: false)
-                                //             .serialTX!);
+                                Provider.of<exoBluetoothControlFunctions>(context,
+                                        listen: false)
+                                    .setROMLimitEnabled(
+                                        true,
+                                        Provider.of<exoBluetoothControlFunctions>(
+                                                context,
+                                                listen: false)
+                                            .serialTX!);
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xFF004788),
