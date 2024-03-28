@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Backend/checkBluetoothConnection.dart';
 import 'package:flutter_application_1/Frontend/color_theme/theme.dart';
@@ -25,8 +26,8 @@ class _deviceSetupState extends State<deviceSetup> {
   bool isFlexing = false;
   bool isExtending = false;
   bool zero_set = false;
-  double? flexlimit;
-  double? extlimit;
+  int? flexlimit;
+  int? extlimit;
 
   @override
   void initState() {
@@ -66,7 +67,7 @@ class _deviceSetupState extends State<deviceSetup> {
 
   @override
   Widget build(BuildContext context) {
-    double curFlexAngle = Provider.of<exoDeviceFunctions>(context).curFlexAngle;
+    int curFlexAngle = Provider.of<exoDeviceFunctions>(context).curFlexAngle.toInt();
     final hexobt = Provider.of<exoBluetoothControlFunctions>(context);
     int currentSpeed = Provider.of<exoDeviceFunctions>(context).speed_setting;
     BluetoothCharacteristic? serialTX =
@@ -99,181 +100,160 @@ class _deviceSetupState extends State<deviceSetup> {
       backgroundColor: device_setup_ColorConstants.scaffoldBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              !zero_set
-                  ? 'Set Zero'
-                  : extlimit == null
-                      ? 'Set Extension Limit'
-                      : 'Set Flexion Limit',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 25,
-                color: device_setup_ColorConstants.buttonColor,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
-              child: Text(
-                textAlign: TextAlign.center,
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Spacer(),
+              Text(
                 !zero_set
-                    ? "Set Max Extension of the device. The device should be straight"
-                    : 'Please set the flex and extend limits of the device \n\n Current Angle : $curFlexAngle',
+                    ? 'Set Maximum Extension'
+                    : extlimit == null
+                        ? 'Set Extension Limit'
+                        : 'Set Flexion Limit',
                 style: TextStyle(
-                  fontSize: 18,
-                  color: device_setup_ColorConstants.textColor1,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                  color: device_setup_ColorConstants.buttonColor,
                 ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //button1
-                GestureDetector(
-                 
-                  onTapDown: (details) {
-                    // startFlexing();
-                    hexobt.flex(currentSpeed, serialTX!);
-                  },
-                  onTapUp: (details) {
-                    // stopFlexing();
-                    hexobt.stop(serialTX!);
-                  },
-                  onTapCancel: () => hexobt.stop(serialTX!),
-                  child: _Flex_BUTTON(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
+                child: Text(
+                  textAlign: TextAlign.center,
+                  !zero_set
+                      ? "Use the controls to extend the device to be straight at the elbow joint."
+                      : 'Please set the flex and extend limits of the device \n\n Current Angle : $curFlexAngle',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: device_setup_ColorConstants.textColor1,
+                  ),
                 ),
-                SizedBox(
-                  width: 20,
-                ),
-                //button2
-                GestureDetector(
-                  
-                  onTap: () {
-                    hexobt.EmergencyStop(serialTX!);
-                    // exoDeviceFunctions().setCurFlexAngle(30);
-                  },
-                  child: _Stop_BUTTON(),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                //button3
-                GestureDetector(
-                  onTapDown: (details) {
-                    hexobt.extend(currentSpeed, serialTX!);
-                  },
-                  onTapUp: (details) {
-                    hexobt.stop(serialTX!);
-                  },
-                  onTapCancel: () => hexobt.stop(serialTX!),
-                  child: _Extend_BUTTON(),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Text(
-              'Speed',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: device_setup_ColorConstants.buttonColor,
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _Speed_BUTTON(
-                  speed: 1,
-                  currentSpeed: currentSpeed,
-                  serialTX: serialTX,
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  //button1
+                  GestureDetector(
+                   
+                    onTapDown: (details) {
+                      // startFlexing();
+                      hexobt.flex(currentSpeed, serialTX!);
+                    },
+                    onTapUp: (details) {
+                      // stopFlexing();
+                      hexobt.stop(serialTX!);
+                    },
+                    onTapCancel: () => hexobt.stop(serialTX!),
+                    child: _Flex_BUTTON(),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  //button2
+                  GestureDetector(
+                    
+                    onTap: () {
+                      hexobt.EmergencyStop(serialTX!);
+                      // exoDeviceFunctions().setCurFlexAngle(30);
+                    },
+                    child: _Stop_BUTTON(),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  //button3
+                  GestureDetector(
+                    onTapDown: (details) {
+                      hexobt.extend(currentSpeed, serialTX!);
+                    },
+                    onTapUp: (details) {
+                      hexobt.stop(serialTX!);
+                    },
+                    onTapCancel: () => hexobt.stop(serialTX!),
+                    child: _Extend_BUTTON(),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Text(
+                'Speed',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: device_setup_ColorConstants.buttonColor,
                 ),
-                SizedBox(
-                  width: 10,
-                ),
-                _Speed_BUTTON(
-                  speed: 2,
-                  currentSpeed: currentSpeed,
-                  serialTX: serialTX,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                _Speed_BUTTON(
-                  speed: 3,
-                  currentSpeed: currentSpeed,
-                  serialTX: serialTX,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                _Speed_BUTTON(
-                  speed: 4,
-                  currentSpeed: currentSpeed,
-                  serialTX: serialTX,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                _Speed_BUTTON(
-                  speed: 5,
-                  currentSpeed: currentSpeed,
-                  serialTX: serialTX,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 80,
-            ),
-            //button5
-            GestureDetector(
-              onTap: () {
-                if (zero_set == false) {
-                  hexobt.setZero(serialTX!);
-                  setState(() {
-                    zero_set = true;
-                  });
-                  SnackBar snackBar = SnackBar(
-                    content: Center(
-                      child: Text(
-                        'Zero set',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color:
-                              device_setup_ColorConstants.dialogButtonTextColor,
-                        ),
-                      ),
-                    ),
-                    duration: Duration(milliseconds: 500),
-                    backgroundColor:
-                        device_setup_ColorConstants.snackBarBackgroundColor,
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                } else {
-                  if (extlimit == null) {
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _Speed_BUTTON(
+                    speed: 1,
+                    currentSpeed: currentSpeed,
+                    serialTX: serialTX,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  _Speed_BUTTON(
+                    speed: 2,
+                    currentSpeed: currentSpeed,
+                    serialTX: serialTX,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  _Speed_BUTTON(
+                    speed: 3,
+                    currentSpeed: currentSpeed,
+                    serialTX: serialTX,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  _Speed_BUTTON(
+                    speed: 4,
+                    currentSpeed: currentSpeed,
+                    serialTX: serialTX,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  _Speed_BUTTON(
+                    speed: 5,
+                    currentSpeed: currentSpeed,
+                    serialTX: serialTX,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 80,
+              ),
+              //button5
+              GestureDetector(
+                onTap: () {
+                  if (zero_set == false) {
+                    hexobt.setZero(serialTX!);
                     setState(() {
-                      extlimit = curFlexAngle;
+                      zero_set = true;
                     });
-                    hexobt.setExtLimit(serialTX!);
                     SnackBar snackBar = SnackBar(
                       content: Center(
                         child: Text(
-                          'Extension Limit set to $curFlexAngle',
+                          'Maximum Extension Set',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
-                            color: device_setup_ColorConstants
-                                .dialogButtonTextColor,
+                            color:
+                                device_setup_ColorConstants.dialogButtonTextColor,
                           ),
                         ),
                       ),
@@ -283,85 +263,148 @@ class _deviceSetupState extends State<deviceSetup> {
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   } else {
-                    setState(() {
-                      flexlimit = curFlexAngle;
-                    });
-                    hexobt.setFlexLimit(serialTX!);
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Center(
+                    if (extlimit == null) {
+                      setState(() {
+                        extlimit = curFlexAngle;
+                      });
+                      hexobt.setExtLimit(serialTX!);
+                      SnackBar snackBar = SnackBar(
+                        content: Center(
                           child: Text(
-                            'Calibration Complete',
+                            'Extension Limit set to $curFlexAngle',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
-                              color: device_setup_ColorConstants.buttonColor,
+                              color: device_setup_ColorConstants
+                                  .dialogButtonTextColor,
                             ),
                           ),
                         ),
-                        content: Text(
-                          'Flexion Limit set to $flexlimit \nExtension Limit set to $extlimit',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: device_setup_ColorConstants.dialogTextColor,
+                        duration: Duration(milliseconds: 500),
+                        backgroundColor:
+                            device_setup_ColorConstants.snackBarBackgroundColor,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else {
+                      setState(() {
+                        flexlimit = curFlexAngle;
+                      });
+                      hexobt.setFlexLimit(serialTX!);
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Center(
+                            child: Text(
+                              'Calibration Complete',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: device_setup_ColorConstants.buttonColor,
+                              ),
+                            ),
                           ),
+                          content: Text(
+                            'Flexion Limit set to $flexlimit \nExtension Limit set to $extlimit',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: device_setup_ColorConstants.dialogTextColor,
+                            ),
+                          ),
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => manualMode()),
+                                  (route) => false,
+                                );
+                                // Provider.of<exoBluetoothControlFunctions>(context,
+                                //         listen: false)
+                                //     .setROMLimitEnabled(
+                                //         true,
+                                //         Provider.of<exoBluetoothControlFunctions>(
+                                //                 context,
+                                //                 listen: false)
+                                //             .serialTX!);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFF004788),
+                              ),
+                              child: Text(
+                                'OK',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: device_setup_ColorConstants
+                                      .dialogButtonTextColor,
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  extlimit = null;
+                                  flexlimit = null;
+                                });
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFF004788),
+                              ),
+                              child: Text(
+                                're-calibrate',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: device_setup_ColorConstants
+                                      .dialogButtonTextColor,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        actions: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => manualMode()),
-                                (route) => false,
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF004788),
-                            ),
-                            child: Text(
-                              'OK',
-                              style: TextStyle(
-                                fontSize: 17,
-                                color: device_setup_ColorConstants
-                                    .dialogButtonTextColor,
-                              ),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                extlimit = null;
-                                flexlimit = null;
-                              });
-                              Navigator.pop(context);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF004788),
-                            ),
-                            child: Text(
-                              're-calibrate',
-                              style: TextStyle(
-                                fontSize: 17,
-                                color: device_setup_ColorConstants
-                                    .dialogButtonTextColor,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                      );
+                    }
                   }
-                }
-              },
-              child: _setLimit_BUTTON(
-                extention: extlimit == null ? true : false,
-                set_zero: zero_set,
+                },
+                child: _setLimit_BUTTON(
+                  extention: extlimit == null ? true : false,
+                  set_zero: zero_set,
+                ),
               ),
-            ),
-          ],
+             Spacer(),
+             if (zero_set)
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: TextButton(
+                  onPressed: () {
+                   if (zero_set){
+                    if (extlimit != null){
+                      setState(() {
+                        extlimit = null;
+                        flexlimit = null;
+                       
+                      });}
+                      else{
+                        setState(() {
+                          zero_set = false;
+                        });
+                      }
+                   }
+                  },
+                  child: Text(
+                    '< Back',
+                    style: TextStyle(
+                      
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: device_setup_ColorConstants.textColor1,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -583,7 +626,7 @@ class _setLimit_BUTTON extends StatelessWidget {
               ? extention == true
                   ? 'Set Extension Limit'
                   : 'Set Flexion Limit'
-              : 'Set Zero',
+              : 'Set Maximum Extension',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,

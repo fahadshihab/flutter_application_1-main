@@ -31,9 +31,9 @@ class _calibration_pageState extends State<calibration_page> {
   @override
   Widget build(BuildContext context) {
     int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
-    double currentAngle = 0;
-    double flexLimit = Provider.of<exoDeviceFunctions>(context).flexLimit;
-    double extLimit = Provider.of<exoDeviceFunctions>(context).extLimit;
+    int currentAngle = 0;
+    int flexLimit = Provider.of<exoDeviceFunctions>(context).flexLimit.toInt();
+    int extLimit = Provider.of<exoDeviceFunctions>(context).extLimit.toInt();
     BluetoothCharacteristic? serialTX =
         Provider.of<exoBluetoothControlFunctions>(context).serialTX;
     bool romLimitSwitch =
@@ -309,89 +309,92 @@ class _calibration_pageState extends State<calibration_page> {
                           ),
                         ),
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.bottomLeft,
-                              //button4
-                              child: GestureDetector(
-                                onTap: () {
-                                  if (flexionMode) {
-                                    Provider.of<exoBluetoothControlFunctions>(
-                                      context,
-                                      listen: false,
-                                    ).setFlexLimit(serialTX!);
-                                    SnackBar snackBar = SnackBar(
-                                      backgroundColor:
-                                          calibration_ColorConstants.primaryColor,
-                                      content: Text(
-                                        'Flexion limit set to $currentAngle',
-                                        style: TextStyle(
-                                          color: calibration_ColorConstants.whiteColor,
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 13),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.bottomLeft,
+                                //button4
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (flexionMode) {
+                                      Provider.of<exoBluetoothControlFunctions>(
+                                        context,
+                                        listen: false,
+                                      ).setFlexLimit(serialTX!);
+                                      SnackBar snackBar = SnackBar(
+                                        backgroundColor:
+                                            calibration_ColorConstants.primaryColor,
+                                        content: Text(
+                                          'Flexion limit set to $currentAngle',
+                                          style: TextStyle(
+                                            color: calibration_ColorConstants.whiteColor,
+                                          ),
                                         ),
-                                      ),
-                                      duration: Duration(seconds: 1),
-                                    );
-
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                  } else {
-                                    Provider.of<exoBluetoothControlFunctions>(
-                                      context,
-                                      listen: false,
-                                    ).setExtLimit(serialTX!);
-
-                                    SnackBar snackBar = SnackBar(
-                                      backgroundColor:
-                                          calibration_ColorConstants.primaryColor,
-                                      content: Text(
-                                        'Extension limit set to $currentAngle',
-                                        style: TextStyle(
-                                          color: calibration_ColorConstants.whiteColor,
+                                        duration: Duration(seconds: 1),
+                                      );
+                        
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                    } else {
+                                      Provider.of<exoBluetoothControlFunctions>(
+                                        context,
+                                        listen: false,
+                                      ).setExtLimit(serialTX!);
+                        
+                                      SnackBar snackBar = SnackBar(
+                                        backgroundColor:
+                                            calibration_ColorConstants.primaryColor,
+                                        content: Text(
+                                          'Extension limit set to $currentAngle',
+                                          style: TextStyle(
+                                            color: calibration_ColorConstants.whiteColor,
+                                          ),
                                         ),
-                                      ),
-                                      duration: Duration(seconds: 1),
-                                    );
-
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                  }
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.only(left: 20, bottom: 10),
-                                  height: 40,
-                                  width: 150,
-                                  padding: EdgeInsets.symmetric(vertical: 10),
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(100)),
-                                    color: calibration_ColorConstants.buttonColor,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      flexionMode
-                                          ? 'Set Flex Limit'
-                                          : 'Set Ext. Limit',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15,
-                                        color: calibration_ColorConstants.primaryColor,
+                                        duration: Duration(seconds: 1),
+                                      );
+                        
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                    }
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(left: 20),
+                                    height: 40,
+                                    width: 150,
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(100)),
+                                      color: calibration_ColorConstants.buttonColor,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        flexionMode
+                                            ? 'Set Flex Limit'
+                                            : 'Set Ext. Limit',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15,
+                                          color: calibration_ColorConstants.primaryColor,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          if (serialTX != null)
-                            _stopButton(
-                              serialTX: serialTX,
-                            ),
-                          SizedBox(
-                            width: 20,
-                          )
-                        ],
+                            if (serialTX != null)
+                              _stopButton(
+                                serialTX: serialTX,
+                              ),
+                            SizedBox(
+                              width: 20,
+                            )
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -570,7 +573,7 @@ class _calibration_pageState extends State<calibration_page> {
 //button3
 class _movementCircle extends StatefulWidget {
   int anglePlus;
-  double currentangle;
+  int currentangle;
   String intString;
 
   BluetoothCharacteristic? serialTX;

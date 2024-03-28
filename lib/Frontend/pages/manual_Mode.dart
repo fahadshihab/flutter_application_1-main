@@ -29,12 +29,12 @@ class _manualModeState extends State<manualMode> {
   Widget build(BuildContext context) {
     BluetoothCharacteristic serialTX =
         Provider.of<exoBluetoothControlFunctions>(context).serialTX!;
-    double currentAngle = Provider.of<exoDeviceFunctions>(context)
-        .curFlexAngle; // double currentAngle = 90.0;
-    double startLimit = Provider.of<exoDeviceFunctions>(context)
-        .flexLimit; // double flexLimit = 120.0;
-    double endLimit = Provider.of<exoDeviceFunctions>(context)
-        .extLimit; // double extLimit = 0.0;
+    int currentAngle = Provider.of<exoDeviceFunctions>(context)
+        .curFlexAngle.toInt(); // double currentAngle = 90.0;
+    int startLimit = Provider.of<exoDeviceFunctions>(context)
+        .flexLimit.toInt(); // double flexLimit = 120.0;
+    int endLimit = Provider.of<exoDeviceFunctions>(context)
+        .extLimit.toInt(); // double extLimit = 0.0;
     final currentState = Provider.of<exoDeviceFunctions>(context);
 
     int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
@@ -90,7 +90,7 @@ class _manualModeState extends State<manualMode> {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       margin: EdgeInsets.symmetric(horizontal: 20),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
@@ -104,32 +104,46 @@ class _manualModeState extends State<manualMode> {
                         ],
                       ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Limits',
+                            'ROM  :  ',
                             style: TextStyle(
+                              fontWeight: FontWeight.bold,
                               fontSize: 17,
-                              color: manual_mode_ColorConstants.appBarText,
+                              color: manual_mode_ColorConstants.appBarText.withOpacity(0.7),
                             ),
                           ),
                           Row(
                             children: [
                               Text(
-                                'Flex: ${startLimit.toInt()}°',
+                                '${startLimit.toInt()}° Flx',
                                 style: TextStyle(
+                                  fontWeight:  FontWeight.bold,
                                   fontSize: 17,
-                                  color: manual_mode_ColorConstants.appBarText,
+                                  color: manual_mode_ColorConstants.appBarText.withOpacity(0.7),
                                 ),
                               ),
                               SizedBox(
                                 width: 20,
                               ),
                               Text(
-                                'Extend: ${endLimit.toInt()}°',
+                            'to',
+                            style: TextStyle(
+                               fontWeight:  FontWeight.bold,
+                              fontSize: 17,
+                              color: manual_mode_ColorConstants.appBarText.withOpacity(0.7),
+                            ),
+                          ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                '${endLimit.toInt()}° Ext',
                                 style: TextStyle(
+                                   fontWeight:  FontWeight.bold,
                                   fontSize: 17,
-                                  color: manual_mode_ColorConstants.appBarText,
+                                  color: manual_mode_ColorConstants.appBarText.withOpacity(0.7),
                                 ),
                               ),
                             ],
