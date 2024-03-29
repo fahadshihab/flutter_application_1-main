@@ -11,11 +11,11 @@ import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 class therapyMode extends StatefulWidget {
   final ValueChanged<int>? onSecondsChanged;
   final int initialSeconds;
-  const therapyMode({  Key? key,
+  const therapyMode({
+    Key? key,
     this.onSecondsChanged,
     this.initialSeconds = 0,
   }) : super(key: key);
-
 
   @override
   State<therapyMode> createState() => therapyModeState();
@@ -77,7 +77,6 @@ class therapyModeState extends State<therapyMode> {
             height: 50,
           ),
           Container(
-          
             margin: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
             padding: EdgeInsets.only(top: 20),
             decoration: BoxDecoration(
@@ -96,7 +95,6 @@ class therapyModeState extends State<therapyMode> {
             child: Column(
               children: [
                 Center(
-                  
                   child: Text(
                     'Flexion Limit : ${flexionLimit}°\n Extension Limit : ${extensionLimit}°\n Speed set to : $speed\n',
                     style: TextStyle(
@@ -107,43 +105,42 @@ class therapyModeState extends State<therapyMode> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                 Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 70),
-              //button1
-              child: ElevatedButton(
-            
-                onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, '/deviceSetup', (route) => false);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                  child: Text(
-                    'Re-Calibrate',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
-                      color: therapymode_ColorConstrants.text1,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 70),
+                  //button1
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/deviceSetup', (route) => false);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 70, vertical: 10),
+                      child: Text(
+                        'Re-Calibrate',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          color: therapymode_ColorConstrants.text1,
+                        ),
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      backgroundColor: Color(0xFF004788),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                   ),
                 ),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  backgroundColor: Color(0xFF004788),
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
               ],
             ),
           ),
-         
           Container(
             margin: EdgeInsets.symmetric(horizontal: 15),
             decoration: BoxDecoration(
@@ -174,7 +171,7 @@ class therapyModeState extends State<therapyMode> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       child: Text(
-                        'reptition count',
+                        'Repetition count',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 17,
@@ -215,7 +212,9 @@ class therapyModeState extends State<therapyMode> {
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            reps--;
+                            if (reps > 0) {
+                              reps--;
+                            }
                           });
                         },
                         child: Icon(
@@ -261,10 +260,10 @@ class therapyModeState extends State<therapyMode> {
                 SizedBox(
                   height: 10,
                 ),
-                
+
                 GestureDetector(
                   onTap: (() {
-                      showDialog(
+                    showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return SecondsPickerDialog(
@@ -275,7 +274,6 @@ class therapyModeState extends State<therapyMode> {
                           },
                           initialSeconds: holdtime,
                         );
-  
                       },
                     );
                   }),
@@ -357,55 +355,51 @@ class therapyModeState extends State<therapyMode> {
                   height: 30,
                 ),
                 //button5
-              
-               
               ],
             ),
           ),
-            GestureDetector(
-                  onTap: () {
-                    Provider.of<exoBluetoothControlFunctions>(context,
-                            listen: false)
-                        .CPM(reps, serialTX!);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => therapyStart(
-                          reps: reps,
-                          holdTime: holdtime,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 25, vertical: 40),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 100, vertical: 15),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: therapymode_ColorConstrants.containerBackground
-                              .withOpacity(0.16),
-                          offset: Offset(0, 3),
-                          blurRadius: 6,
-                          spreadRadius: 0,
-                        ),
-                      ],
-                      borderRadius: BorderRadius.circular(30),
-                      color: therapymode_ColorConstrants.buttonColor,
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Start Session',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 17,
-                          color: therapymode_ColorConstrants.text1,
-                        ),
-                      ),
-                    ),
+          GestureDetector(
+            onTap: () {
+              Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+                  .CPM(reps, serialTX!);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => therapyStart(
+                    reps: reps,
+                    holdTime: holdtime,
                   ),
                 ),
+              );
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 25, vertical: 40),
+              padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: therapymode_ColorConstrants.containerBackground
+                        .withOpacity(0.16),
+                    offset: Offset(0, 3),
+                    blurRadius: 6,
+                    spreadRadius: 0,
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(30),
+                color: therapymode_ColorConstrants.buttonColor,
+              ),
+              child: Center(
+                child: Text(
+                  'Start Session',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 17,
+                    color: therapymode_ColorConstrants.text1,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ])));
   }
 }
@@ -440,8 +434,9 @@ class _SecondsPickerDialogState extends State<SecondsPickerDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Select Seconds", textAlign: TextAlign.center, style: TextStyle(color: maincolors.color1)   ),
-      
+      title: Text("Select Seconds",
+          textAlign: TextAlign.center,
+          style: TextStyle(color: maincolors.color1)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -470,18 +465,16 @@ class _SecondsPickerDialogState extends State<SecondsPickerDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Cancel', style: TextStyle(color: maincolors.color1) ),
+          child: Text('Cancel', style: TextStyle(color: maincolors.color1)),
         ),
         TextButton(
           onPressed: () {
             if (widget.onSecondsChanged != null) {
               widget.onSecondsChanged!(_seconds);
-
-          
             }
             Navigator.of(context).pop();
           },
-          child: Text('OK', style: TextStyle(color: maincolors.color1) ),
+          child: Text('OK', style: TextStyle(color: maincolors.color1)),
         ),
       ],
     );

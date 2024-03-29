@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -31,7 +32,8 @@ class _calibration_pageState extends State<calibration_page> {
   @override
   Widget build(BuildContext context) {
     int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
-    int currentAngle = 0;
+    int currentAngle =
+        Provider.of<exoDeviceFunctions>(context).curFlexAngle.toInt();
     int flexLimit = Provider.of<exoDeviceFunctions>(context).flexLimit.toInt();
     int extLimit = Provider.of<exoDeviceFunctions>(context).extLimit.toInt();
     BluetoothCharacteristic? serialTX =
@@ -75,7 +77,8 @@ class _calibration_pageState extends State<calibration_page> {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: calibration_ColorConstants.shadowColor.withOpacity(0.5),
+                  color:
+                      calibration_ColorConstants.shadowColor.withOpacity(0.5),
                   spreadRadius: 0.5,
                   blurRadius: 7,
                   offset: Offset(0, 0),
@@ -101,7 +104,7 @@ class _calibration_pageState extends State<calibration_page> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       //button1
-                      GestureDetector(           
+                      GestureDetector(
                         onTap: () {
                           if (!flexionMode) {
                             setState(() {
@@ -182,8 +185,8 @@ class _calibration_pageState extends State<calibration_page> {
                           children: <Widget>[
                             Text(
                               flexionMode
-                                  ? 'set Flexion limit to: $currentAngle'
-                                  : 'set Extension limit to: $currentAngle',
+                                  ? 'set Flexion limit to: $currentAngle°'
+                                  : 'Set Extension limit to: $currentAngle°',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: calibration_ColorConstants.textColor,
@@ -284,8 +287,8 @@ class _calibration_pageState extends State<calibration_page> {
                         padding: const EdgeInsets.symmetric(horizontal: 18),
                         child: Text(
                           flexionMode
-                              ? 'Calibrate the flexion angle to your free range of motion'
-                              : 'Calibrate the extension angle to your range of motion',
+                              ? 'Calibrate the Flexion angle to your free range of motion'
+                              : 'Calibrate the Extension angle to your range of motion',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
@@ -299,8 +302,8 @@ class _calibration_pageState extends State<calibration_page> {
                             horizontal: 18, vertical: 5),
                         child: Text(
                           flexionMode
-                              ? 'Current Flexion Limit: $flexLimit'
-                              : 'Current Extension Limit: $extLimit',
+                              ? 'Current Flexion Limit: $flexLimit°'
+                              : 'Current Extension Limit: $extLimit°',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -326,16 +329,18 @@ class _calibration_pageState extends State<calibration_page> {
                                       ).setFlexLimit(serialTX!);
                                       SnackBar snackBar = SnackBar(
                                         backgroundColor:
-                                            calibration_ColorConstants.primaryColor,
+                                            calibration_ColorConstants
+                                                .primaryColor,
                                         content: Text(
                                           'Flexion limit set to $currentAngle',
                                           style: TextStyle(
-                                            color: calibration_ColorConstants.whiteColor,
+                                            color: calibration_ColorConstants
+                                                .whiteColor,
                                           ),
                                         ),
                                         duration: Duration(seconds: 1),
                                       );
-                        
+
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(snackBar);
                                     } else {
@@ -343,19 +348,21 @@ class _calibration_pageState extends State<calibration_page> {
                                         context,
                                         listen: false,
                                       ).setExtLimit(serialTX!);
-                        
+
                                       SnackBar snackBar = SnackBar(
                                         backgroundColor:
-                                            calibration_ColorConstants.primaryColor,
+                                            calibration_ColorConstants
+                                                .primaryColor,
                                         content: Text(
                                           'Extension limit set to $currentAngle',
                                           style: TextStyle(
-                                            color: calibration_ColorConstants.whiteColor,
+                                            color: calibration_ColorConstants
+                                                .whiteColor,
                                           ),
                                         ),
                                         duration: Duration(seconds: 1),
                                       );
-                        
+
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(snackBar);
                                     }
@@ -366,9 +373,10 @@ class _calibration_pageState extends State<calibration_page> {
                                     width: 150,
                                     padding: EdgeInsets.symmetric(vertical: 10),
                                     decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(100)),
-                                      color: calibration_ColorConstants.buttonColor,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100)),
+                                      color: calibration_ColorConstants
+                                          .buttonColor,
                                     ),
                                     child: Center(
                                       child: Text(
@@ -378,7 +386,8 @@ class _calibration_pageState extends State<calibration_page> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 15,
-                                          color: calibration_ColorConstants.primaryColor,
+                                          color: calibration_ColorConstants
+                                              .primaryColor,
                                         ),
                                       ),
                                     ),
