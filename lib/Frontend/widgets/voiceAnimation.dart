@@ -4,6 +4,8 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:porcupine_flutter/porcupine_manager.dart';
+import 'package:porcupine_flutter/porcupine_error.dart';
 
 class voiceAnimation extends StatefulWidget {
   bool isListening = false;
@@ -18,8 +20,11 @@ class _voiceAnimationState extends State<voiceAnimation> {
   late stt.SpeechToText _speech;
   String _voiceText = '';
   bool _isListening = false;
+  late PorcupineManager _voiceDetectorManager;
+  BluetoothCharacteristic? serialTX;
 
   StateMachineController? _controller;
+  int speed = 0;
 
   // trigger listen
   SMITrigger? _listen;
@@ -34,16 +39,57 @@ class _voiceAnimationState extends State<voiceAnimation> {
 
     super.initState();
     _speech = stt.SpeechToText();
+    createVoiceDetectorManager();
+  }
+
+  void createVoiceDetectorManager() async {
+    try {
+      _voiceDetectorManager = await PorcupineManager.fromKeywordPaths(
+          "NUb1A/2gquY3D6CTnf8AjRSJExGHltmVu04M7tftnO8wOruh4PThnw==", [
+        "assets/keywords/Hold-it_en_android_v3_0_0.ppn",
+        "assets/keywords/Extend-it_en_android_v3_0_0.ppn",
+        "assets/keywords/Flex-it_en_android_v3_0_0.ppn"
+      ], (keywordIndex) {
+        if (keywordIndex == 0) {
+          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+              .stop(serialTX!);
+        } else if (keywordIndex == 1) {
+          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+              .extend(speed, serialTX!);
+        } else if (keywordIndex == 2) {
+          Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+              .flex(speed, serialTX!);
+        }
+      });
+    } on PorcupineException catch (err) {
+      print("voice init error");
+    }
+  }
+
+  void startDetection() async {
+    _voiceDetectorManager.start().then((value) {
+      _listen?.fire();
+      _isListening = true;
+    });
+  }
+
+  void stopDetection() async {
+    await _voiceDetectorManager.stop();
+    _listenToIdle?.fire();
+    _isListening = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    BluetoothCharacteristic serialTX =
-        Provider.of<exoBluetoothControlFunctions>(context).serialTX!;
-    int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
+    serialTX = Provider.of<exoBluetoothControlFunctions>(context).serialTX;
+    speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
     return GestureDetector(
       onTap: () {
-        _listenS(speed, serialTX);
+        if (!_isListening) {
+          startDetection();
+        } else {
+          stopDetection();
+        }
       },
       child: Container(
         padding: EdgeInsets.all(10),
