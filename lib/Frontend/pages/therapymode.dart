@@ -33,6 +33,25 @@ class therapyModeState extends State<therapyMode> {
     _seconds = widget.initialSeconds;
   }
 
+  Future<void> setAllCPMSettings(BluetoothCharacteristic? serialTX,
+      int holdtime, int reps, int speed) async {
+    Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+        .setCPMHoldTime(holdtime, serialTX!);
+    print(holdtime);
+    await Future.delayed(const Duration(milliseconds: 500));
+    Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+        .setCPMReps(reps, serialTX);
+    print(reps);
+    await Future.delayed(const Duration(milliseconds: 500));
+    Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+        .setCPMSpeed(speed, serialTX);
+    print(speed);
+    await Future.delayed(const Duration(milliseconds: 500));
+    Provider.of<exoBluetoothControlFunctions>(context, listen: false)
+        .CPM(serialTX);
+    print("cpm started");
+  }
+
   @override
   Widget build(BuildContext context) {
     BluetoothCharacteristic? serialTX =
@@ -42,6 +61,7 @@ class therapyModeState extends State<therapyMode> {
     int extensionLimit =
         Provider.of<exoDeviceFunctions>(context).extLimit.toInt();
     int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
+    int cpm_status = Provider.of<exoDeviceFunctions>(context).cpm_status;
 
     return Scaffold(
         bottomNavigationBar: bottomNavBar(),
@@ -360,8 +380,15 @@ class therapyModeState extends State<therapyMode> {
           ),
           GestureDetector(
             onTap: () {
-              Provider.of<exoBluetoothControlFunctions>(context, listen: false)
-                  .CPM(reps, serialTX!);
+              print(reps);
+              if (cpm_status == 0) {
+                setAllCPMSettings(serialTX, holdtime, reps, speed);
+              } else if (cpm_status == 1) {
+                Provider.of<exoBluetoothControlFunctions>(context,
+                        listen: false)
+                    .EmergencyStop(serialTX!);
+              }
+              /*
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -371,6 +398,7 @@ class therapyModeState extends State<therapyMode> {
                   ),
                 ),
               );
+              */
             },
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 25, vertical: 40),
@@ -386,11 +414,13 @@ class therapyModeState extends State<therapyMode> {
                   ),
                 ],
                 borderRadius: BorderRadius.circular(30),
-                color: therapymode_ColorConstrants.buttonColor,
+                color: cpm_status == 1
+                    ? Color.fromARGB(255, 160, 10, 10)
+                    : therapymode_ColorConstrants.buttonColor,
               ),
               child: Center(
                 child: Text(
-                  'Start Session',
+                  cpm_status == 1 ? 'Stop Session' : 'Start Session',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 17,

@@ -86,8 +86,10 @@ class _therapyStartState extends State<therapyStart> {
                 borderRadius: BorderRadius.circular(5),
                 minHeight: 11,
                 value: 0.5,
-                backgroundColor: therapyStart_ColorConstrants.linearProgressBackground,
-                valueColor: AlwaysStoppedAnimation<Color>(therapyStart_ColorConstrants.linearProgressValue),
+                backgroundColor:
+                    therapyStart_ColorConstrants.linearProgressBackground,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    therapyStart_ColorConstrants.linearProgressValue),
               ),
               SizedBox(
                 height: 140,
@@ -132,7 +134,8 @@ class _therapyStartState extends State<therapyStart> {
                         height: 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
-                          color: therapyStart_ColorConstrants.buttonBackground.withOpacity(0.6),
+                          color: therapyStart_ColorConstrants.buttonBackground
+                              .withOpacity(0.6),
                         ),
                         child: Center(
                           child: Text(
@@ -164,7 +167,8 @@ class _therapyStartState extends State<therapyStart> {
                         height: 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
-                          color: therapyStart_ColorConstrants.stopButtonBackground,
+                          color:
+                              therapyStart_ColorConstrants.stopButtonBackground,
                         ),
                         child: Center(
                           child: Text(
@@ -239,25 +243,5 @@ class _ArmRangeGauge extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-
-Future<void> startReps(BuildContext context, int numberOfReps) async {
-  for (int i = 0; i < numberOfReps; i++) {
-    double currentAngle =
-        Provider.of<exoDeviceFunctions>(context, listen: false).curFlexAngle;
-    double flexLimit =
-        Provider.of<exoDeviceFunctions>(context, listen: false).flexLimit;
-    double extLimit =
-        Provider.of<exoDeviceFunctions>(context, listen: false).extLimit;
-
-    if (currentAngle > flexLimit) {
-      await Provider.of<exoDeviceFunctions>(context, listen: false)
-          .test_flex(false);
-    } else if (currentAngle < extLimit) {
-      await Provider.of<exoDeviceFunctions>(context, listen: false)
-          .test_extend(false);
-    }
   }
 }

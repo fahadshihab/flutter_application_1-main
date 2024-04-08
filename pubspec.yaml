@@ -49,6 +49,7 @@ dependencies:
   flutter_time_picker_spinner: ^2.0.0
   animated_text_kit: ^4.2.2
   rive: ^0.12.4
+  porcupine_flutter: ^3.0.3
 
 
 
@@ -99,6 +100,9 @@ flutter:
     - assets/rive/new_file.riv
     - assets/images/backgroundHexo.gif
     - assets/rive/google_assistant_redesign_-_animation.riv
+    - assets/keywords/Hold-it_en_android_v3_0_0.ppn
+    - assets/keywords/Extend-it_en_android_v3_0_0.ppn
+    - assets/keywords/Flex-it_en_android_v3_0_0.ppn
    
   
 

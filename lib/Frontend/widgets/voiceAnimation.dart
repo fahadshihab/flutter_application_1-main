@@ -40,10 +40,10 @@ class _voiceAnimationState extends State<voiceAnimation> {
   Widget build(BuildContext context) {
     BluetoothCharacteristic serialTX =
         Provider.of<exoBluetoothControlFunctions>(context).serialTX!;
-        int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
+    int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
     return GestureDetector(
       onTap: () {
-        _listenS(speed,serialTX);
+        _listenS(speed, serialTX);
       },
       child: Container(
         padding: EdgeInsets.all(10),
@@ -76,32 +76,27 @@ class _voiceAnimationState extends State<voiceAnimation> {
     );
   }
 
-   void _listenS(int speed,  BluetoothCharacteristic serialTX) async {
+  void _listenS(int speed, BluetoothCharacteristic serialTX) async {
     if (_isListening) {
       _speech.stop();
-       _listenToIdle?.fire();
-       await Future.delayed(Duration(milliseconds: 500));
-       
-        
+      _listenToIdle?.fire();
+      await Future.delayed(Duration(milliseconds: 500));
+
       setState(() {
         _isListening = false;
-        
       });
     } else {
-       _listen?.fire();
+      _listen?.fire();
       await Future.delayed(Duration(milliseconds: 400));
-        
-      bool available = await _speech.initialize(
-        onStatus: (val) => print('onStatus: $val'),
-        onError: (val) async {print('onError: $val');
-        _listenToIdle?.fire();
-        await Future.delayed(Duration(milliseconds: 500));
-        
-        }
-      );
-      if (available) {
 
-       
+      bool available = await _speech.initialize(
+          onStatus: (val) => print('onStatus: $val'),
+          onError: (val) async {
+            print('onError: $val');
+            _listenToIdle?.fire();
+            await Future.delayed(Duration(milliseconds: 500));
+          });
+      if (available) {
         _speech.listen(
           onResult: (val) {
             setState(() {
@@ -110,28 +105,30 @@ class _voiceAnimationState extends State<voiceAnimation> {
 
             if (_voiceText.contains("stop") || _voiceText.contains("Stop")) {
               print("Stop");
-             exoBluetoothControlFunctions().stop(serialTX);
+              exoBluetoothControlFunctions().stop(serialTX);
             }
 
             if (_voiceText.contains("flex") || _voiceText.contains("Flex")) {
               print("Flex");
-            exoBluetoothControlFunctions().flex(speed, serialTX);
+              exoBluetoothControlFunctions().flex(speed, serialTX);
             }
-            if (_voiceText.contains("extend") || _voiceText.contains("Extend")) {
+            if (_voiceText.contains("extend") ||
+                _voiceText.contains("Extend")) {
               print("Extend");
-            exoBluetoothControlFunctions().extend(speed, serialTX);
+              exoBluetoothControlFunctions().extend(speed, serialTX);
             }
 
             // Add more conditions for other words
 
             // Restart listening immediately
-            _listenS(speed,serialTX);
+            _listenS(speed, serialTX);
           },
         );
-        
+
         setState(() {
           _isListening = true;
         });
       }
     }
-   }}
+  }
+}

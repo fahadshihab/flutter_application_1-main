@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 class exoDeviceFunctions with ChangeNotifier {
   late StreamSubscription _receiverSubscription;
   int _speed_setting = 1;
+  int _rem_cpm_reps = 0;
+  int _cpm_status = 0;
   double _flexionCounter = 0;
   double _extensionCounter = 0;
   double _curFlexAngle = 80;
@@ -20,6 +22,8 @@ class exoDeviceFunctions with ChangeNotifier {
   BluetoothDevice? _connectedDevice;
 
   int get speed_setting => _speed_setting;
+  int get rem_cpm_reps => _rem_cpm_reps;
+  int get cpm_status => _cpm_status;
   double get flexLimit => _flexLimit;
   double get extensionCounter => _extensionCounter;
   double get flexionCounter => _flexionCounter;
@@ -69,6 +73,11 @@ class exoDeviceFunctions with ChangeNotifier {
     notifyListeners();
   }
 
+  void setRemCPMReps(int reps) {
+    _rem_cpm_reps = reps;
+    notifyListeners();
+  }
+
   void setFlexLimit(double limit) {
     _flexLimit = limit;
     notifyListeners();
@@ -104,6 +113,11 @@ class exoDeviceFunctions with ChangeNotifier {
     notifyListeners();
   }
 
+  void setCPMStatus(int status) {
+    _cpm_status = status;
+    notifyListeners();
+  }
+
   void test() {
     print("test");
   }
@@ -119,10 +133,6 @@ class exoDeviceFunctions with ChangeNotifier {
       List<String> commands = rx_str.split(" ");
 
       if (commands[0] == "A") {
-        //Provider.of<exoDeviceFunctions>(context, listen: false)
-        //    .setCurFlexAngle(double.parse(commands[1]));
-        // Provider.of<exoDeviceFunctions>(context)
-        //     .setCurFlexAngle(30);
         setCurFlexAngle(double.parse(commands[1]));
       } else if (commands[0] == "P0") {
         setAngleControlEnabled(int.parse(commands[1]) == 1 ? true : false);
@@ -132,6 +142,10 @@ class exoDeviceFunctions with ChangeNotifier {
         setFlexLimit(double.parse(commands[1]));
       } else if (commands[0] == "P3") {
         setExtLimit(double.parse(commands[1]));
+      } else if (commands[0] == "D") {
+        setRemCPMReps(int.parse(commands[1]));
+      } else if (commands[0] == "C") {
+        setCPMStatus(int.parse(commands[1]));
       }
     });
     connectedDevice.cancelWhenDisconnected(_receiverSubscription);
@@ -158,7 +172,6 @@ class exoBluetoothControlFunctions extends ChangeNotifier {
 
   void setSerialTX(BluetoothCharacteristic serialTX) {
     _serialTX = serialTX;
-
     notifyListeners();
   }
 
@@ -175,8 +188,8 @@ class exoBluetoothControlFunctions extends ChangeNotifier {
     serialTX.write(utf8.encode(tx_str));
   }
 
-  void CPM(int cpm, BluetoothCharacteristic serialTX) {
-    String tx_str = "C" + " " + cpm.toString();
+  void CPM(BluetoothCharacteristic serialTX) {
+    String tx_str = "C 0";
     serialTX!.write(utf8.encode(tx_str));
   }
 
@@ -251,6 +264,21 @@ class exoBluetoothControlFunctions extends ChangeNotifier {
   void EmergencyStop(BluetoothCharacteristic serialTX) {
     String tx_str = "X 0";
     serialTX!.write(utf8.encode(tx_str));
+  }
+
+  void setCPMReps(int reps, BluetoothCharacteristic serialTX) {
+    serialTX!.write(utf8.encode("M 5"));
+    serialTX!.write(utf8.encode("Y $reps"));
+  }
+
+  void setCPMHoldTime(int secs, BluetoothCharacteristic serialTX) {
+    serialTX!.write(utf8.encode("M 2"));
+    serialTX!.write(utf8.encode("Y $secs"));
+  }
+
+  void setCPMSpeed(int spd, BluetoothCharacteristic serialTX) {
+    serialTX!.write(utf8.encode("M 4"));
+    serialTX!.write(utf8.encode("Y ${spd * 40}"));
   }
 
   // void unwindIntergral(BluetoothCharacteristic serialTX) {
