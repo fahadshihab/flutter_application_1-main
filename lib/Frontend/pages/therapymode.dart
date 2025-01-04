@@ -25,6 +25,7 @@ class therapyModeState extends State<therapyMode> {
   int holdtime = 0;
   late int _seconds;
   int reps = 0;
+  bool _isInTransit = false;
 
   @override
   void initState() {
@@ -35,6 +36,9 @@ class therapyModeState extends State<therapyMode> {
 
   Future<void> setAllCPMSettings(BluetoothCharacteristic? serialTX,
       int holdtime, int reps, int speed) async {
+    setState(() {
+      _isInTransit = true;
+    });
     Provider.of<exoBluetoothControlFunctions>(context, listen: false)
         .setCPMHoldTime(holdtime, serialTX!);
     print(holdtime);
@@ -50,6 +54,9 @@ class therapyModeState extends State<therapyMode> {
     Provider.of<exoBluetoothControlFunctions>(context, listen: false)
         .CPM(serialTX);
     print("cpm started");
+    setState(() {
+      _isInTransit = false;
+    });
   }
 
   @override
@@ -380,8 +387,10 @@ class therapyModeState extends State<therapyMode> {
           ),
           GestureDetector(
             onTap: () {
-              print(reps);
-              if (cpm_status == 0) {
+              print("transit: $_isInTransit cpm: $cpm_status");
+              if (_isInTransit == true) {
+                ;
+              } else if (cpm_status == 0) {
                 setAllCPMSettings(serialTX, holdtime, reps, speed);
               } else if (cpm_status == 1) {
                 Provider.of<exoBluetoothControlFunctions>(context,

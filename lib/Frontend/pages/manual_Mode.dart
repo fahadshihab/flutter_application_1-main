@@ -12,7 +12,6 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rive/rive.dart';
 
 class manualMode extends StatefulWidget {
   const manualMode({super.key});
@@ -30,15 +29,18 @@ class _manualModeState extends State<manualMode> {
     BluetoothCharacteristic serialTX =
         Provider.of<exoBluetoothControlFunctions>(context).serialTX!;
     int currentAngle = Provider.of<exoDeviceFunctions>(context)
-        .curFlexAngle.toInt(); // double currentAngle = 90.0;
+        .curFlexAngle
+        .toInt(); // double currentAngle = 90.0;
     int startLimit = Provider.of<exoDeviceFunctions>(context)
-        .flexLimit.toInt(); // double flexLimit = 120.0;
+        .flexLimit
+        .toInt(); // double flexLimit = 120.0;
     int endLimit = Provider.of<exoDeviceFunctions>(context)
-        .extLimit.toInt(); // double extLimit = 0.0;
+        .extLimit
+        .toInt(); // double extLimit = 0.0;
     final currentState = Provider.of<exoDeviceFunctions>(context);
 
     int speed = Provider.of<exoDeviceFunctions>(context).speed_setting;
-       return Scaffold(
+    return Scaffold(
       bottomNavigationBar: bottomNavBar(),
       extendBodyBehindAppBar: true,
       backgroundColor: manual_mode_ColorConstants.primaryBackground,
@@ -111,7 +113,8 @@ class _manualModeState extends State<manualMode> {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 17,
-                              color: manual_mode_ColorConstants.appBarText.withOpacity(0.7),
+                              color: manual_mode_ColorConstants.appBarText
+                                  .withOpacity(0.7),
                             ),
                           ),
                           Row(
@@ -119,31 +122,34 @@ class _manualModeState extends State<manualMode> {
                               Text(
                                 '${startLimit.toInt()}° Flx',
                                 style: TextStyle(
-                                  fontWeight:  FontWeight.bold,
+                                  fontWeight: FontWeight.bold,
                                   fontSize: 17,
-                                  color: manual_mode_ColorConstants.appBarText.withOpacity(0.7),
+                                  color: manual_mode_ColorConstants.appBarText
+                                      .withOpacity(0.7),
                                 ),
                               ),
                               SizedBox(
                                 width: 20,
                               ),
                               Text(
-                            'to',
-                            style: TextStyle(
-                               fontWeight:  FontWeight.bold,
-                              fontSize: 17,
-                              color: manual_mode_ColorConstants.appBarText.withOpacity(0.7),
-                            ),
-                          ),
+                                'to',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                  color: manual_mode_ColorConstants.appBarText
+                                      .withOpacity(0.7),
+                                ),
+                              ),
                               SizedBox(
                                 width: 20,
                               ),
                               Text(
                                 '${endLimit.toInt()}° Ext',
                                 style: TextStyle(
-                                   fontWeight:  FontWeight.bold,
+                                  fontWeight: FontWeight.bold,
                                   fontSize: 17,
-                                  color: manual_mode_ColorConstants.appBarText.withOpacity(0.7),
+                                  color: manual_mode_ColorConstants.appBarText
+                                      .withOpacity(0.7),
                                 ),
                               ),
                             ],
@@ -233,7 +239,6 @@ class _manualModeState extends State<manualMode> {
     );
   }
 
-
   /////////////////////////////// FOR TESTING PURPOSES ONLY  BELOW ///////////////////////////////
   ///
   ///
@@ -265,7 +270,7 @@ class _manualModeState extends State<manualMode> {
 class _Extend_BUTTON extends StatelessWidget {
   const _Extend_BUTTON({
     super.key,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -305,7 +310,7 @@ class _Extend_BUTTON extends StatelessWidget {
 class _Stop_BUTTON extends StatelessWidget {
   const _Stop_BUTTON({
     super.key,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -345,7 +350,7 @@ class _Stop_BUTTON extends StatelessWidget {
 class _Flex_BUTTON extends StatelessWidget {
   const _Flex_BUTTON({
     super.key,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {

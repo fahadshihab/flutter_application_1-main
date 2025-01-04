@@ -29,8 +29,8 @@ class checkBluetoothConnection {
 
   Future<bool> bluetoothConnectionInetial() async {
     if (await FlutterBluePlus.adapterState.first == BluetoothAdapterState.on) {
-      print(await FlutterBluePlus.systemDevices);
-      if (await FlutterBluePlus.systemDevices.then((value) {
+      print(await FlutterBluePlus.systemDevices([]));
+      if (await FlutterBluePlus.systemDevices([]).then((value) {
         for (BluetoothDevice device in value) {
           if (device.platformName.contains("CREAID")) {
             return true;

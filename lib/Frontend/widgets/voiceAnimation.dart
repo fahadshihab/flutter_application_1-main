@@ -45,7 +45,7 @@ class _voiceAnimationState extends State<voiceAnimation> {
   void createVoiceDetectorManager() async {
     try {
       _voiceDetectorManager = await PorcupineManager.fromKeywordPaths(
-          "NUb1A/2gquY3D6CTnf8AjRSJExGHltmVu04M7tftnO8wOruh4PThnw==", [
+          "c2jlQiiaqhTw/TaWjPq8DoyckRKD5IzBAfWuDOZT5gqc4aVRnZW/QA==", [
         "assets/keywords/Hold-it_en_android_v3_0_0.ppn",
         "assets/keywords/Extend-it_en_android_v3_0_0.ppn",
         "assets/keywords/Flex-it_en_android_v3_0_0.ppn"

@@ -905,7 +905,8 @@ test() {
 checkAndDisconnectDevice(String deviceName) async {
   // Discover connected devices
   print('tty');
-  List<BluetoothDevice> connectedDevices = await FlutterBluePlus.systemDevices;
+  List<BluetoothDevice> connectedDevices =
+      await FlutterBluePlus.systemDevices([]);
 
   // Check if the device with the specified name is connected
   connectedDevices.forEach((device) {
