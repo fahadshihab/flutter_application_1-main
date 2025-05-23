@@ -7,7 +7,6 @@ import 'package:flutter_application_1/Backend/exoDeviceFunctions.dart';
 import 'package:flutter_application_1/Frontend/color_theme/theme.dart';
 import 'package:flutter_application_1/Frontend/pages/bottomNavBar.dart';
 import 'package:flutter_application_1/Frontend/widgets/hexoAnimation.dart';
-import 'package:flutter_application_1/Frontend/widgets/voiceAnimation.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -226,14 +225,7 @@ class _manualModeState extends State<manualMode> {
               ),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.4,
-              child: Stack(children: [
-                hexoAnimationWidget(),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  //button4
-                  child: voiceAnimation(),
-                )
-              ]))
+              child: hexoAnimationWidget())
         ],
       ),
     );
