@@ -8,26 +8,21 @@ class signin_UI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () {
-          FirebaseAuth.instance
-              .signInWithProvider(GoogleAuthProvider())
-              .then((value) {
-            if (value.user != null) {
-              if (doctorORpatient(value.user) == true) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ConnectDevicePage()));
-              } else if (doctorORpatient(value.user) == false) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ConnectDevicePage()));
-              }
-            }
-          });
-        },
-        child: Scaffold());
+    //  onTap: () {
+    //       FirebaseAuth.instance
+    //           .signInWithProvider(GoogleAuthProvider())
+    //           .then((value) {
+    //         if (value.user != null) {
+    //           if (doctorORpatient(value.user) == true) {
+    //             Navigator.push(context,
+    //                 MaterialPageRoute(builder: (context) => findDevice()));
+    //           } else if (doctorORpatient(value.user) == false) {
+    //             Navigator.push(context,
+    //                 MaterialPageRoute(builder: (context) => findDevice()));
+    //           }
+    //         }
+    //       });
+    //     },
+    return Scaffold();
   }
 }
