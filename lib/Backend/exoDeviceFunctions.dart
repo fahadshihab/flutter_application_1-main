@@ -142,9 +142,9 @@ class exoDeviceFunctions with ChangeNotifier {
         setFlexLimit(double.parse(commands[1]));
       } else if (commands[0] == "P3") {
         setExtLimit(double.parse(commands[1]));
-      } else if (commands[0] == "D") {
+      } else if (commands[0] == "PRG") {
         setRemCPMReps(int.parse(commands[1]));
-      } else if (commands[0] == "C") {
+      } else if (commands[0] == "CPMS") {
         setCPMStatus(int.parse(commands[1]));
       }
     });
@@ -179,62 +179,54 @@ class exoBluetoothControlFunctions extends ChangeNotifier {
     int speed,
     BluetoothCharacteristic serialTX,
   ) {
-    String tx_str = "E" + " " + "${speed * 50} ";
+    String tx_str = "MANEXTEND 0";
     serialTX.write(utf8.encode(tx_str));
   }
 
   void flex(int speed, BluetoothCharacteristic serialTX) {
-    String tx_str = "F" + " " + "${speed * 50}";
+    String tx_str = "MANFLEX 0";
     serialTX.write(utf8.encode(tx_str));
   }
 
   void CPM(BluetoothCharacteristic serialTX) {
-    String tx_str = "C 0";
+    String tx_str = "STARTCPM 0";
     serialTX!.write(utf8.encode(tx_str));
   }
 
   void entendByAngle(double angle, BluetoothCharacteristic serialTX) {
-    String tx_str = "J" + " " + angle.toString();
-    serialTX!.write(utf8.encode(tx_str));
+    serialTX!.write(utf8.encode("INCANGLE ${(-angle).toString()}"));
   }
 
   void flexByAngle(double angle, BluetoothCharacteristic serialTX) {
-    String tx_str = "I" + " " + angle.toString();
-    serialTX!.write(utf8.encode(tx_str));
+    serialTX!.write(utf8.encode("INCANGLE ${(angle).toString()}"));
   }
 
   void angleControl(BluetoothCharacteristic serialTX) {
-    String tx_str = "G" + " " + "3";
-    serialTX!.write(utf8.encode(tx_str));
-    serialTX!.write(ascii.encode("P 0"));
+    // String tx_str = "G" + " " + "3";
+    // serialTX!.write(utf8.encode(tx_str));
+    // serialTX!.write(ascii.encode("P 0"));
   }
 
   void disableAngleControl(BluetoothCharacteristic serialTX) {
-    String tx_str = "G" + " " + "2";
-    serialTX!.write(utf8.encode(tx_str));
-    serialTX!.write(ascii.encode("P 0"));
+    // String tx_str = "G" + " " + "2";
+    // serialTX!.write(utf8.encode(tx_str));
+    // serialTX!.write(ascii.encode("P 0"));
   }
 
   void setSpeed(int speed, BluetoothCharacteristic serialTX) {
-    String tx_str = "S" + " " + "${speed * 40}";
-    serialTX!.write(utf8.encode(tx_str));
+    serialTX!.write(utf8.encode("SETSPEED ${(speed * 10)}"));
   }
 
   void setFlexLimit(BluetoothCharacteristic serialTX) {
-    String tx_str = "M" + " " + "0";
-    serialTX!.write(utf8.encode(tx_str));
-    serialTX!.write(ascii.encode("P 0"));
+    serialTX!.write(utf8.encode("SETMAXANG -1.0"));
   }
 
   void setExtLimit(BluetoothCharacteristic serialTX) {
-    String tx_str = "M" + " " + "1";
-    serialTX!.write(utf8.encode(tx_str));
-    serialTX!.write(ascii.encode("P 0"));
+    serialTX!.write(ascii.encode("SETMINANG -1.0"));
   }
 
   void setROMLimitEnabled(bool enabled, BluetoothCharacteristic serialTX) {
-    String tx_str = "G" + " " + (enabled ? "1" : "0");
-    serialTX!.write(utf8.encode(tx_str));
+    serialTX!.write(utf8.encode("ROMLIMIT ${(enabled ? "1" : "0")}"));
     serialTX!.write(ascii.encode("P 0"));
   }
 
@@ -251,34 +243,37 @@ class exoBluetoothControlFunctions extends ChangeNotifier {
   }
 
   void setZero(BluetoothCharacteristic serialTX) {
-    String tx_str = "Z 0";
-    serialTX!.write(utf8.encode(tx_str));
+    // String tx_str = "Z 0";
+    // serialTX!.write(utf8.encode(tx_str));
     serialTX!.write(ascii.encode("P 0"));
   }
 
   void stop(BluetoothCharacteristic serialTX) {
-    String tx_str = "S 0";
+    String tx_str = "MANSTOP 0";
     serialTX.write(utf8.encode(tx_str));
   }
 
   void EmergencyStop(BluetoothCharacteristic serialTX) {
-    String tx_str = "X 0";
+    String tx_str = "MANSTOP 0";
     serialTX!.write(utf8.encode(tx_str));
   }
 
   void setCPMReps(int reps, BluetoothCharacteristic serialTX) {
-    serialTX!.write(utf8.encode("M 5"));
-    serialTX!.write(utf8.encode("Y $reps"));
+    serialTX!.write(utf8.encode("SETREPS $reps"));
+  }
+
+  void stopCPM(BluetoothCharacteristic serialTX) {
+    String tx_str = "STOPCPM 0";
+    serialTX!.write(utf8.encode(tx_str));
   }
 
   void setCPMHoldTime(int secs, BluetoothCharacteristic serialTX) {
-    serialTX!.write(utf8.encode("M 2"));
-    serialTX!.write(utf8.encode("Y $secs"));
+    serialTX!.write(utf8.encode("SETHOLDTIMEF $secs"));
+    serialTX!.write(utf8.encode("SETHOLDTIMEX $secs"));
   }
 
   void setCPMSpeed(int spd, BluetoothCharacteristic serialTX) {
-    serialTX!.write(utf8.encode("M 4"));
-    serialTX!.write(utf8.encode("Y ${spd * 40}"));
+    serialTX!.write(utf8.encode("SETSPEED ${spd * 10.0}"));
   }
 
   // void unwindIntergral(BluetoothCharacteristic serialTX) {
