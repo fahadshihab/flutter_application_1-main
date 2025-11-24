@@ -395,7 +395,7 @@ class therapyModeState extends State<therapyMode> {
               } else if (cpm_status == 1) {
                 Provider.of<exoBluetoothControlFunctions>(context,
                         listen: false)
-                    .EmergencyStop(serialTX!);
+                    .stopCPM(serialTX!);
               }
               /*
               Navigator.push(
